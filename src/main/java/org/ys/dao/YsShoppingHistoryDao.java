@@ -10,7 +10,6 @@ import org.ys.entity.YsShoppingHistory;
  * @author makejava
  * @since 2025-07-16 19:41:25
  */
-@Mapper
 public interface YsShoppingHistoryDao extends BaseMapper<YsShoppingHistory> {
 
 }

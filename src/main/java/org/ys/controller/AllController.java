@@ -13,13 +13,12 @@ import java.util.Map;
 
 @RestController
 public class AllController {
-       @Autowired
-       private AllService service;
+    @Autowired
+    private AllService service;
 
     @RequestMapping("login")
     @ResponseBody
     public void login(@RequestBody Map<String, Object> map){
         service.login(map);
-
     }
 }

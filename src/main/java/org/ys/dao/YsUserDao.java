@@ -10,7 +10,6 @@ import org.ys.entity.YsUser;
  * @author makejava
  * @since 2025-07-16 19:41:45
  */
-@Mapper
 public interface YsUserDao extends BaseMapper<YsUser> {
     YsUser  queryUser(String username, String password);
 

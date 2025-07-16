@@ -10,7 +10,6 @@ import org.ys.entity.YsUserAddr;
  * @author makejava
  * @since 2025-07-16 19:41:46
  */
-@Mapper
 public interface YsUserAddrDao extends BaseMapper<YsUserAddr> {
 
 }

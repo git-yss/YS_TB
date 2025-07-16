@@ -10,7 +10,7 @@ import org.ys.entity.YsGoods;
  * @author makejava
  * @since 2025-07-16 19:37:18
  */
-@Mapper
+
 public interface YsGoodsDao extends BaseMapper<YsGoods> {
 
 }
