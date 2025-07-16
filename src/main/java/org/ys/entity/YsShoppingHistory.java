@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @since 2025-07-16 19:41:25
  */
 @SuppressWarnings("serial")
-public class YsShoppingHistory extends Model<YsShoppingHistory> {
+public class YsShoppingHistory  {
 //订单ID
     private Integer id;
 //用户id

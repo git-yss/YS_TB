@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("org.ys.dao") // 确保添加
+@MapperScan("org.ys.dao")
 public class YsApplication {
 
     public static void main(String[] args) {

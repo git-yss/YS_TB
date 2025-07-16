@@ -1,6 +1,7 @@
 package org.ys.service.impl;
 
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -13,7 +14,7 @@ import java.util.Map;
 @Service
 @Transactional
 public class AllServiceImpl implements AllService {
-    @Resource
+    @Autowired
     private YsUserDao ysUserDao;
     @Override
     public void login(Map<String, Object> map) {

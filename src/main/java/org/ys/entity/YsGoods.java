@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 2025-07-16 19:37:18
  */
 @SuppressWarnings("serial")
-public class YsGoods extends Model<YsGoods> {
+public class YsGoods  {
     //商品id
     private Integer id;
     //用户id
@@ -83,6 +83,7 @@ public class YsGoods extends Model<YsGoods> {
     public void setPicture(String picture) {
         this.picture = picture;
     }
+
 
 }
 

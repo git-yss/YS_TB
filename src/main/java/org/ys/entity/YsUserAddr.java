@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 2025-07-16 19:41:46
  */
 @SuppressWarnings("serial")
-public class YsUserAddr extends Model<YsUserAddr> {
+public class YsUserAddr{
     //ID
     private Integer id;
     //用户id

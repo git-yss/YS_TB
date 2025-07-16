@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.service.AllService;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
