@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue商城 - Spring Boot整合示例</title>
+  <!-- 引入Element UI样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+</head>
+<body>
+<div id="app" class="container">
+  <!-- 顶部导航栏 -->
+  <header class="header">
+    <div class="logo">
+      <i class="el-icon-shopping-bag-1"></i>
+      <span>Vue商城</span>
+    </div>
+
+    <div class="search-bar">
+      <el-input placeholder="搜索商品..." v-model="searchKeyword">
+        <el-button slot="append" icon="el-icon-search"></el-button>
+      </el-input>
+    </div>
+
+    <div class="nav-links">
+      <a href="#" class="nav-link">首页</a>
+      <a href="#" class="nav-link">分类</a>
+      <a href="#" class="nav-link">促销</a>
+      <a href="#" class="nav-link">品牌</a>
+      <div class="cart-icon" @click="showCart = true">
+        <i class="el-icon-shopping-cart-full" style="font-size: 24px;"></i>
+        <span class="cart-count">{{ cartItemCount }}</span>
+      </div>
+      <el-dropdown>
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-user" style="font-size: 24px;"></i>
+                    </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-if="!isLoggedIn">
+            <a href="#" @click="loginDialogVisible = true">登录</a>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="isLoggedIn">
+            <a href="#" @click="logout">退出</a>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="isLoggedIn">我的订单</el-dropdown-item>
+          <el-dropdown-item>个人中心</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+
+    <button class="mobile-menu-btn">
+      <i class="el-icon-menu"></i>
+    </button>
+  </header>
+
+  <!-- 主体内容 -->
+  <div class="main-content">
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+      <h3 class="sidebar-title">商品分类</h3>
+      <ul class="category-list">
+        <li v-for="(category, index) in categories"
+            :key="index"
+            :class="['category-item', {active: currentCategory === category.id}]"
+            @click="currentCategory = category.id">
+          {{ category.name }}
+        </li>
+      </ul>
+
+      <h3 class="sidebar-title" style="margin-top: 30px;">价格区间</h3>
+      <div style="padding: 0 10px;">
+        <el-slider v-model="priceRange" range :max="5000" :step="100"></el-slider>
+        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+          <span>¥{{ priceRange[0] }}</span>
+          <span>¥{{ priceRange[1] }}</span>
+        </div>
+      </div>
+
+      <h3 class="sidebar-title" style="margin-top: 30px;">品牌</h3>
+      <div style="padding: 0 10px;">
+        <el-checkbox-group v-model="selectedBrands">
+          <el-checkbox v-for="brand in brands" :key="brand" :label="brand" style="display: block; margin: 8px 0;"></el-checkbox>
+        </el-checkbox-group>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="content">
+      <h2 class="section-title">
+        <i class="el-icon-goods"></i>
+        热门商品
+      </h2>
+
+      <div class="products-grid">
+        <div class="product-card" v-for="product in filteredProducts" :key="product.id">
+          <div class="product-image">
+            <img :src="product.image" :alt="product.name">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <div class="product-price">¥{{ product.price.toFixed(2) }}</div>
+            <div class="product-rating">
+              <el-rate
+                      v-model="product.rating"
+                      disabled
+                      show-score
+                      text-color="#ff9900"
+                      score-template="{value}">
+              </el-rate>
+            </div>
+            <div class="product-actions">
+              <el-button type="primary" class="add-to-cart" @click="addToCart(product)">
+                <i class="el-icon-shopping-cart-full"></i> 加入购物车
+              </el-button>
+              <el-button icon="el-icon-star-off" circle @click="addToWishlist(product)"></el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">关于我们</h3>
+        <p>Vue商城是一家专注于提供高品质商品的电商平台，致力于为用户提供便捷、安全的购物体验。</p>
+      </div>
+
+      <div class="footer-section">
+        <h3 class="footer-title">客户服务</h3>
+        <ul class="footer-links">
+          <li><a href="#">帮助中心</a></li>
+          <li><a href="#">售后服务</a></li>
+          <li><a href="#">在线客服</a></li>
+          <li><a href="#">投诉中心</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3 class="footer-title">关注我们</h3>
+        <ul class="footer-links">
+          <li><a href="#">微信公众号</a></li>
+          <li><a href="#">新浪微博</a></li>
+          <li><a href="#">抖音</a></li>
+          <li><a href="#">Bilibili</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="copyright">
+      &copy; 2023 Vue商城 版权所有
+    </div>
+  </footer>
+</div>
+
+<!-- 引入Vue.js -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<!-- 引入Element UI -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script type="text/javascript" src="./js/login.js"></script>
+
+</body>
+</html>

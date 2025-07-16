@@ -1,0 +1,17 @@
+package org.ys.dao;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.ys.entity.YsUserAddr;
+
+/**
+ * (YsUserAddr)表数据库访问层
+ *
+ * @author makejava
+ * @since 2025-07-16 19:41:46
+ */
+@Mapper
+public interface YsUserAddrDao extends BaseMapper<YsUserAddr> {
+
+}
+
