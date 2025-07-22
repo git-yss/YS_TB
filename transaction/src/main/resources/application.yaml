@@ -26,3 +26,8 @@ mybatis:
   type-aliases-package: org.ys.entity
   configuration:
     mapUnderscoreToCamelCase: true
+
+  mybatis-plus:
+    mapper-locations: classpath*:mapper/**/*.xml
+    configuration:
+      mapUnderscoreToCamelCase: true

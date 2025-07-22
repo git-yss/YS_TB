@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.ys.commens.pojo.CommentResult;
 import org.ys.transaction.service.AllService;
 
 
@@ -17,7 +18,8 @@ public class AllController {
 
     @RequestMapping("login")
     @ResponseBody
-    public void login(@RequestBody Map<String, Object> map){
+    public CommentResult login(@RequestBody Map<String, Object> map){
         service.login(map);
+        return new CommentResult().ok();
     }
 }

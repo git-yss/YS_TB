@@ -15,21 +15,15 @@ var mainApp = new Vue({
     },
 
     methods: {
-        login() {
+         login() {
             if (this.username && this.password) {
                 let params = {
                     username: this.username,
                     password: this.password
                 };
-                fetch(contextPath+'/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(params)
-                }).then(res => res.json())
-                    .then(data => {
-                        window.location.href = 'shopping.html';
-                    });
-
+                fetchData(contextPath+'/login',params,function () {
+                    window.location.href = 'shopping.html';
+                },this)
             } else {
                 alert('请输入用户名和密码');
             }

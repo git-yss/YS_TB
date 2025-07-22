@@ -35,7 +35,7 @@
         values(sex) , balance = values(balance) , email = values(email) , tel = values(tel)
     </insert>
     <select id="queryUser" resultType="org.ys.commens.entity.YsUser">
-        select * from ys_tb.ys_user where username=#{username} and password=#{password}
+        select * from ys_tb.ys_user where id=#{username} and password=#{password}
     </select>
 
 </mapper>

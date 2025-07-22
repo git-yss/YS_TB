@@ -1,6 +1,7 @@
 package org.ys.commens.pojo;
 
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -26,7 +27,7 @@ public class CommentResult implements Serializable {
 
     public static CommentResult ok(Object data){
         CommentResult br =new CommentResult();
-        br.setStatus(200);
+        br.setStatus(HttpStatus.OK.value());
         br.setMsg("OK");
         br.setData(data);
         return br;
@@ -34,7 +35,7 @@ public class CommentResult implements Serializable {
 
     public static CommentResult error(String msg){
         CommentResult br =new CommentResult();
-        br.setStatus(400);
+        br.setStatus(HttpStatus.BAD_REQUEST.value());
         br.setMsg(msg);
         return br;
     }
