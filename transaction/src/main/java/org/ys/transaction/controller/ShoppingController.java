@@ -1,6 +1,7 @@
 package org.ys.transaction.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +30,13 @@ public class ShoppingController {
     @ResponseBody
     public CommentResult showCart(@RequestBody Map<String, Object> map){
         //分页查询
-        return  service.showCart(Long.valueOf((String) map.get("userId")));
+        return  service.showCart(Long.valueOf(map.get("userId").toString()));
     }
-
 
     @RequestMapping("deleteById")
     @ResponseBody
     public CommentResult deleteById(@RequestBody Map<String, Object> map){
-        return  service.deleteById(Long.valueOf((String) map.get("itemId")),Long.valueOf((String) map.get("userId")));
+        return  service.deleteById(Long.valueOf(map.get("itemId").toString()),Long.valueOf(map.get("userId").toString()));
     }
 
 
@@ -58,8 +58,8 @@ public class ShoppingController {
      */
     @RequestMapping("goSeckillSettlement")
     @ResponseBody
-    public CommentResult goSeckillSettlement(@RequestBody Map<String, Object> map){
-        return  service.goSeckillSettlement((Long) map.get("itemId"),Long.valueOf((String) map.get("userId")));
+    public CommentResult goSeckillSettlement(@RequestBody Map<String, Object> map) throws JsonProcessingException {
+        return  service.goSeckillSettlement(map.get("itemId").toString(),map.get("userId").toString());
     }
 
     /**
@@ -70,7 +70,7 @@ public class ShoppingController {
     @RequestMapping("seckill")
     @ResponseBody
     public CommentResult seckill(@RequestBody Map<String, Object> map){
-        return  service.seckill(Long.valueOf((Long) map.get("itemId")),Long.valueOf((Long) map.get("userId")));
+        return  service.seckill(map.get("itemId").toString(),map.get("userId").toString());
     }
 
     /**
@@ -81,8 +81,8 @@ public class ShoppingController {
     @RequestMapping("initSeckillItem")
     @ResponseBody
     public CommentResult initSeckillItem(@RequestBody Map<String, Object> map){
-        return  service.initSeckillItem( Long.parseLong(map.get("itemId").toString()),new BigDecimal(100),
-                Integer.valueOf(map.get("num").toString()),Long.valueOf(map.get("expireTime").toString()));
+        return  service.initSeckillItem(map.get("itemId").toString(),new BigDecimal(100),
+                Integer.valueOf(map.get("num").toString()),map.get("expireTime").toString());
     }
 
 

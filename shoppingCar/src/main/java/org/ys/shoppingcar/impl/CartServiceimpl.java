@@ -1,10 +1,13 @@
 package org.ys.shoppingcar.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
 import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,19 +64,32 @@ public class CartServiceimpl implements CartService {
 
     @Override
     public CommentResult addCart(CartItem cartItem) {
-        String cartKey = SHOP_CAR_PREFIX + cartItem.getUserId();
-        RMap<Long, CartItem> map = redissonClient.getMap(cartKey);
-        //检查商品是否已经存在购物车中
-        if(map.containsKey(cartItem.getItemId())){
-            CartItem goods = map.get(cartItem.getItemId());
-            goods.setNum(cartItem.getNum());
-            map.put(cartItem.getItemId(),goods);
-        }else{
-            map.put(cartItem.getItemId(),cartItem);
+        try {
+            String cartKey = SHOP_CAR_PREFIX + cartItem.getUserId();
+            RMap<String, String> map = redissonClient.getMap(cartKey, new org.redisson.client.codec.StringCodec());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String itemId = String.valueOf(cartItem.getItemId());
+
+            // 检查商品是否已经存在购物车中
+            if (map.containsKey(itemId)) {
+                String existingItemJson = map.get(itemId);
+                CartItem existingItem = objectMapper.readValue(existingItemJson, CartItem.class);
+                existingItem.setNum(cartItem.getNum());
+                String updatedItemJson = objectMapper.writeValueAsString(existingItem);
+                map.put(itemId, updatedItemJson);
+            } else {
+                String cartItemJson = objectMapper.writeValueAsString(cartItem);
+                map.put(itemId, cartItemJson);
+            }
+
+            // 30日过期
+            map.expire(30, TimeUnit.DAYS);
+            return CommentResult.ok();
+        } catch (Exception e) {
+            log.error("添加购物车失败: {}", e.getMessage(), e);
+            return CommentResult.error("添加购物车失败: " + e.getMessage());
         }
-        //30日过期
-        map.expire(30,TimeUnit.DAYS);
-        return CommentResult.ok();
     }
 
     @Override
@@ -88,10 +104,15 @@ public class CartServiceimpl implements CartService {
 
     @Override
     public CommentResult deleteById(Long itemId, Long userId) {
-        String cartKey = SHOP_CAR_PREFIX + userId;
-        RMap<Long, CartItem> cartMap = redissonClient.getMap(cartKey);
-        cartMap.remove(itemId);
-        return  CommentResult.ok();
+        try {
+            String cartKey = SHOP_CAR_PREFIX + userId;
+            RMap<String, String> cartMap = redissonClient.getMap(cartKey, new org.redisson.client.codec.StringCodec());
+            cartMap.remove(String.valueOf(itemId));
+            return CommentResult.ok();
+        } catch (Exception e) {
+            log.error("删除购物车商品失败: {}", e.getMessage(), e);
+            return CommentResult.error("删除购物车商品失败: " + e.getMessage());
+        }
     }
 
     @Override
@@ -113,9 +134,9 @@ public class CartServiceimpl implements CartService {
      * @return
      */
     @Override
-    public CommentResult seckill(Long itemId, Long userId) {
+    public CommentResult seckill(String itemId, String userId) {
         //获取秒杀的所有商品信息
-        RMap<Long, CartItem> map = redissonClient.getMap(STOCK_PREFIX);
+        RMap<String, String> map = redissonClient.getMap(STOCK_PREFIX,new org.redisson.client.codec.StringCodec());
         // 检查秒杀活动是否已过期
         if (!map.isExists()) {
             return CommentResult.error("秒杀活动已结束");
@@ -126,79 +147,118 @@ public class CartServiceimpl implements CartService {
             // 只设置等待时间，不设置锁持有时间。Redisson 默认会使用看门狗机制，在业务执行期间自动续期。
             if (lock.tryLock(100, TimeUnit.MILLISECONDS)) {
                 try {
-//                    //1、获取秒杀商品信息
-//                    CartItem item = map.get(STOCK_PREFIX+itemId);
-//                    //2、检查库存
-//                    if (item.getNum() < 1) {
-//                        return CommentResult.error("商品已售罄");
-//                    }else if(redissonClient.getMap(USER_ORDER_PREFIX + userId).containsKey(itemId)){ //            3、判断当前用户是否已经秒杀过
-//                       return CommentResult.error("您已经秒杀过该商品");
-//                    }else{
-//                        //            4、Redis中商品库存-1
-//                        item.setNum(item.getNum() - 1);
-//                        map.put(STOCK_PREFIX+itemId,item);
-//                    }
-//                    //5、创建订单,redis新增一条记录用户和商品id的数据
-//                    RMap<String, CartItem> seckillUserMap = redissonClient.getMap(USER_ORDER_PREFIX + userId);
-//                    seckillUserMap.put(itemId,item);
-
-                    String luaScript =
-                            "local stockKey = KEYS[1] \n" +
-                                    "local userOrderKey = KEYS[2] \n" +
-                                    "local itemId = ARGV[1] \n" +
-                                    "-- 1、获取秒杀商品信息 \n" +
-                                    "local itemJson = redis.call('HGET', stockKey, itemId) \n" +
-                                    "-- 检查商品是否存在 \n" +
-                                    "if not itemJson then \n" +
-                                    "    return 'Item not found' \n" +
-                                    "end \n" +
-                                    "-- 反序列化商品信息 \n" +
-                                    "local item = cjson.decode(itemJson) \n" +
-                                    "-- 2、检查库存 \n" +
-                                    "if item.num < 1 then \n" +
-                                    "    return 'Out of stock' \n" +
-                                    "end \n" +
-                                    "-- 3、判断当前用户是否已经秒杀过 \n" +
-                                    "if redis.call('HEXISTS', userOrderKey, itemId) == 1 then \n" +
-                                    "    return 'Already purchased' \n" +
-                                    "end \n" +
-                                    "-- 4、Redis中商品库存-1 \n" +
-                                    "item.num = item.num - 1 \n" +
-                                    "redis.call('HSET', stockKey, itemId, cjson.encode(item)) \n" +
-                                    "-- 5、创建订单,redis新增一条记录用户和商品id的数据 \n" +
-                                    "item.statusEnum = {code=1, description='生成订单中'} \n" +
-                                    "redis.call('HSET', userOrderKey, itemId, cjson.encode(item)) \n" +
-                                    "return 'Success'";
-
-                    try {
-                        RScript script = redissonClient.getScript();
-                        String result = script.eval(
-                                RScript.Mode.READ_WRITE,
-                                luaScript,
-                                RScript.ReturnType.VALUE,
-                                Arrays.asList(STOCK_PREFIX, USER_ORDER_PREFIX + userId),
-                                itemId
-                        );
-
-                        switch (result) {
-                            case "Success":
-                                //消息队列发送订单
-                                CartItem item = map.get(STOCK_PREFIX+itemId);
-                                item.setNum(1);//数量为1
-                                jmsTemplate.convertAndSend("seckill.order.queue", item);
-                                return CommentResult.ok("秒杀成功");
-                            case "Out of stock":
-                                return CommentResult.error("商品已售罄");
-                            case "Already purchased":
-                                return CommentResult.error("您已经秒杀过该商品");
-                            case "Item not found":
-                                return CommentResult.error("秒杀商品不存在");
-                            default:
-                                return CommentResult.error("秒杀失败");
-                        }
-                    } catch (Exception e) {
-                        return CommentResult.error("秒杀失败: " + e.getMessage());
+                    //1、获取秒杀商品信息
+                    String itemJson = map.get(itemId);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    CartItem item = objectMapper.readValue(itemJson, CartItem.class);
+                    //2、检查库存
+                    if (item.getNum() < 1) {
+                        return CommentResult.error("商品已售罄");
+                    }else if(redissonClient.getMap(USER_ORDER_PREFIX + userId, new StringCodec()).containsKey(itemId)){ //            3、判断当前用户是否已经秒杀过
+                       return CommentResult.error("您已经秒杀过该商品");
+                    }else{
+                        //            4、Redis中商品库存-1
+                        item.setNum(item.getNum() - 1);
+                        ObjectMapper objectMapper1 = new ObjectMapper();
+                        String updatedItemJson = objectMapper1.writeValueAsString(item);
+                        map.put(itemId,updatedItemJson);
                     }
+                    //5、创建订单,redis新增一条记录用户和商品id的数据
+                    RMap<String, String> seckillUserMap = redissonClient.getMap(USER_ORDER_PREFIX + userId,new StringCodec());
+                    item.setUserId(Long.parseLong(userId));
+                    ObjectMapper objectMapper2 = new ObjectMapper();
+                    String updatedItemJson = objectMapper2.writeValueAsString(item);
+                    seckillUserMap.put(itemId,updatedItemJson);
+                    //6、发送消息
+                    String json = map.get(String.valueOf(itemId));
+                                if (json != null && !json.isEmpty()) {
+                                    ObjectMapper objectMapper3 = new ObjectMapper();
+                                    CartItem item1 = objectMapper3.readValue(itemJson, CartItem.class);
+                                    item1.setNum(1);//数量为1
+                                    jmsTemplate.convertAndSend("seckill.order.queue", item);
+                                    return CommentResult.ok("秒杀成功");
+                                }
+                                return CommentResult.error("获取商品信息失败");
+
+//                    String luaScript =
+//                            "local stockKey = KEYS[1] \n" +
+//                                    "local userOrderKey = KEYS[2] \n" +
+//                                    "local itemId = ARGV[1] \n" +
+//                                    "-- 1、获取秒杀商品信息 \n" +
+//                                    "local itemJson = redis.call('HGET', stockKey, itemId) \n" +
+//                                    "-- 检查商品是否存在 \n" +
+//                                    "if not itemJson or itemJson == false or itemJson == '' then \n" +
+//                                    "    return 'Item not found' \n" +
+//                                    "end \n" +
+//                                    "-- 检查是否为有效JSON \n" +
+//                                    "local item = nil \n" +
+//                                    "local success, result = pcall(function() return cjson.decode(itemJson) end) \n" +
+//                                    "if not success then \n" +
+//                                    "    return 'Invalid JSON format: ' .. tostring(result) \n" +
+//                                    "end \n" +
+//                                    "item = result \n" +
+//                                    "-- 2、检查库存 \n" +
+//                                    "if not item.num or item.num < 1 then \n" +
+//                                    "    return 'Out of stock' \n" +
+//                                    "end \n" +
+//                                    "-- 3、判断当前用户是否已经秒杀过 \n" +
+//                                    "if redis.call('HEXISTS', userOrderKey, itemId) == 1 then \n" +
+//                                    "    return 'Already purchased' \n" +
+//                                    "end \n" +
+//                                    "-- 4、Redis中商品库存-1 \n" +
+//                                    "item.num = item.num - 1 \n" +
+//                                    "local updatedItemJson = cjson.encode(item) \n" +
+//                                    "redis.call('HSET', stockKey, itemId, updatedItemJson) \n" +
+//                                    "-- 5、创建订单,redis新增一条记录用户和商品id的数据 \n" +
+//                                    "-- 构建订单项，数量为1 \n" +
+//                                    "local orderItem = { \n" +
+//                                    "    id = item.id or 0, \n" +
+//                                    "    itemId = item.itemId or tonumber(itemId), \n" +
+//                                    "    price = item.price or 0, \n" +
+//                                    "    num = 1, \n" +
+//                                    "    userId = item.userId or 0 \n" +
+//                                    "} \n" +
+//                                    "-- 设置状态枚举 \n" +
+//                                    "orderItem.statusEnum = {code=1, description='生成订单中'} \n" +
+//                                    "local orderItemJson = cjson.encode(orderItem) \n" +
+//                                    "redis.call('HSET', userOrderKey, itemId, orderItemJson) \n" +
+//                                    "return 'Success'";
+//
+//                    try {
+//                        RScript script = redissonClient.getScript();
+//                        String result = script.eval(
+//                                RScript.Mode.READ_WRITE,
+//                                luaScript,
+//                                RScript.ReturnType.VALUE,
+//                                Arrays.asList(STOCK_PREFIX, USER_ORDER_PREFIX + userId),
+//                                itemId
+//                        );
+//
+//                        switch (result) {
+//                            case "Success":
+//                                //消息队列发送订单
+//                                String itemJson = map.get(String.valueOf(itemId));
+//                                if (itemJson != null && !itemJson.isEmpty()) {
+//                                    ObjectMapper objectMapper = new ObjectMapper();
+//                                    CartItem item = objectMapper.readValue(itemJson, CartItem.class);
+//                                    item.setNum(1);//数量为1
+//                                    jmsTemplate.convertAndSend("seckill.order.queue", item);
+//                                    return CommentResult.ok("秒杀成功");
+//                                }
+//                                return CommentResult.error("获取商品信息失败");
+//                            case "Out of stock":
+//                                return CommentResult.error("商品已售罄");
+//                            case "Already purchased":
+//                                return CommentResult.error("您已经秒杀过该商品");
+//                            case "Item not found":
+//                                return CommentResult.error("秒杀商品不存在");
+//                            default:
+//                                return CommentResult.error("秒杀失败");
+//                        }
+//                    } catch (Exception e) {
+//                        log.error("秒杀失败: {}", e);
+//                        throw new RuntimeException(e);
+//                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }finally {
@@ -242,13 +302,16 @@ public class CartServiceimpl implements CartService {
 
 
 
-    private void updateRedisOrderStatus(long userId, long itemId, OrderStatusEnum statusEnum, long orderId) {
-        RMap<Long, CartItem> userOrderMap = redissonClient.getMap(USER_ORDER_PREFIX + userId);
-        CartItem item = userOrderMap.get(itemId);
-        if (item != null) {
+    private void updateRedisOrderStatus(long userId, long itemId, OrderStatusEnum statusEnum, long orderId) throws JsonProcessingException {
+        RMap<String, String> userOrderMap = redissonClient.getMap(USER_ORDER_PREFIX + userId, new org.redisson.client.codec.StringCodec());
+        String itemJson = userOrderMap.get(String.valueOf(itemId));
+        if (itemJson != null && !itemJson.isEmpty()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CartItem item = objectMapper.readValue(itemJson, CartItem.class);
             item.setStatusEnum(statusEnum);
             item.setId(orderId);
-            userOrderMap.put(itemId, item);
+            String updatedItemJson = objectMapper.writeValueAsString(item);
+            userOrderMap.put(String.valueOf(itemId), updatedItemJson);
         }
     }
     /**
@@ -257,13 +320,16 @@ public class CartServiceimpl implements CartService {
      * @param expireTime 过期时间（小时）
      */
     @Override
-    public CommentResult initSeckillItem(long itemId, BigDecimal price, int num, long expireTime) {
+    public CommentResult initSeckillItem(String itemId, BigDecimal price, int num, String expireTime) {
         try {
-            RMap<Long, CartItem> map = redissonClient.getMap(STOCK_PREFIX);
-            CartItem cartItem = new CartItem(itemId, price, num);
+            RMap<String, String> map = redissonClient.getMap(STOCK_PREFIX,new org.redisson.client.codec.StringCodec());
+            CartItem cartItem = new CartItem(Long.valueOf(itemId), price, num);
+            // 将对象转换为JSON字符串存储
+            ObjectMapper objectMapper = new ObjectMapper();
+            String cartItemJson = objectMapper.writeValueAsString(cartItem);
             // 设置过期时间
-            map.put(itemId, cartItem);
-            LocalDateTime expireDateTime = LocalDateTime.now().plusHours(expireTime); // 2小时后过期
+            map.put(itemId, cartItemJson);
+            LocalDateTime expireDateTime = LocalDateTime.now().plusHours(Long.parseLong(expireTime)); // 2小时后过期
             map.expireAt(expireDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         }catch (Exception e){
             return CommentResult.error("初始化秒杀商品失败");
@@ -272,36 +338,38 @@ public class CartServiceimpl implements CartService {
     }
 
     @Override
-    public CommentResult goSeckillSettlement(Long itemId, Long userId) {
+    public CommentResult goSeckillSettlement(String itemId, String userId) throws JsonProcessingException {
         //以redis购物车为准,
-        RMap<String, CartItem> seckillUserMap = redissonClient.getMap(USER_ORDER_PREFIX + userId);
-        CartItem cartItem = seckillUserMap.get(itemId);
-
+        RMap<String, String> seckillUserMap = redissonClient.getMap(USER_ORDER_PREFIX + userId, new org.redisson.client.codec.StringCodec());
+        String cartItemJson = seckillUserMap.get(itemId);
+        if (cartItemJson == null || cartItemJson.isEmpty()) {
+            return CommentResult.error("未找到订单信息");
+        }
+        // 将JSON字符串转换为CartItem对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        CartItem cartItem = objectMapper.readValue(cartItemJson, CartItem.class);
         //数据库商品
-        YsGoods goods = goodsService.selectGoodById(itemId);
+        YsGoods goods = goodsService.selectGoodById(Long.valueOf(itemId));
         if(cartItem.getPrice().compareTo(goods.getPrice())!=0){
             log.error("价格不一致,请核对价格");
         }else{
             //        扣除对应余额(不会有并发问题，秒杀场景支付只会一次支付一个订单)
             YsUser ysUser = new YsUser();
-            ysUser.setId(userId);
+            ysUser.setId(Long.valueOf(userId));
             ysUser.setBalance(ysUser.getBalance().subtract(cartItem.getPrice()));
             userDao.updateById(ysUser);
             //修改订单状态
-            YsOrder order = ysOrderDao.selectById(cartItem.getId());
             int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), cartItem.getId());
             if(i>0){
                 log.info("订单支付成功！");
             }
-
              //  发送邮件购买成功，地址为多少多少！；
-
             jmsTemplate.convertAndSend("mail.queue", cartItem.getId());
              //        新增购物历史记录
             YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();
             ysShoppingHistory.setId(cartItem.getId());
-            ysShoppingHistory.setUserId(userId);
-            ysShoppingHistory.setGoodsId(itemId);
+            ysShoppingHistory.setUserId(Long.valueOf(userId));
+            ysShoppingHistory.setGoodsId(Long.valueOf(itemId));
             shoppingHistoryDao.insert(ysShoppingHistory);
         }
 

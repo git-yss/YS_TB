@@ -1,5 +1,7 @@
 package org.ys.shoppingcar.messageListener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 
 import jakarta.jms.JMSException;
@@ -39,8 +41,15 @@ public class OrderMessageListener {
     private static final int MAX_RETRY_COUNT = 3;
 
     @JmsListener(destination = "seckill.order.queue")
-    public void receiveOrderMessage(CartItem cartItem, Message message) {
-        System.out.println("接收到秒杀订单消息: " + cartItem);
+    public void receiveOrderMessage(String cartItemJson, Message message) {
+        System.out.println("接收到秒杀订单消息: " + cartItemJson);
+        ObjectMapper objectMapper = new ObjectMapper();
+        CartItem cartItem = null;
+        try {
+            cartItem = objectMapper.readValue(cartItemJson, CartItem.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         // 新增购物订单
         try {
             // 处理订单消息

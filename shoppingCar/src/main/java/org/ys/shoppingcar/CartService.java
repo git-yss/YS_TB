@@ -1,6 +1,7 @@
 package org.ys.shoppingcar;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.vo.CartItem;
 
@@ -33,7 +34,7 @@ public interface CartService {
     CommentResult deleteById(Long itemId, Long userId);
 
     /**
-     * 去支付
+     * 普通支付
      * @param maps
      * @return
      */
@@ -45,7 +46,7 @@ public interface CartService {
      * @param itemId
      * @return
      */
-    CommentResult seckill(Long itemId,Long userId);
+    CommentResult seckill(String itemId,String userId);
 
     /**
      * 生成订单
@@ -59,8 +60,13 @@ public interface CartService {
      * @param itemId 商品ID
      * @param expireTime 过期时间（秒）
      */
-    CommentResult initSeckillItem(long itemId, BigDecimal price,int num, long expireTime);
+    CommentResult initSeckillItem(String itemId, BigDecimal price,int num, String expireTime);
 
-
-    CommentResult goSeckillSettlement(Long itemId, Long userId);
+    /**
+     * 秒杀结算
+     * @param itemId
+     * @param userId
+     * @return
+     */
+    CommentResult goSeckillSettlement(String itemId, String userId) throws JsonProcessingException;
 }
