@@ -1,4 +1,4 @@
-
+let contextPath = location.origin;
  function fetchData(url,params,callback, context) {
     fetch(url,{
         method: 'POST',
@@ -8,7 +8,6 @@
         .then(data => {
             console.log(data); // 处理响应数据
             if(data.status==200){
-                window.location.href = 'shopping.html';
                 callback && callback(data);
             }else{
                 if (context && context.$message && context.$message.error) {

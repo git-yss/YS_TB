@@ -21,6 +21,11 @@
             <artifactId>commens</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.ys</groupId>
+            <artifactId>shoppingCar</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- Spring Boot Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -31,7 +36,6 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
-
         <!-- MySQL 驱动 -->
         <dependency>
             <groupId>mysql</groupId>

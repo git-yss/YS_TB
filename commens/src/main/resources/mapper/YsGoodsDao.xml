@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ys.commens.dao.YsGoodsDao">
+    <resultMap type="org.ys.commens.entity.YsGoods" id="YsGoodsMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="brand" column="brand" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="inventory" column="inventory" jdbcType="INTEGER"/>
+        <result property="image" column="image" jdbcType="VARCHAR"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into ys_tb.ys_goods(id, brand, name, introduce, price, inventory, image, category)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.brand}, #{entity.name}, #{entity.introduce}, #{entity.price}, #{entity.inventory}, #{entity.image}, #{entity.category})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
+        insert into ys_tb.ys_goods(id, brand, name, introduce, price, inventory, image, category)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.brand}, #{entity.name}, #{entity.introduce}, #{entity.price}, #{entity.inventory}, #{entity.image}, #{entity.category})
+        </foreach>
+        on duplicate key update
+        id = values(id) , brand = values(brand) , name = values(name) , introduce = values(introduce) , price = values(price) , inventory = values(inventory) , image = values(image) , category = values(category)     </insert>
+    <update id="decreaseStock">
+        update ys_tb.ys_goods set inventory = inventory - #{num} where id = #{itemId}
+    </update>
+    <select id="selectGoodById" resultMap="YsGoodsMap">
+        select * from ys_tb.ys_goods where id = #{itemId} for update
+    </select>
+
+
+</mapper>
+
+

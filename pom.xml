@@ -29,6 +29,7 @@
         <mysql.version>8.0.33</mysql.version>
         <lombok.version>1.18.28</lombok.version>
         <web.version>2.7.15</web.version>
+        <redisson.version>3.23.2</redisson.version>
     </properties>
     <dependencyManagement>
     <dependencies>
@@ -38,14 +39,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${web.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+            <version>${web.version}</version>
+        </dependency>
         <!-- MyBatis-Plus 启动器 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-
         <!-- MySQL 驱动 -->
         <dependency>
             <groupId>mysql</groupId>

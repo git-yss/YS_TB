@@ -1,12 +1,13 @@
 package org.ys.transaction.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.ys.commens.entity.YsGoods;
 import org.ys.commens.entity.YsUser;
-import org.ys.commens.pojo.CommentResult;
-import org.ys.transaction.dao.YsUserDao;
+import org.ys.commens.dao.YsUserDao;
 import org.ys.transaction.service.AllService;
 
 
@@ -26,5 +27,18 @@ public class AllServiceImpl implements AllService {
         if (ObjectUtils.isEmpty(user)) {
             throw new RuntimeException("账号密码错误");
         }
+    }
+
+    @Override
+    public Page<YsGoods> queryAllGoods(Map<String, Object> map) {
+        // 从 map 中获取当前页码和每页大小
+        long current = Long.parseLong(map.get("current").toString());
+        long size = Long.parseLong(map.get("size").toString());
+
+        // 创建分页对象
+        Page<YsGoods> page = new Page<>(current, size);
+        page.setTotal(ysUserDao.queryAllGoodsPage(page,map).size());
+        page.setRecords(ysUserDao.queryAllGoodsPage(page,map));
+        return page;
     }
 }

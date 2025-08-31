@@ -1,8 +1,12 @@
 package org.ys.shoppingcar;
 
-import org.ys.commens.pojo.CommentResult;
 
+import org.ys.commens.pojo.CommentResult;
+import org.ys.commens.vo.CartItem;
+
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface CartService {
     /**
@@ -11,33 +15,52 @@ public interface CartService {
      * @param num
      * @return
      */
-    CommentResult addCart(Long itemId, Integer num);
+    CommentResult addCart(CartItem ysGoods);
 
     /**
      * 显示购物车
       * @return
      */
-    CommentResult showCart();
+    CommentResult showCart(Long userId);
 
-    /**
-     * 修改购物车中购买数量
-     * @param itemId
-     * @param num
-     * @return
-     */
-    CommentResult updateNum(Long itemId,Integer num);
+
 
     /**
      * 删除购物车数据
      * @param itemId
      * @return
      */
-    CommentResult deleteById(Long itemId);
+    CommentResult deleteById(Long itemId, Long userId);
 
     /**
-     * 去结算
-     * @param ids
+     * 去支付
+     * @param maps
      * @return
      */
-    CommentResult goSettlement(List<Long> ids);
+    CommentResult goSettlement(List<Map<String, Object>> maps);
+
+    /**
+     * 秒杀单品
+     * @param userId
+     * @param itemId
+     * @return
+     */
+    CommentResult seckill(Long itemId,Long userId);
+
+    /**
+     * 生成订单
+     * @param cartItem
+     * @return
+     */
+    void addOrder(CartItem  cartItem);
+
+    /**
+     * 初始化秒杀商品并设置过期时间
+     * @param itemId 商品ID
+     * @param expireTime 过期时间（秒）
+     */
+    CommentResult initSeckillItem(long itemId, BigDecimal price,int num, long expireTime);
+
+
+    CommentResult goSeckillSettlement(Long itemId, Long userId);
 }

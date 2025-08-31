@@ -1,4 +1,4 @@
-package org.ys.transaction.dao;
+package org.ys.commens.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.ys.commens.entity.YsShoppingHistory;

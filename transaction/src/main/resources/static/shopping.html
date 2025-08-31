@@ -38,12 +38,12 @@
                     </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-if="!isLoggedIn">
-            <a href="#" @click="loginDialogVisible = true">登录</a>
+            <a href="#" @click="login">登录</a>
           </el-dropdown-item>
           <el-dropdown-item v-if="isLoggedIn">
             <a href="#" @click="logout">退出</a>
           </el-dropdown-item>
-          <el-dropdown-item v-if="isLoggedIn">我的订单</el-dropdown-item>
+          <el-dropdown-item v-if="isLoggedIn" @click="toShoppingCar">我的订单</el-dropdown-item>
           <el-dropdown-item>个人中心</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -70,7 +70,7 @@
 
       <h3 class="sidebar-title" style="margin-top: 30px;">价格区间</h3>
       <div style="padding: 0 10px;">
-        <el-slider v-model="priceRange" range :max="5000" :step="100"></el-slider>
+        <el-slider v-model="priceRange" range :max="50000" :step="100"></el-slider>
         <div style="display: flex; justify-content: space-between; margin-top: 10px;">
           <span>¥{{ priceRange[0] }}</span>
           <span>¥{{ priceRange[1] }}</span>
@@ -98,17 +98,18 @@
             <img :src="product.image" :alt="product.name">
           </div>
           <div class="product-info">
-            <h3 class="product-title">{{ product.name }}</h3>
+            <h3 class="product-title">{{ product.introduce }}</h3>
             <div class="product-price">¥{{ product.price.toFixed(2) }}</div>
-            <div class="product-rating">
-              <el-rate
-                      v-model="product.rating"
-                      disabled
-                      show-score
-                      text-color="#ff9900"
-                      score-template="{value}">
-              </el-rate>
-            </div>
+<!--             todo 评分-->
+<!--            <div class="product-rating">-->
+<!--              <el-rate-->
+<!--                      v-model="product.rating"-->
+<!--                      disabled-->
+<!--                      show-score-->
+<!--                      text-color="#ff9900"-->
+<!--                      score-template="{value}">-->
+<!--              </el-rate>-->
+<!--            </div>-->
             <div class="product-actions">
               <el-button type="primary" class="add-to-cart" @click="addToCart(product)">
                 <i class="el-icon-shopping-cart-full"></i> 加入购物车
@@ -118,7 +119,18 @@
           </div>
         </div>
       </div>
+      <!-- 分页组件 -->
+      <div class="pagination-right">
+        <el-pagination
+                layout="prev, pager, next"
+                :total="totalProducts"
+                :page-size="pageSize"
+                :current-page="currentPage"
+                @current-change="handlePageChange">
+        </el-pagination>
+      </div>
     </main>
+
   </div>
 
   <!-- 底部 -->

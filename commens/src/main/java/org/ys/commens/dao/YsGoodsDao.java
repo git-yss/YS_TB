@@ -1,8 +1,10 @@
-package org.ys.transaction.dao;
+package org.ys.commens.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.ys.commens.entity.YsGoods;
+
+import java.math.BigDecimal;
 
 /**
  * (YsGoods)表数据库访问层
@@ -13,5 +15,8 @@ import org.ys.commens.entity.YsGoods;
 
 public interface YsGoodsDao extends BaseMapper<YsGoods> {
 
+    void decreaseStock(long itemId, Integer num);
+
+    YsGoods selectGoodById(long itemId);
 }
 

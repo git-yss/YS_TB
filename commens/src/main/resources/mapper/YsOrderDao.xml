@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ys.commens.dao.YsOrderDao">
+
+    <resultMap type="org.ys.commens.entity.YsOrder" id="YsOrderMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="addtime" column="addTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into ys_tb.ys_order(id, user_id, goods_id, status, addTime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.id}, #{entity.userId}, #{entity.goodsId}, #{entity.status}, #{entity.addtime})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
+        insert into ys_tb.ys_order(id, user_id, goods_id, status, addTime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.userId}, #{entity.goodsId}, #{entity.status}, #{entity.addtime})
+        </foreach>
+        on duplicate key update
+id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , status = values(status) , addTime = values(addTime)
+   </insert>
+
+    <insert id="addOrder">
+        insert into ys_tb.ys_order(id, user_id, goods_id, status)
+        values
+        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.goodsId}, #{cartItem.statusEnum.code})
+    </insert>
+    <update id="updateStatusById">
+        update ys_tb.ys_order set status = #{status} where id = #{id}
+    </update>
+    <select id="selectDetailById" resultType="java.util.Map">
+        select addr.addr "addr",
+               order.id "orderId",
+               user.username "username",
+               user.email "email",
+               user.tel "tel",
+               goods.introduce "introduce"
+               from ys_order order,ys_goods goods,ys_user user,ys_user_address addr
+        where order.user_id = user.id
+            and order.goods_id = goods.id
+            and user.id = addr.user_id
+            and id = #{id}
+    </select>
+
+</mapper>
+

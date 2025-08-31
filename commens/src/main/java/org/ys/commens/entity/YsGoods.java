@@ -1,85 +1,97 @@
 package org.ys.commens.entity;
 
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
+import java.math.BigDecimal;
+
 /**
- * (YsGoods)表实体类
- *
- * @author makejava
- * @since 2025-07-16 19:37:18
- */
-@SuppressWarnings("serial")
-public class YsGoods  {
+     * (YsGoods)表实体类
+     *
+     * @author makejava
+     * @since 2025-07-23 22:01:18
+     */
+    @SuppressWarnings("serial")
+    public  class YsGoods extends Model<YsGoods> {
     //商品id
-    private Integer id;
-    //用户id
-    private Integer userId;
+        private Long id;
+    //品牌
+        private String brand;
     //商品名称
-    private String name;
+        private String name;
     //商品介绍
-    private String introduce;
+        private String introduce;
     //单价
-    private Double price;
+        private BigDecimal price;
     //库存
-    private Integer inventory;
+        private Integer inventory;
     //图片地址
-    private String picture;
+        private String image;
+    //分类
+        private String category;
 
 
-    public Integer getId() {
-        return id;
-    }
+        public Long getId() {
+            return id;
+        }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-    public Integer getUserId() {
-        return userId;
-    }
+        public String getBrand() {
+            return brand;
+        }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+        public void setBrand(String brand) {
+            this.brand = brand;
+        }
 
-    public String getName() {
-        return name;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public String getIntroduce() {
-        return introduce;
-    }
+        public String getIntroduce() {
+            return introduce;
+        }
 
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
+        public void setIntroduce(String introduce) {
+            this.introduce = introduce;
+        }
 
-    public Double getPrice() {
-        return price;
-    }
+        public BigDecimal getPrice() {
+            return price;
+        }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
 
-    public Integer getInventory() {
-        return inventory;
-    }
+        public Integer getInventory() {
+            return inventory;
+        }
 
-    public void setInventory(Integer inventory) {
-        this.inventory = inventory;
-    }
+        public void setInventory(Integer inventory) {
+            this.inventory = inventory;
+        }
 
-    public String getPicture() {
-        return picture;
-    }
+        public String getImage() {
+            return image;
+        }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
+        public void setImage(String image) {
+            this.image = image;
+        }
 
+        public String getCategory() {
+            return category;
+        }
 
+        public void setCategory(String category) {
+            this.category = category;
+        }
 }
 

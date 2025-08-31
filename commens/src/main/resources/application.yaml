@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: commens
+  artemis:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+    pool:
+      enabled: false
+#  mail:
+#    host: smtp.qq.com # 替换为你的邮箱SMTP服务器地址
+#    username: 811570083@qq.com # 替换为你的发件邮箱地址
+#    password: fmnkefykmgtkbfda # 替换为你获取到的授权码，而非邮箱密码
+#    default-encoding: UTF-8
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true # 启用TLS加密
+#            required: true
+redis:
+  mode: single
+  address: redis://127.0.0.1:6379
+  password:
+  timeout: 3000
+  database: 0
+  pool:
+    max-active: 64
+    max-idle: 24
+    min-idle: 8
+    max-wait: 3000
+

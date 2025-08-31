@@ -1,19 +1,28 @@
 package org.ys.commens.entity;
 
+
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
+import java.util.Date;
+
 /**
- * (YsShoppingHistory)表实体类
+ * (YsOrder)表实体类
  *
  * @author makejava
- * @since 2025-07-16 19:41:25
+ * @since 2025-08-31 12:34:48
  */
 @SuppressWarnings("serial")
-public class YsShoppingHistory  {
-//订单ID
+public class YsOrder extends Model<YsOrder> {
+//ID
     private Long id;
 //用户id
     private Long userId;
 //商品id
     private Long goodsId;
+//订单状态
+    private String status;
+//订单时间
+    private Date addtime;
 
 
     public Long getId() {
@@ -40,6 +49,21 @@ public class YsShoppingHistory  {
         this.goodsId = goodsId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
 
 }
 

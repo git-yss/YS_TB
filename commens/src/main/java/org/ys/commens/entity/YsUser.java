@@ -1,5 +1,7 @@
 package org.ys.commens.entity;
 
+import java.math.BigDecimal;
+
 /**
  * (YsUser)表实体类
  *
@@ -9,7 +11,7 @@ package org.ys.commens.entity;
 @SuppressWarnings("serial")
 public class YsUser  {
     //用户ID
-    private Integer id;
+    private Long id;
     //用户名
     private String username;
     //密码
@@ -19,18 +21,18 @@ public class YsUser  {
     //性别
     private String sex;
     //余额
-    private Double balance;
+    private BigDecimal balance;
     //电子邮件
     private String email;
     //电话号码
     private String tel;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,11 +68,11 @@ public class YsUser  {
         this.sex = sex;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

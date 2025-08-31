@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.ys.transaction.dao.YsUserAddrDao">
+<mapper namespace="org.ys.commens.dao.YsUserAddrDao">
 
     <resultMap type="org.ys.commens.entity.YsUserAddr" id="YsUserAddrMap">
-        <result property="id" column="id" jdbcType="INTEGER"/>
-        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
         <result property="addr" column="addr" jdbcType="VARCHAR"/>
     </resultMap>
 
