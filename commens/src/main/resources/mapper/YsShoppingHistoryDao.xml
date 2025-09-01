@@ -8,24 +8,9 @@
         <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <!-- 批量插入 -->
-    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+    <insert id="insert" >
         insert into ys_tb.ys_shopping_history(id, user_id, goods_id)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.id}, #{entity.userId}, #{entity.goodsId})
-        </foreach>
+        values(#{id}, #{userId}, #{goodsId})
     </insert>
-    <!-- 批量插入或按主键更新 -->
-    <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
-        insert into ys_tb.ys_shopping_history(id, user_id, goods_id)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.id}, #{entity.userId}, #{entity.goodsId})
-        </foreach>
-        on duplicate key update
-        id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , status = values(status)
-    </insert>
-
 </mapper>
 

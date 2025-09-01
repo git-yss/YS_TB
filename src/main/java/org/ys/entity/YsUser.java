@@ -1,23 +1,20 @@
-package org.ys.commens.entity;
+package org.ys.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 
-import java.math.BigDecimal;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
+import java.io.Serializable;
 
 /**
  * (YsUser)表实体类
  *
  * @author makejava
- * @since 2025-07-16 19:41:46
+ * @since 2025-09-01 22:31:41
  */
 @SuppressWarnings("serial")
-@TableName("ys_user")
-public class YsUser  {
+public class YsUser extends Model<YsUser> {
     //用户ID
-    @TableId(value = "id", type = IdType.INPUT)
-    private Long id;
+    private Integer id;
     //用户名
     private String username;
     //密码
@@ -27,18 +24,18 @@ public class YsUser  {
     //性别
     private String sex;
     //余额
-    private BigDecimal balance;
+    private Double balance;
     //电子邮件
     private String email;
     //电话号码
     private String tel;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,11 +71,11 @@ public class YsUser  {
         this.sex = sex;
     }
 
-    public BigDecimal getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 

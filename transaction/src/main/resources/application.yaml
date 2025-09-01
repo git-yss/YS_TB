@@ -19,13 +19,10 @@ jackson:
   serialization:
     write-dates-as-timestamps: true
   default-property-inclusion: non_null
+logging:
+  level:
+    org.ys.commens.dao: debug
 
-
-mybatis:
-  mapper-locations: classpath:mapper/*.xml  # XML 映射文件路径
-  type-aliases-package: org.ys.entity
-  configuration:
-    mapUnderscoreToCamelCase: true
 
   mybatis-plus:
     mapper-locations: classpath*:mapper/**/*.xml

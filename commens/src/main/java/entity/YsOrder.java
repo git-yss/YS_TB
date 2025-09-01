@@ -1,56 +1,52 @@
-package org.ys.commens.entity;
+package entity;
 
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * (YsOrder)表实体类
  *
  * @author makejava
- * @since 2025-08-31 12:34:48
+ * @since 2025-09-01 22:31:36
  */
 @SuppressWarnings("serial")
-@TableName("ys_order")
 public class YsOrder extends Model<YsOrder> {
-//ID
-@TableId(value = "id", type = IdType.INPUT)
-    private Long id;
-//用户id
-    private Long userId;
-//商品id
-    private Long goodsId;
-//订单状态
+    //ID
+    private Integer id;
+    //用户id
+    private Integer userId;
+    //商品id
+    private String goodsId;
+    //订单状态
     private String status;
-//订单时间
+    //订单时间
     private Date addtime;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public Long getGoodsId() {
+    public String getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(Long goodsId) {
+    public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
 

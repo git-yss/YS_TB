@@ -32,23 +32,29 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
     <insert id="addOrder">
         insert into ys_tb.ys_order(id, user_id, goods_id, status)
         values
-        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.goodsId}, #{cartItem.statusEnum.code})
+        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.itemId}, #{cartItem.statusEnum})
     </insert>
     <update id="updateStatusById">
-        update ys_tb.ys_order set status = #{status} where id = #{id}
+        update ys_tb.ys_order set status = #{code} where id = #{id}
     </update>
     <select id="selectDetailById" resultType="java.util.Map">
-        select addr.addr "addr",
-               order.id "orderId",
-               user.username "username",
-               user.email "email",
-               user.tel "tel",
-               goods.introduce "introduce"
-               from ys_order order,ys_goods goods,ys_user user,ys_user_address addr
-        where order.user_id = user.id
-            and order.goods_id = goods.id
-            and user.id = addr.user_id
-            and id = #{id}
+        SELECT
+            addr.addr "addr",
+            o.id "orderId",
+            us.username "username",
+            us.email "email",
+            us.tel "tel",
+            goods.introduce "introduce"
+        FROM
+            ys_order o,
+            ys_goods goods,
+            ys_user us,
+            ys_user_addr addr
+        WHERE
+            o.user_id = us.id
+          AND o.goods_id = goods.id
+          AND us.id = addr.user_id
+          AND o.id = #{orderId}
     </select>
 
 </mapper>

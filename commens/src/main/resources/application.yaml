@@ -7,6 +7,7 @@ spring:
     password: admin
     pool:
       enabled: false
+
 #  mail:
 #    host: smtp.qq.com # 替换为你的邮箱SMTP服务器地址
 #    username: 811570083@qq.com # 替换为你的发件邮箱地址
@@ -30,4 +31,11 @@ redis:
     max-idle: 24
     min-idle: 8
     max-wait: 3000
+logging:
+  level:
+    org.ys.commens.dao: debug
+mybatis-plus:
+  global-config:
+    db-config:
+      update-strategy: NOT_NULL # 或者使用 IGNORED 允许更新为 null
 

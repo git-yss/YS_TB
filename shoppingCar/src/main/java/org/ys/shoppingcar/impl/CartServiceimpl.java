@@ -2,7 +2,6 @@ package org.ys.shoppingcar.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Resource;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.jms.core.JmsTemplate;
@@ -23,6 +22,7 @@ import org.ys.commens.utils.IDUtils;
 import org.ys.commens.vo.CartItem;
 import org.ys.shoppingcar.CartService;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -336,7 +336,7 @@ public class CartServiceimpl implements CartService {
             item.setStatusEnum(statusEnum.getCode());
             item.setId(orderId);
             String updatedItemJson = objectMapper.writeValueAsString(item);
-            order.set(updatedItemJson);
+            order.set(updatedItemJson,order.remainTimeToLive(),TimeUnit.MILLISECONDS);
         }
     }
     /**
@@ -375,21 +375,23 @@ public class CartServiceimpl implements CartService {
         CartItem cartItem = objectMapper.readValue(cartItemJson, CartItem.class);
         //数据库商品价格
         YsGoods goods = goodsService.selectGoodById(Long.valueOf(itemId));
-        if(cartItem.getPrice().compareTo(goods.getPrice())!=0){
+          if(cartItem.getPrice().compareTo(goods.getPrice())!=0){
             //真实场景应该需要新建一个表存储商品价格变动，看订单下单时间是否在商品价格变动时间段内，符合秒杀活动时间即使价格不一样仍然按照订单价格执行
             //本场景适合简单场景，秒杀活动价格不会变化
             log.error("价格不一致,拒绝下单");
         }else{
             //        扣除对应余额(不会有并发问题，秒杀场景只会一次支付一个订单)
-            YsUser ysUser = new YsUser();
-            ysUser.setId(Long.valueOf(userId));
+            YsUser ysUser = userDao.selectById(Long.valueOf(userId));
             ysUser.setBalance(ysUser.getBalance().subtract(cartItem.getPrice()));
-            userDao.updateById(ysUser);
+            userDao.updateBalanceById(ysUser);
             //修改订单状态
             int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), cartItem.getId());
             if(i>0){
-                log.info("订单支付成功！");
+                log.info("订单支付状态修改成功！");
                 //修改redis订单状态
+                //以redis购物车为准,(存在redis订单存在，但是mysql还未生成)
+                cartItem.setStatusEnum(OrderStatusEnum.PAID.getCode());
+                order.set(objectMapper.writeValueAsString(cartItem));
             }else if(i==0 && cartItem.getStatusEnum()==OrderStatusEnum.ORDER_CREATING.getCode()){
                 log.info("补偿订单，触发防悬挂");
                 //mq还未执行生成订单，秒杀支付已经就绪，需要帮他生成订单

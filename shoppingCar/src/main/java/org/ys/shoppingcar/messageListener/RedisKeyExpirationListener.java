@@ -1,8 +1,6 @@
 package org.ys.shoppingcar.messageListener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
@@ -10,8 +8,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.stereotype.Component;
-import org.ys.commens.enums.OrderStatusEnum;
-import org.ys.commens.pojo.CommentResult;
+
 import org.ys.commens.vo.CartItem;
 import org.ys.shoppingcar.CartService;
 
@@ -27,7 +24,6 @@ public class RedisKeyExpirationListener implements MessageListener {
     //秒杀获得分布式锁前缀
     private static final String STOCK_LOCK = "seckill:lock:itemId:";
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisKeyExpirationListener.class);
 
     //用户秒杀订单key
     private static final String USER_ORDER_PREFIX = "seckill:user:order:";
@@ -40,7 +36,6 @@ public class RedisKeyExpirationListener implements MessageListener {
     @Override
     public void onMessage(CharSequence channel, Object message) {
         String expiredKey = message.toString();
-        logger.warn("监听到Redis键过期: {}", expiredKey);
         // 根据键的前缀执行不同的业务逻辑
         if (expiredKey.startsWith(USER_ORDER_PREFIX)) {
             handleOrderExpiry(expiredKey);

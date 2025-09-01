@@ -36,8 +36,8 @@ int insertOrUpdateBatch(@Param("entities") List<YsOrder> entities);
 
 int addOrder(@Param("cartItem") CartItem cartItem);
 
- int updateStatusById(int code, long id);
+ int updateStatusById(@Param("code") int code,@Param("id") long id);
 
- Map<String, Object> selectDetailById(long orderId);
+ Map<String, Object> selectDetailById(@Param("orderId")long orderId);
 }
 

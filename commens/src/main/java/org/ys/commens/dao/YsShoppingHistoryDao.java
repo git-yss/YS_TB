@@ -11,6 +11,7 @@ import org.ys.commens.entity.YsShoppingHistory;
  * @since 2025-07-16 19:41:25
  */
 public interface YsShoppingHistoryDao extends BaseMapper<YsShoppingHistory> {
+    int insert(YsShoppingHistory ysShoppingHistory);
 
 }
 

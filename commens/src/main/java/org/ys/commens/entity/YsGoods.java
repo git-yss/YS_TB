@@ -1,5 +1,8 @@
 package org.ys.commens.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 import java.math.BigDecimal;
@@ -11,8 +14,10 @@ import java.math.BigDecimal;
      * @since 2025-07-23 22:01:18
      */
     @SuppressWarnings("serial")
+    @TableName("ys_goods")
     public  class YsGoods extends Model<YsGoods> {
     //商品id
+    @TableId(value = "id", type = IdType.INPUT)
         private Long id;
     //品牌
         private String brand;

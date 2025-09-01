@@ -1,4 +1,10 @@
 spring:
   application:
     name: shoppingCar
-
+logging:
+  level:
+    org.ys.commens.dao: debug
+mybatis-plus:
+  global-config:
+    db-config:
+      update-strategy: NOT_NULL

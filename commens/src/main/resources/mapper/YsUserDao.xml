@@ -40,6 +40,15 @@
     <select id="queryAllGoodsPage" resultType="org.ys.commens.entity.YsGoods">
         select * from ys_tb.ys_goods limit #{page.current}, #{page.size}
     </select>
+    <select id="selectById" resultType="org.ys.commens.entity.YsUser">
+        select * from ys_tb.ys_user where id=#{id}
+    </select>
+
+    <!-- updateById方法的SQL映射 -->
+    <update id="updateBalanceById" parameterType="org.ys.commens.entity.YsUser">
+        UPDATE ys_user set balance=#{ysUser.balance} WHERE id = #{ysUser.id}
+
+    </update>
 
 </mapper>
 

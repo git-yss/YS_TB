@@ -2,7 +2,6 @@ package org.ys.transaction.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +10,7 @@ import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.vo.CartItem;
 import org.ys.shoppingcar.CartService;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
