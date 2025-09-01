@@ -20,7 +20,7 @@ public class CartItem implements Serializable {
     private BigDecimal price;   // 商品价格
     private Integer num;   // 数量
     private long userId;       // 用户
-    private OrderStatusEnum statusEnum;       // 商品图片
+    private int statusEnum;       // 商品图片
 
     public CartItem(long itemId, BigDecimal price, int num) {
         this.itemId = itemId;

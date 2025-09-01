@@ -53,7 +53,9 @@ public interface CartService {
      * @param cartItem
      * @return
      */
-    void addOrder(CartItem  cartItem);
+    void addOrder(CartItem  cartItem,int code);
+
+    void addOrderCpnt(CartItem  cartItem);
 
     /**
      * 初始化秒杀商品并设置过期时间

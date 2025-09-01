@@ -6,7 +6,7 @@ import jakarta.annotation.Resource;
 
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -53,11 +53,15 @@ public class OrderMessageListener {
         // 新增购物订单
         try {
             // 处理订单消息
-            cartService.addOrder(cartItem);
+            cartItem.setNum(1);//秒杀场景都是扣1个
+            cartService.addOrder(cartItem,99);
             // 手动确认消息
             message.acknowledge();
             log.info("订单处理成功: 用户ID={}, 商品ID={}", cartItem.getUserId(), cartItem.getItemId());
-        } catch (Exception e) {
+        } catch (DuplicateKeyException e) {
+            //订单防悬挂，这里不处理直接返回
+
+        }catch (Exception e) {
             // 发生异常时，消息会重新入队
             log.error("订单处理失败: {}", cartItem.getItemId(), e);
             try {

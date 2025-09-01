@@ -32,6 +32,9 @@
     <update id="decreaseStock">
         update ys_tb.ys_goods set inventory = inventory - #{num} where id = #{itemId}
     </update>
+    <update id="increaseStock">
+        update ys_tb.ys_goods set inventory = inventory + #{num} where id = #{itemId}
+    </update>
     <select id="selectGoodById" resultMap="YsGoodsMap">
         select * from ys_tb.ys_goods where id = #{itemId} for update
     </select>

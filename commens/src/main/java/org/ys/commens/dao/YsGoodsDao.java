@@ -18,5 +18,7 @@ public interface YsGoodsDao extends BaseMapper<YsGoods> {
     void decreaseStock(long itemId, Integer num);
 
     YsGoods selectGoodById(long itemId);
+
+    void increaseStock(long itemId, Integer num);
 }
 
