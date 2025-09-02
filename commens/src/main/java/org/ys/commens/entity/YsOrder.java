@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @SuppressWarnings("serial")
 @TableName("ys_order")
-public class YsOrder extends Model<YsOrder> {
+public class YsOrder   {
 //ID
 @TableId(value = "id", type = IdType.INPUT)
     private Long id;

@@ -6,7 +6,6 @@
 
     <modules>
         <module>commens</module>
-        <module>shoppingCar</module>
         <module>transaction</module>
     </modules>
 
@@ -25,7 +24,7 @@
 
     <properties>
         <java.version>8</java.version>
-        <mybatis-plus.version>3.5.13</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <mysql.version>8.0.33</mysql.version>
         <lombok.version>1.18.28</lombok.version>
         <web.version>2.7.15</web.version>
@@ -49,6 +48,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
+            <version>${web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
