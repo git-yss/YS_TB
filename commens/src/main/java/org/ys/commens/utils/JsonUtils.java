@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 易购商城自定义响应结构
+ * JsonUtils
  */
 public class JsonUtils {
 

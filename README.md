@@ -9,3 +9,17 @@
 
 1、降低秒杀接口性能，将扣库存数据库操作放在秒杀接口中保证同步一致性
 2、业务上保证商品不会缺货，商品缺货时及时进货
+
+下班调整的点：
+
+1. 确保 Redis 配置启用了过期事件通知，#redis.conf配置 notify-keyspace-events Ex
+
+2. 建立索引 ，生成sql文件放在项目里，启动时自动执行
+
+   ```
+   JsonUtils.objectToJson(cartItem);
+   ```
+
+```
+JsonUtils.jsonToPojo(existingItemJson, CartItem.class);
+```

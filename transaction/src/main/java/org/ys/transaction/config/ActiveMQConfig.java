@@ -1,4 +1,4 @@
-package org.ys.commens.config;
+package org.ys.transaction.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;

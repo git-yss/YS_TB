@@ -1,4 +1,4 @@
-package org.ys.shoppingcar.messageListener;
+package org.ys.transaction.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.redisson.api.RBucket;
@@ -9,8 +9,10 @@ import org.redisson.api.listener.MessageListener;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.stereotype.Component;
 
+import org.ys.commens.utils.JsonUtils;
 import org.ys.commens.vo.CartItem;
-import org.ys.shoppingcar.CartService;
+import org.ys.transaction.service.CartService;
+
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -65,13 +67,12 @@ public class RedisKeyExpirationListener implements MessageListener {
                     try {
                         //1、获取秒杀商品订单
                         String orderJson  = order.get();
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        CartItem item = objectMapper.readValue(orderJson, CartItem.class);
+                        CartItem item = JsonUtils.jsonToPojo(orderJson, CartItem.class);
                         //1、获取秒杀商品信息,库存+1
                         String itemJson = map.get(itemId);
-                        CartItem itemInfo = objectMapper.readValue(itemJson, CartItem.class);
+                        CartItem itemInfo = JsonUtils.jsonToPojo(itemJson, CartItem.class);
                         itemInfo.setNum(itemInfo.getNum() + 1);
-                        String updatedItemJson = objectMapper.writeValueAsString(itemInfo);
+                        String updatedItemJson = JsonUtils.objectToJson(itemInfo);
                         map.put(itemId,updatedItemJson);
                         //2、删除订单，释放库存
                         item.setNum(1);

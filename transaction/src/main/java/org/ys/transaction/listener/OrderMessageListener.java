@@ -1,7 +1,4 @@
-package org.ys.shoppingcar.messageListener;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package org.ys.transaction.listener;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jms.annotation.JmsListener;
@@ -10,15 +7,17 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.ys.commens.dao.YsOrderDao;
+import org.ys.commens.utils.JsonUtils;
 import org.ys.commens.vo.CartItem;
-import org.ys.shoppingcar.CartService;
-
+import org.ys.transaction.service.CartService;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * 秒杀场景消息监听进行新增订单和结算时发送邮件
+ */
 @Component
 public class OrderMessageListener {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderMessageListener.class);
@@ -43,16 +42,10 @@ public class OrderMessageListener {
     @JmsListener(destination = "seckill.order.queue", containerFactory = "jmsListenerContainerFactory")
     public void receiveOrderMessage(String cartItemJson, Message message) {
         System.out.println("接收到秒杀订单消息: " + cartItemJson);
-        ObjectMapper objectMapper = new ObjectMapper();
         CartItem cartItem = null;
-        try {
-            cartItem = objectMapper.readValue(cartItemJson, CartItem.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        cartItem = JsonUtils.jsonToPojo(cartItemJson, CartItem.class);
         // 新增购物订单
         try {
-
             // 处理订单消息
             cartItem.setNum(1);//秒杀场景都是扣1个
             cartService.addOrder(cartItem,99);
@@ -72,7 +65,7 @@ public class OrderMessageListener {
                 log.info("当前重试次数: {}", retryCount);
                 if (retryCount < MAX_RETRY_COUNT) {
                     // 重新发送消息
-                    requeueMessage(cartItem, retryCount + 1);
+                    requeueMessage(cartItem, retryCount + 1,"seckill.order.queue");
                 } else {
                     // 超过重试次数，转入死信队列或人工处理
                     moveToDLQ(cartItem);
@@ -111,7 +104,7 @@ public class OrderMessageListener {
                 log.info("当前重试次数: {}", retryCount);
                 if (retryCount < MAX_RETRY_COUNT) {
                     // 重新发送消息
-                    requeueMessageMail(orderId, retryCount + 1);
+                    requeueMessage(orderId, retryCount + 1,"mail.queue");
                 } else {
                     // 超过重试次数，转入死信队列或人工处理
                     moveToDLQ(orderId);
@@ -149,49 +142,18 @@ public class OrderMessageListener {
      * @param retryCount 重试次数
      * @throws JMSException JMS异常
      */
-    private void requeueMessage(Object obj, int retryCount) throws JMSException {
+    private void requeueMessage(Object obj, int retryCount,String queueName) throws JMSException {
         // 发送消息到原始队列，并设置重试次数属性
-        try {
-            // 将对象序列化为JSON字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(obj);
-
-            // 添加重试次数属性到JMS消息头
-            jmsTemplate.send("seckill.order.queue", session -> {
-                Message message = session.createTextMessage(jsonString);
-                message.setIntProperty("retryCount", retryCount);
-                // 设置延迟时间，避免立即重试
-                message.setLongProperty("_AMQ_SCHED_DELIVERY", System.currentTimeMillis() + (retryCount * 10000)); // 延迟重试
-                return message;
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize object to JSON", e);
-        }
-    }
-
-    /**
-     * 重新发送消息到队列
-     * @param obj 信息
-     * @param retryCount 重试次数
-     * @throws JMSException JMS异常
-     */
-    private void requeueMessageMail(Object obj, int retryCount) throws JMSException {
-        try {
-            // 将对象序列化为JSON字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(obj);
-
-            // 添加重试次数属性到JMS消息头
-            jmsTemplate.send("mail.queue", session -> {
-                Message message = session.createTextMessage(jsonString);
-                message.setIntProperty("retryCount", retryCount);
-                // 设置延迟时间，避免立即重试
-                message.setLongProperty("_AMQ_SCHED_DELIVERY", System.currentTimeMillis() + (retryCount * 10000)); // 延迟重试
-                return message;
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize object to JSON", e);
-        }
+        // 将对象序列化为JSON字符串
+        String jsonString = JsonUtils.objectToJson(obj);
+        // 添加重试次数属性到JMS消息头
+        jmsTemplate.send(queueName, session -> {
+            Message message = session.createTextMessage(jsonString);
+            message.setIntProperty("retryCount", retryCount);
+            // 设置延迟时间，避免立即重试
+            message.setLongProperty("_AMQ_SCHED_DELIVERY", System.currentTimeMillis() + (retryCount * 10000)); // 延迟重试
+            return message;
+        });
     }
 
     /**

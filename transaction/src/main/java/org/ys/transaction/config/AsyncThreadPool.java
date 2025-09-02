@@ -1,4 +1,4 @@
-package org.ys.commens.config;
+package org.ys.transaction.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

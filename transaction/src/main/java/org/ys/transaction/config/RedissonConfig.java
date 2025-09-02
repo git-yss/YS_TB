@@ -1,4 +1,4 @@
-package org.ys.commens.config;
+package org.ys.transaction.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

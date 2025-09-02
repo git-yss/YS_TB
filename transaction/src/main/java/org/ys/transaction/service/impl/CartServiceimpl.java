@@ -1,39 +1,36 @@
-package org.ys.shoppingcar.impl;
+package org.ys.transaction.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.ys.commens.dao.YsGoodsDao;
 import org.ys.commens.dao.YsOrderDao;
 import org.ys.commens.dao.YsShoppingHistoryDao;
 import org.ys.commens.dao.YsUserDao;
 import org.ys.commens.entity.YsGoods;
-import org.ys.commens.entity.YsOrder;
 import org.ys.commens.entity.YsShoppingHistory;
 import org.ys.commens.entity.YsUser;
 import org.ys.commens.enums.OrderStatusEnum;
 import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.utils.IDUtils;
+import org.ys.commens.utils.JsonUtils;
 import org.ys.commens.vo.CartItem;
-import org.ys.shoppingcar.CartService;
+import org.ys.transaction.service.CartService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
-public class CartServiceimpl implements CartService {
+public class CartServiceimpl  implements CartService {
     //秒杀商品key
     private static final String STOCK_PREFIX = "seckill:stock";
     //秒杀获得分布式锁前缀
@@ -68,19 +65,17 @@ public class CartServiceimpl implements CartService {
         try {
             String cartKey = SHOP_CAR_PREFIX + cartItem.getUserId();
             RMap<String, String> map = redissonClient.getMap(cartKey, new StringCodec());
-
-            ObjectMapper objectMapper = new ObjectMapper();
             String itemId = String.valueOf(cartItem.getItemId());
 
             // 检查商品是否已经存在购物车中
             if (map.containsKey(itemId)) {
                 String existingItemJson = map.get(itemId);
-                CartItem existingItem = objectMapper.readValue(existingItemJson, CartItem.class);
+                CartItem existingItem = JsonUtils.jsonToPojo(existingItemJson, CartItem.class);
                 existingItem.setNum(cartItem.getNum());
-                String updatedItemJson = objectMapper.writeValueAsString(existingItem);
+                String updatedItemJson = JsonUtils.objectToJson(existingItem);
                 map.put(itemId, updatedItemJson);
             } else {
-                String cartItemJson = objectMapper.writeValueAsString(cartItem);
+                String cartItemJson = JsonUtils.objectToJson(cartItem);
                 map.put(itemId, cartItemJson);
             }
 
@@ -150,8 +145,7 @@ public class CartServiceimpl implements CartService {
                 try {
                     //1、获取秒杀商品信息
                     String itemJson = map.get(itemId);
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    CartItem item = objectMapper.readValue(itemJson, CartItem.class);
+                    CartItem item = JsonUtils.jsonToPojo(itemJson, CartItem.class);
                     //todo 此处应该查询一下mysql中库存是否足够，如果不足秒杀活动的库存量应该立即停止秒杀活动或者及时补充货源；或者关闭普通购买商品通道保证只能通过秒杀活动购买！
                     //2、检查库存
                     if (item.getNum() < 1) {
@@ -161,14 +155,14 @@ public class CartServiceimpl implements CartService {
                     }else{
                         // 4、Redis中商品库存-1
                         item.setNum(item.getNum() - 1);
-                        String updatedItemJson = objectMapper.writeValueAsString(item);
+                        String updatedItemJson = JsonUtils.objectToJson(item);
                         map.put(itemId,updatedItemJson);
                     }
                     //5、创建订单,redis新增一条记录用户和商品id的数据
                     RBucket<Object> order = redissonClient.getBucket(USER_ORDER_PREFIX + userId + "_" + itemId);
                     item.setUserId(Long.parseLong(userId));
                     item.setStatusEnum(OrderStatusEnum.ORDER_CREATING.getCode());//订单创建中
-                    String updatedItemJson = objectMapper.writeValueAsString(item);
+                    String updatedItemJson = JsonUtils.objectToJson(item);
                     order.set(updatedItemJson);
                     order.expire(15, TimeUnit.MINUTES);//秒杀订单过期时间为15分钟
                     //6、发送消息
@@ -331,11 +325,11 @@ public class CartServiceimpl implements CartService {
         RBucket<String> order = redissonClient.getBucket(USER_ORDER_PREFIX + userId + "_" + itemId);
         String itemJson = order.get();
         if (itemJson != null && !itemJson.isEmpty()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            CartItem item = objectMapper.readValue(itemJson, CartItem.class);
+            CartItem item = JsonUtils.jsonToPojo(itemJson, CartItem.class);
             item.setStatusEnum(statusEnum.getCode());
             item.setId(orderId);
-            String updatedItemJson = objectMapper.writeValueAsString(item);
+
+            String updatedItemJson = JsonUtils.objectToJson(item);
             order.set(updatedItemJson,order.remainTimeToLive(),TimeUnit.MILLISECONDS);
         }
     }
@@ -350,8 +344,7 @@ public class CartServiceimpl implements CartService {
             RMap<String, String> map = redissonClient.getMap(STOCK_PREFIX,new StringCodec());
             CartItem cartItem = new CartItem(Long.valueOf(itemId), price, num);
             // 将对象转换为JSON字符串存储
-            ObjectMapper objectMapper = new ObjectMapper();
-            String cartItemJson = objectMapper.writeValueAsString(cartItem);
+            String cartItemJson = JsonUtils.objectToJson(cartItem);
             // 设置过期时间
             map.put(itemId, cartItemJson);
             LocalDateTime expireDateTime = LocalDateTime.now().plusHours(Long.parseLong(expireTime)); // 2小时后过期
@@ -371,8 +364,7 @@ public class CartServiceimpl implements CartService {
             return CommentResult.error("订单不存在，可能已过期");
         }
         // 将JSON字符串转换为CartItem对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        CartItem cartItem = objectMapper.readValue(cartItemJson, CartItem.class);
+        CartItem cartItem = JsonUtils.jsonToPojo(cartItemJson, CartItem.class);
         //数据库商品价格
         YsGoods goods = goodsService.selectGoodById(Long.valueOf(itemId));
           if(cartItem.getPrice().compareTo(goods.getPrice())!=0){
@@ -391,7 +383,7 @@ public class CartServiceimpl implements CartService {
                 //修改redis订单状态
                 //以redis购物车为准,(存在redis订单存在，但是mysql还未生成)
                 cartItem.setStatusEnum(OrderStatusEnum.PAID.getCode());
-                order.set(objectMapper.writeValueAsString(cartItem));
+                order.set(JsonUtils.objectToJson(cartItem));
             }else if(i==0 && cartItem.getStatusEnum()==OrderStatusEnum.ORDER_CREATING.getCode()){
                 log.info("补偿订单，触发防悬挂");
                 //mq还未执行生成订单，秒杀支付已经就绪，需要帮他生成订单
