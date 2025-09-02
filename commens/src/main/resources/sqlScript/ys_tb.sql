@@ -7,6 +7,22 @@ USE `ys_tb`;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+/*
+ Navicat Premium Dump SQL
+
+ Source Server         : 个人Mysql
+ Source Server Type    : MySQL
+ Source Server Version : 80405 (8.4.5)
+ Source Host           : localhost:3306
+ Source Schema         : ys_tb
+
+ Target Server Type    : MySQL
+ Target Server Version : 80405 (8.4.5)
+ File Encoding         : 65001
+
+ Date: 02/09/2025 21:46:55
+*/
+
 -- ----------------------------
 -- Table structure for ys_goods
 -- ----------------------------
@@ -19,13 +35,14 @@ CREATE TABLE `ys_goods`  (
                              `price` decimal(18, 2) NULL DEFAULT NULL COMMENT '单价',
                              `inventory` int NULL DEFAULT NULL COMMENT '库存',
                              `image` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片地址',
-                             `category` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分类'
+                             `category` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分类',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ys_goods
 -- ----------------------------
-INSERT INTO `ys_goods` VALUES (1, '苹果', 'Apple iPhone 13 ', 'Apple iPhone 13 Pro Max 远峰蓝色 256GB', 100.00, 86, 'https://img14.360buyimg.com/n5/s720x720_jfs/t1/317900/26/6095/94534/683ef68aF0f1e309b/9790c3aadc316f29.jpg.avif', '2');
+INSERT INTO `ys_goods` VALUES (1, '苹果', 'Apple iPhone 13 ', 'Apple iPhone 13 Pro Max 远峰蓝色 256GB', 100.00, 98, 'https://img14.360buyimg.com/n5/s720x720_jfs/t1/317900/26/6095/94534/683ef68aF0f1e309b/9790c3aadc316f29.jpg.avif', '2');
 INSERT INTO `ys_goods` VALUES (2, '华为', '华为 Mate 50 Pro', '华为 Mate 50 Pro 昆仑破晓 512GB', 6999.00, 100, 'https://img10.360buyimg.com/n5/s720x720_jfs/t1/311483/6/15185/95700/686ce8d2F63b69f90/17d192406da2a018.jpg.avif', '2');
 INSERT INTO `ys_goods` VALUES (3, '小米', '小米13', '小米13 5G手机 12GB+256GB 白色', 4299.00, 100, 'https://img10.360buyimg.com/n1/s720x720_jfs/t1/240220/3/10125/24182/66d6e2bdFaa5497a2/2e60e3b6f0f7e88a.jpg.avif', '2');
 INSERT INTO `ys_goods` VALUES (4, '苹果', 'Apple MacBook', 'Apple MacBook Pro 14英寸 M2 Pro芯片', 15999.00, 100, 'https://img10.360buyimg.com/n5/s720x720_jfs/t1/299221/1/22700/31811/6878a28bFa7ee0e91/abf9ad7c90f86815.jpg.avif', '3');
@@ -43,21 +60,14 @@ CREATE TABLE `ys_order`  (
                              `user_id` bigint NOT NULL COMMENT '用户id',
                              `goods_id` bigint NULL DEFAULT NULL COMMENT '商品id',
                              `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单状态',
-                             `addTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '订单时间'
+                             `addTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '订单时间',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             UNIQUE INDEX `IDX_USER_ID`(`user_id` ASC, `goods_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ys_order
 -- ----------------------------
-INSERT INTO `ys_order` VALUES (175674100901648, 12345, 1, '2', '2025-09-01 23:36:49');
-INSERT INTO `ys_order` VALUES (175674164731471, 12345, 1, '2', '2025-09-01 23:47:27');
-INSERT INTO `ys_order` VALUES (175674165746187, 12345, 1, '2', '2025-09-01 23:47:37');
-INSERT INTO `ys_order` VALUES (175674166027143, 12345, 1, '2', '2025-09-01 23:47:40');
-INSERT INTO `ys_order` VALUES (175674166127656, 12345, 1, '2', '2025-09-01 23:47:41');
-INSERT INTO `ys_order` VALUES (175674176737917, 12345, 1, '2', '2025-09-01 23:49:27');
-INSERT INTO `ys_order` VALUES (175674176739743, 12345, 1, '2', '2025-09-01 23:49:27');
-INSERT INTO `ys_order` VALUES (175674176741309, 12345, 1, '2', '2025-09-01 23:49:27');
-INSERT INTO `ys_order` VALUES (175674176743103, 12345, 1, '2', '2025-09-01 23:49:27');
 
 -- ----------------------------
 -- Table structure for ys_shopping_cart
@@ -66,7 +76,9 @@ DROP TABLE IF EXISTS `ys_shopping_cart`;
 CREATE TABLE `ys_shopping_cart`  (
                                      `id` bigint NOT NULL COMMENT 'ID',
                                      `user_id` bigint NOT NULL COMMENT '用户id',
-                                     `goods_id` bigint NOT NULL COMMENT '商品id'
+                                     `goods_id` bigint NOT NULL COMMENT '商品id',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `IDX_USER_ID`(`user_id` ASC, `goods_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -80,12 +92,15 @@ DROP TABLE IF EXISTS `ys_shopping_history`;
 CREATE TABLE `ys_shopping_history`  (
                                         `id` bigint NOT NULL COMMENT '订单ID',
                                         `user_id` bigint NOT NULL COMMENT '用户id',
-                                        `goods_id` bigint NOT NULL COMMENT '商品id'
+                                        `goods_id` bigint NOT NULL COMMENT '商品id',
+                                        PRIMARY KEY (`id`) USING BTREE,
+                                        INDEX `IDX_USER_ID`(`user_id` ASC, `goods_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ys_shopping_history
 -- ----------------------------
+INSERT INTO `ys_shopping_history` VALUES (175682008056462, 12345, 1);
 
 -- ----------------------------
 -- Table structure for ys_user
@@ -99,13 +114,15 @@ CREATE TABLE `ys_user`  (
                             `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
                             `balance` decimal(18, 2) NOT NULL COMMENT '余额',
                             `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电子邮件',
-                            `tel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电话号码'
+                            `tel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电话号码',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            UNIQUE INDEX `IDX_USER_ID`(`id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ys_user
 -- ----------------------------
-INSERT INTO `ys_user` VALUES (12345, '杨顺', '123456', '25', '1', 6000.00, '811570083@qqcom', '17683273448');
+INSERT INTO `ys_user` VALUES (12345, '杨顺', '123456', '25', '1', 5800.00, '811570083@qqcom', '17683273448');
 
 -- ----------------------------
 -- Table structure for ys_user_addr
@@ -114,7 +131,9 @@ DROP TABLE IF EXISTS `ys_user_addr`;
 CREATE TABLE `ys_user_addr`  (
                                  `id` bigint NOT NULL COMMENT 'ID',
                                  `user_id` bigint NOT NULL COMMENT '用户id',
-                                 `addr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址'
+                                 `addr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址',
+                                 PRIMARY KEY (`id`) USING BTREE,
+                                 UNIQUE INDEX `IDX_USER_ID`(`user_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
