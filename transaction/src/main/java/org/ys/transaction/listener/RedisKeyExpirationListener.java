@@ -37,9 +37,9 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
     private RedissonClient redissonClient;
 
     @Override
-    public void onMessage(CharSequence charSequence, CharSequence charSequence1, String s) {
-        String expiredKey = s;
+    public void onMessage(CharSequence charSequence, CharSequence charSequence1, String expiredKey) {
         // 根据键的前缀执行不同的业务逻辑
+        System.out.println("收到过期键通知: " + expiredKey);
         if (expiredKey.startsWith(USER_ORDER_PREFIX)) {
             handleOrderExpiry(expiredKey);
         }
