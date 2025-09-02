@@ -3,6 +3,7 @@ package org.ys.transaction.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ public class CartServiceimpl  implements CartService {
     private static final String USER_ORDER_PREFIX = "seckill:user:order:";
     //用户购物车key
     private static final String SHOP_CAR_PREFIX = "shoppingCar:order:";
+
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CartServiceimpl.class);
 
     @Resource
@@ -56,6 +58,9 @@ public class CartServiceimpl  implements CartService {
 
     @Resource
     private YsUserDao userDao;
+
+    @Value("${seckill.orderTimeOut}")
+    private long orderTimeOut;
 
     @Resource
     private YsShoppingHistoryDao shoppingHistoryDao;
@@ -164,7 +169,7 @@ public class CartServiceimpl  implements CartService {
                     item.setStatusEnum(OrderStatusEnum.ORDER_CREATING.getCode());//订单创建中
                     String updatedItemJson = JsonUtils.objectToJson(item);
                     order.set(updatedItemJson);
-                    order.expire(15, TimeUnit.MINUTES);//秒杀订单过期时间为15分钟
+                    order.expire(orderTimeOut, TimeUnit.MINUTES);//秒杀订单过期时间为5分钟
                     //6、发送消息
                     jmsTemplate.convertAndSend("seckill.order.queue", updatedItemJson);
                     return CommentResult.ok("秒杀成功");

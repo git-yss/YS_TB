@@ -43,3 +43,10 @@ redis:
     max-idle: 24
     min-idle: 8
     max-wait: 3000
+
+
+
+#自定义参数区域------------------------
+
+seckill:   #秒杀配置参数
+  orderTimeOut: 5 #秒杀订单过期时间
