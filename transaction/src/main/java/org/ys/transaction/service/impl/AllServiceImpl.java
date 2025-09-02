@@ -8,14 +8,14 @@ import org.springframework.util.ObjectUtils;
 import org.ys.commens.entity.YsGoods;
 import org.ys.commens.entity.YsUser;
 import org.ys.commens.dao.YsUserDao;
-import org.ys.transaction.service.AllService;
+import org.ys.transaction.service.IndexService;
 
 
 import java.util.Map;
 
 @Service
 @Transactional
-public class AllServiceImpl implements AllService {
+public class AllServiceImpl implements IndexService {
     @Autowired
     private YsUserDao ysUserDao;
     @Override

@@ -8,16 +8,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.commens.entity.YsGoods;
 import org.ys.commens.pojo.CommentResult;
-import org.ys.transaction.service.AllService;
+import org.ys.transaction.service.IndexService;
 
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class AllController {
     @Autowired
-    private AllService service;
+    private IndexService service;
 
     @RequestMapping("login")
     @ResponseBody

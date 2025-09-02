@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.vo.CartItem;
-import org.ys.shoppingcar.CartService;
+import org.ys.transaction.service.CartService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
