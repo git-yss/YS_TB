@@ -1,4 +1,5 @@
-# YS_TB
+YS_TB
+
 模拟电商平台
 
 ## 未解决点：（提供解决思路待后续补充）
@@ -16,10 +17,4 @@
 
 2. 建立索引 ，生成sql文件放在项目里，启动时自动执行
 
-   ```
-   JsonUtils.objectToJson(cartItem);
-   ```
-
-```
-JsonUtils.jsonToPojo(existingItemJson, CartItem.class);
-```
+   
