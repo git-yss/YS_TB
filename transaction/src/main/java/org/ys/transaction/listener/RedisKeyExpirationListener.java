@@ -1,11 +1,11 @@
 package org.ys.transaction.listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
+import org.redisson.api.listener.PatternMessageListener;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisKeyExpirationListener implements MessageListener {
+public class RedisKeyExpirationListener implements PatternMessageListener<String> {
 
     //秒杀商品key
     private static final String STOCK_PREFIX = "seckill:stock";
@@ -35,20 +35,18 @@ public class RedisKeyExpirationListener implements MessageListener {
 
     @Resource
     private RedissonClient redissonClient;
+
     @Override
-    public void onMessage(CharSequence channel, Object message) {
-        String expiredKey = message.toString();
+    public void onMessage(CharSequence charSequence, CharSequence charSequence1, String expiredKey) {
         // 根据键的前缀执行不同的业务逻辑
+        System.out.println("收到过期键通知: " + expiredKey);
         if (expiredKey.startsWith(USER_ORDER_PREFIX)) {
             handleOrderExpiry(expiredKey);
         }
-        // 可以添加更多条件分支处理不同类型的键
     }
-
     private void handleOrderExpiry(String orderKey) {
        //解析key中的userId和itemId “seckill:user:order:123_321”
         String[] parts = orderKey.split("[:_]");
-        String userId = parts[3]; // 123
         String itemId = parts[4]; // 321
        //获取秒杀的所有商品信息
         RMap<String, String> map = redissonClient.getMap(STOCK_PREFIX,new StringCodec());
@@ -95,6 +93,7 @@ public class RedisKeyExpirationListener implements MessageListener {
             }
         }
     }
+
 
 
 }

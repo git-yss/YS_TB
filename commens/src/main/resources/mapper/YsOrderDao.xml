@@ -37,6 +37,9 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
     <update id="updateStatusById">
         update ys_tb.ys_order set status = #{code} where id = #{id}
     </update>
+    <delete id="deleteById">
+        delete from ys_tb.ys_order where id = #{id}
+    </delete>
     <select id="selectDetailById" resultType="java.util.Map">
         SELECT
             addr.addr "addr",

@@ -3,8 +3,6 @@ package org.ys.commens.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-
 import java.math.BigDecimal;
 
 /**
@@ -15,7 +13,7 @@ import java.math.BigDecimal;
      */
     @SuppressWarnings("serial")
     @TableName("ys_goods")
-    public  class YsGoods extends Model<YsGoods> {
+    public  class YsGoods  {
     //商品id
     @TableId(value = "id", type = IdType.INPUT)
         private Long id;

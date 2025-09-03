@@ -6,7 +6,6 @@
 
     <modules>
         <module>commens</module>
-        <module>shoppingCar</module>
         <module>transaction</module>
     </modules>
 
@@ -49,6 +48,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
+            <version>${web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
