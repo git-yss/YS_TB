@@ -34,11 +34,18 @@ public interface CartService {
     CommentResult deleteById(Long itemId, Long userId);
 
     /**
-     * 普通支付
-     * @param maps
+     * 普通商品结算订单
+     * @param items  商品id集合  用户id
      * @return
      */
-    CommentResult goSettlement(List<Map<String, Object>> maps);
+    CommentResult goSettlement( Map<String, Object> items);
+
+    /**
+     * 普通商品支付订单
+     * @param userId  orderId 用户id  订单id
+     * @return
+     */
+    CommentResult goPay( String userId, String orderId);
 
     /**
      * 秒杀单品

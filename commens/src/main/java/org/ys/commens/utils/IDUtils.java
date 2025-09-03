@@ -11,7 +11,7 @@ public class IDUtils {
 	/**
 	 * 商品id生成
 	 */
-	public static long genItemId() {
+	public static long genOrderId() {
 		//取当前时间的长整形值包含毫秒
 		long millis = System.currentTimeMillis();
 		//加上两位随机数

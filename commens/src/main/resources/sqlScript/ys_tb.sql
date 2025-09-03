@@ -61,8 +61,7 @@ CREATE TABLE `ys_order`  (
                              `goods_id` bigint NULL DEFAULT NULL COMMENT '商品id',
                              `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单状态',
                              `addTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '订单时间',
-                             PRIMARY KEY (`id`) USING BTREE,
-                             UNIQUE INDEX `IDX_USER_ID`(`user_id` ASC, `goods_id` ASC) USING BTREE
+                             UNIQUE INDEX `IDX_USER_ID`(`id` ASC, `user_id` ASC, `goods_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

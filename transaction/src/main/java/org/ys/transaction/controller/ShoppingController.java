@@ -41,14 +41,14 @@ public class ShoppingController {
 
 
     /**
-     * 普通商品结算接口
-     * @param maps
+     * 普通商品结算订单接口
+     * @param items  商品id集合  用户id
      * @return
      */
     @RequestMapping("goSettlement")
     @ResponseBody
-    public CommentResult goSettlement(@RequestBody List<Map<String, Object>> maps){
-        return  service.goSettlement(maps);
+    public CommentResult goSettlement(@RequestBody Map<String, Object> items){
+        return  service.goSettlement(items);
     }
 
     /**

@@ -48,7 +48,7 @@ public class ActiveMQConfig {
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory());
-        factory.setConcurrency("1-1");
+        factory.setConcurrency("1-1");// 1个最小消费者，1个最大消费者
         // 设置确认模式为客户端手动确认
         factory.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
         return factory;

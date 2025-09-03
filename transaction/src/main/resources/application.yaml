@@ -29,7 +29,12 @@ jackson:
   default-property-inclusion: non_null
 logging:
   level:
+    # 你现有的配置
     org.ys.commens.dao: debug
+    # MyBatis 和 MyBatis-Plus 相关日志
+    com.baomidou.mybatisplus: debug
+    org.mybatis: debug
+
 
 
 redis:
@@ -49,4 +54,8 @@ redis:
 #自定义参数区域------------------------
 
 seckill:   #秒杀配置参数
-  orderTimeOut: 5 #秒杀订单过期时间
+  orderTimeOut: 5 #秒杀订单过期时间 （单位：分钟）
+normal:   #普通订单配置参数
+  orderTimeOut: 7 #普通订单过期时间（单位：天）
+shoppinCar:  #购物车配置参数
+  timeOut: 30   #购物车过期时间（单位：天）

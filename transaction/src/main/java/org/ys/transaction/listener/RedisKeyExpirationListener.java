@@ -38,13 +38,23 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
 
     @Override
     public void onMessage(CharSequence charSequence, CharSequence charSequence1, String expiredKey) {
-        // 根据键的前缀执行不同的业务逻辑
+        // 构造dump键名
+        String dumpKey = "dump:" + expiredKey;
+        // 从dump键中获取值
+        RBucket<String> dumpBucket = redissonClient.getBucket(dumpKey, new StringCodec());
+        String expiredValue = dumpBucket.get();
+
         System.out.println("收到过期键通知: " + expiredKey);
         if (expiredKey.startsWith(USER_ORDER_PREFIX)) {
-            handleOrderExpiry(expiredKey);
+            if (expiredValue != null) {
+                System.out.println("过期键: " + expiredKey + ", 过期值: " + expiredValue);
+                handleOrderExpiry(expiredKey, expiredValue);
+                // 删除dump键
+                dumpBucket.delete();
+            }
         }
     }
-    private void handleOrderExpiry(String orderKey) {
+    private void handleOrderExpiry(String orderKey,String orderJson) {
        //解析key中的userId和itemId “seckill:user:order:123_321”
         String[] parts = orderKey.split("[:_]");
         String itemId = parts[4]; // 321
@@ -54,8 +64,6 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
         if (!map.isExists()) {
 
         }else{
-            RBucket<String> order = redissonClient.getBucket(orderKey);
-
             // 库存+1
             //分布式锁来锁住秒杀商品
             RLock lock = redissonClient.getLock(STOCK_LOCK+itemId);
@@ -64,7 +72,6 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
                 if (lock.tryLock(100, TimeUnit.MILLISECONDS)) {
                     try {
                         //1、获取秒杀商品订单
-                        String orderJson  = order.get();
                         CartItem item = JsonUtils.jsonToPojo(orderJson, CartItem.class);
                         //1、获取秒杀商品信息,库存+1
                         String itemJson = map.get(itemId);
@@ -72,14 +79,12 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
                         itemInfo.setNum(itemInfo.getNum() + 1);
                         String updatedItemJson = JsonUtils.objectToJson(itemInfo);
                         map.put(itemId,updatedItemJson);
-                        //2、删除订单，释放库存
+                        //2、删除数据库订单，释放库存
                         item.setNum(1);
                         cartService.addOrderCpnt(item);
 
                     } catch (Exception e) {
                         throw new RuntimeException(e);
-                    }finally {
-                        lock.unlock();
                     }
 
                 }else{
