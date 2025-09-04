@@ -9,6 +9,7 @@ import org.redisson.api.listener.PatternMessageListener;
 import org.redisson.client.codec.StringCodec;
 import org.springframework.stereotype.Component;
 
+import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.utils.JsonUtils;
 import org.ys.commens.vo.CartItem;
 import org.ys.transaction.service.CartService;
@@ -30,6 +31,9 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
     //用户秒杀订单key
     private static final String USER_ORDER_PREFIX = "seckill:user:order:";
 
+    //用户订单key
+    private static final String NORMAL_USER_ORDER_PREFIX = "normal:user:order:";
+
     @Resource
     private CartService cartService;
 
@@ -38,23 +42,37 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
 
     @Override
     public void onMessage(CharSequence charSequence, CharSequence charSequence1, String expiredKey) {
+        System.out.println("收到过期键通知: " + expiredKey);
         // 构造dump键名
         String dumpKey = "dump:" + expiredKey;
-        // 从dump键中获取值
-        RBucket<String> dumpBucket = redissonClient.getBucket(dumpKey, new StringCodec());
-        String expiredValue = dumpBucket.get();
-
-        System.out.println("收到过期键通知: " + expiredKey);
         if (expiredKey.startsWith(USER_ORDER_PREFIX)) {
+            // 从dump键中获取值
+            RBucket<String> dumpBucket = redissonClient.getBucket(dumpKey, new StringCodec());
+            String expiredValue = dumpBucket.get();
             if (expiredValue != null) {
                 System.out.println("过期键: " + expiredKey + ", 过期值: " + expiredValue);
-                handleOrderExpiry(expiredKey, expiredValue);
+                handleSeckillOrderExpiry(expiredKey, expiredValue);
                 // 删除dump键
                 dumpBucket.delete();
             }
+        }else if(expiredKey.startsWith(NORMAL_USER_ORDER_PREFIX)){
+            // 从dump键中获取值
+            String[] parts = expiredKey.split("[:_]");
+            String orderId = parts[4];
+            RMap<String, String> map = redissonClient.getMap(dumpKey, new StringCodec());
+            System.out.println("过期键: " + expiredKey + ", 过期值: " + map);
+            handleOrderExpiry(orderId, map);
+            // 删除dump键
+            map.delete();
         }
     }
-    private void handleOrderExpiry(String orderKey,String orderJson) {
+
+    /**
+     * 秒杀超时订单过期回滚处理
+     * @param orderKey
+     * @param orderJson
+     */
+    private void handleSeckillOrderExpiry(String orderKey,String orderJson) {
        //解析key中的userId和itemId “seckill:user:order:123_321”
         String[] parts = orderKey.split("[:_]");
         String itemId = parts[4]; // 321
@@ -96,6 +114,19 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
             }finally {
                 lock.unlock();
             }
+        }
+    }
+
+
+    /**
+     * 普通超时订单过期回滚处理
+     * @param orderId
+     * @param map
+     */
+    private void handleOrderExpiry(String orderId,RMap<String, String> map) {
+        for (String itemId : map.keySet()) {
+            CartItem item = JsonUtils.jsonToPojo(map.get(itemId), CartItem.class);
+            cartService.addOrderNormalCpnt(orderId,item);
         }
     }
 

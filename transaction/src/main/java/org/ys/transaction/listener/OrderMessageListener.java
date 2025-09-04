@@ -48,7 +48,7 @@ public class OrderMessageListener {
         try {
             // 处理订单消息
             cartItem.setNum(1);//秒杀场景都是扣1个
-            cartService.addOrder(cartItem,99);
+            cartService.addOrder(cartItem,"");
             // 手动确认消息
             message.acknowledge();
             log.info("订单处理成功: 用户ID={}, 商品ID={}", cartItem.getUserId(), cartItem.getItemId());

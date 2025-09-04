@@ -38,8 +38,19 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
         update ys_tb.ys_order set status = #{code} where id = #{id}
     </update>
     <delete id="deleteById">
-        delete from ys_tb.ys_order where id = #{id}
+        update ys_tb.ys_order set status = #{status}
+                              where id = #{id}
+        <if test="userId !=0 ">
+            and user_id=#{userId}
+        </if>
+        <if test="itemId !=0">
+            and goods_id=#{itemId}
+        </if>
     </delete>
+    <select id="selectsById" resultType="org.ys.commens.entity.YsOrder">
+        select * from ys_tb.ys_order where id = #{id}
+
+    </select>
     <select id="selectDetailById" resultType="java.util.Map">
         SELECT
             addr.addr "addr",

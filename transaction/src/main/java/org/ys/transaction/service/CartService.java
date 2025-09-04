@@ -6,6 +6,7 @@ import org.ys.commens.pojo.CommentResult;
 import org.ys.commens.vo.CartItem;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,9 +61,13 @@ public interface CartService {
      * @param cartItem
      * @return
      */
-    void addOrder(CartItem  cartItem,int code);
+    void addOrder(CartItem  cartItem,String way);
 
     void addOrderCpnt(CartItem  cartItem);
+
+    void addOrderNormal(ArrayList<CartItem> cartItem,String way);
+
+    void addOrderNormalCpnt(String orderId,CartItem item );
 
     /**
      * 初始化秒杀商品并设置过期时间

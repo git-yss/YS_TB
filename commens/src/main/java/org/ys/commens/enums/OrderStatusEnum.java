@@ -4,7 +4,8 @@ public enum OrderStatusEnum {
     ORDER_CREATING(1, "生成订单中"),
     PENDING_PAYMENT(2, "待支付"),
     PAID(3, "已支付"),
-    CANCELLED(4, "已取消");
+    CANCELLED(4, "已取消"),
+    EXPIRECANCELLED(5, "过期取消");
 
     private final int code;
     private final String description;

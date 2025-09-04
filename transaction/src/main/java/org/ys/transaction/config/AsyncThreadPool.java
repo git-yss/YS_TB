@@ -15,12 +15,14 @@ public class AsyncThreadPool {
     @Bean("cartTaskExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(20);
-        executor.setQueueCapacity(200);
+        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors() * 2);
+        executor.setMaxPoolSize(50);
+        executor.setQueueCapacity(1000);
         executor.setKeepAliveSeconds(60);
-        executor.setThreadNamePrefix("cart-async-");
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setThreadNamePrefix("cart-order-async-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());// 设置拒绝执行策略为调用者运行策略
+        executor.setWaitForTasksToCompleteOnShutdown(true);// 设置关闭时等待任务完成
+        executor.setAwaitTerminationSeconds(60);// 设置等待终止时间
         executor.initialize();
         return executor;
     }

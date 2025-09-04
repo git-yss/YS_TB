@@ -12,6 +12,7 @@ import org.ys.commens.dao.YsOrderDao;
 import org.ys.commens.dao.YsShoppingHistoryDao;
 import org.ys.commens.dao.YsUserDao;
 import org.ys.commens.entity.YsGoods;
+import org.ys.commens.entity.YsOrder;
 import org.ys.commens.entity.YsShoppingHistory;
 import org.ys.commens.entity.YsUser;
 import org.ys.commens.enums.OrderStatusEnum;
@@ -26,7 +27,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -56,7 +59,7 @@ public class CartServiceimpl  implements CartService {
 
 
     @Resource
-    private YsGoodsDao goodsService;
+    private YsGoodsDao goodsDao;
 
     @Resource
     private YsUserDao userDao;
@@ -136,38 +139,112 @@ public class CartServiceimpl  implements CartService {
 
         String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;//用户普通订单key
         RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
+        // 同时设置dump键（不过期）,用作过期后获取值的备用key
+        String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;
+        RMap<String, String> dumpMap = redissonClient.getMap(dumpKey, new StringCodec());
         ArrayList<CartItem> cartItems = new ArrayList<>();
         for (String itemId : items.split(",")) {
             CartItem cartItem = JsonUtils.jsonToPojo(cartMap.get(itemId), CartItem.class);
             cartItem.setId(orderId);
             cartItems.add(cartItem);
             map.put(itemId, JsonUtils.objectToJson(cartItem));
+            dumpMap.put(itemId, JsonUtils.objectToJson(cartItem));
         }
         map.expire(normalOrderTimeOut, TimeUnit.DAYS);
-        //添加数据库普通订单，扣库存
-        addOrderNormal(cartItems);
+        //使用线程池异步执行添加数据库普通订单，扣库存
+        CompletableFuture.runAsync(()->{
+            try {
+                addOrderNormal(cartItems,"");
+            } catch (Exception e) {
+                log.error("添加普通订单失败: {}", e.getMessage(), e);
+                //走补偿机制 清理redis购物车
+                RMap<String, String> carMap = redissonClient.getMap(normalOrderKey, new StringCodec());
+                carMap.delete();
+            }
+        });
+
         return CommentResult.ok(orderId);
     }
 
     @Override
     public CommentResult goPay(String userId, String orderId) {
-        return null;
-    }
+        //获取redis订单信息
+        String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;//用户普通订单key
+        RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
 
-    private void addOrderNormal(ArrayList<CartItem> cartItems) {
+       //获取余额
+        YsUser ysUser = userDao.selectById(Long.valueOf(userId));
+        //数据库商品价格
+        List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.parseLong(orderId));
+        if(ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(OrderStatusEnum.PENDING_PAYMENT.getCode())){
+            for (YsOrder ysOrder : ysOrders) {
+                String itemId = String.valueOf(ysOrder.getGoodsId());
+                YsGoods goods = goodsDao.selectGoodById(Long.valueOf(itemId));
+                BigDecimal price = goods.getPrice();
+                ysUser.setBalance(ysUser.getBalance().subtract(price));
+            }
+            // 扣除对应余额(不会有并发问题，只会一次支付一个订单)
+            userDao.updateBalanceById(ysUser);
+            //修改订单状态
+            int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), Long.parseLong(orderId));
+            if(i>0){
+                log.info("订单支付状态修改成功！");
+                map.delete();
+            }
+            //新增购物历史记录
+            YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();
+            ysShoppingHistory.setId(cartItem.getId());
+            ysShoppingHistory.setUserId(Long.valueOf(userId));
+            ysShoppingHistory.setGoodsId(Long.valueOf(itemId));
+            shoppingHistoryDao.insert(ysShoppingHistory);
+            //  发送邮件购买成功，地址为多少多少！；
+            jmsTemplate.convertAndSend("mail.queue", cartItem.getId());
+        }else{
+            //todo
+            log.info("补偿订单，触发防悬挂");
+            //异步线程还未执行生成订单，支付已经就绪，需要帮他生成订单
+            cartItem.setNum(1);//秒杀场景都是扣1个
+            addOrderNormal(cartItem,"cpnt");
+        }
+        return CommentResult.ok();
+    }
+    @Override
+    public void addOrderNormal(ArrayList<CartItem> cartItems,String way) {
         for (CartItem cartItem : cartItems) {
                 // 1. 创建订单记录
-               cartItem.setStatusEnum(OrderStatusEnum.PENDING_PAYMENT.getCode());
+            if(way.equals("cpnt")){
+                //防悬挂
+                cartItem.setStatusEnum(OrderStatusEnum.PAID.getCode());
+            }else {
+                cartItem.setStatusEnum(OrderStatusEnum.PENDING_PAYMENT.getCode());
+            }
+
                ysOrderDao.addOrder(cartItem);
 
                 // 2. 扣减数据库中的商品库存
-                int stock =goodsService.selectGoodById(cartItem.getItemId()).getInventory();
+                int stock = goodsDao.selectGoodById(cartItem.getItemId()).getInventory();
                 if(stock>0){
-                    goodsService.decreaseStock(cartItem.getItemId(), cartItem.getNum());
+                    goodsDao.decreaseStock(cartItem.getItemId(), cartItem.getNum());
                 }else{
                     log.error("商品已售罄");
                     throw new RuntimeException("商品已售罄");
                 }
+        }
+    }
+    @Override
+    public void addOrderNormalCpnt(String orderId,CartItem item ) {
+
+        List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.valueOf(orderId));
+        //返还库存
+        if (ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(OrderStatusEnum.PENDING_PAYMENT.getCode())) {
+            for (YsOrder ysOrder : ysOrders) {
+                if(ysOrder.getGoodsId().equals(item.getItemId())){
+                    goodsDao.increaseStock(item.getItemId(), item.getNum());
+                    //作废订单
+                    ysOrderDao.deleteById(ysOrder.getId(),ysOrder.getUserId(),ysOrder.getGoodsId(),OrderStatusEnum.EXPIRECANCELLED.getCode());
+                }
+            }
+
         }
     }
 
@@ -242,27 +319,28 @@ public class CartServiceimpl  implements CartService {
      * @param code
      */
     @Override
-    public void addOrder(CartItem cartItem,int code) {
+    public void addOrder(CartItem cartItem,String way) {
         //创建订单前查询redis订单是否过期，过期则不执行！
         if(!redissonClient.getBucket(USER_ORDER_PREFIX + cartItem.getUserId() + "_" + cartItem.getItemId()).isExists()){
            log.info("订单已过期");
         }else{
             // 1. 创建订单记录
-            if(code==99){
+            if(way.equals("cpnt")){
+                //防悬挂
+                cartItem.setStatusEnum(OrderStatusEnum.PAID.getCode());
+            }else {
                 cartItem.setStatusEnum(OrderStatusEnum.PENDING_PAYMENT.getCode());
-            }else{
-                //防悬挂直接补偿一个支付完成的订单
-                cartItem.setStatusEnum(code);
             }
+
 
             long orderId = IDUtils.genOrderId();
             cartItem.setId(orderId);
             ysOrderDao.addOrder(cartItem);
 
             // 2. 扣减数据库中的商品库存
-            int stock =goodsService.selectGoodById(cartItem.getItemId()).getInventory();
+            int stock = goodsDao.selectGoodById(cartItem.getItemId()).getInventory();
             if(stock>0){
-                goodsService.decreaseStock(cartItem.getItemId(), cartItem.getNum());
+                goodsDao.decreaseStock(cartItem.getItemId(), cartItem.getNum());
             }else{
                 log.error("商品已售罄");
                 throw new RuntimeException("商品已售罄");
@@ -283,10 +361,10 @@ public class CartServiceimpl  implements CartService {
         log.info("执行回滚机制，返还库存");
         //返还库存
         //锁查
-        YsGoods ysGoods = goodsService.selectGoodById(cartItem.getItemId());
-        goodsService.increaseStock(ysGoods.getId(), cartItem.getNum());
+        YsGoods ysGoods = goodsDao.selectGoodById(cartItem.getItemId());
+        goodsDao.increaseStock(ysGoods.getId(), cartItem.getNum());
         //删除订单
-        ysOrderDao.deleteById(cartItem.getId());
+        ysOrderDao.deleteById(cartItem.getId(),cartItem.getUserId(),cartItem.getItemId(),OrderStatusEnum.EXPIRECANCELLED.getCode());
 
     }
 
@@ -340,7 +418,7 @@ public class CartServiceimpl  implements CartService {
         // 将JSON字符串转换为CartItem对象
         CartItem cartItem = JsonUtils.jsonToPojo(cartItemJson, CartItem.class);
         //数据库商品价格
-        YsGoods goods = goodsService.selectGoodById(Long.valueOf(itemId));
+        YsGoods goods = goodsDao.selectGoodById(Long.valueOf(itemId));
           if(cartItem.getPrice().compareTo(goods.getPrice())!=0){
             //真实场景应该需要新建一个表存储商品价格变动，看订单下单时间是否在商品价格变动时间段内，符合秒杀活动时间即使价格不一样仍然按照订单价格执行
             //本场景适合简单场景，秒杀活动价格不会变化
@@ -362,7 +440,7 @@ public class CartServiceimpl  implements CartService {
                 log.info("补偿订单，触发防悬挂");
                 //mq还未执行生成订单，秒杀支付已经就绪，需要帮他生成订单
                 cartItem.setNum(1);//秒杀场景都是扣1个
-                addOrder(cartItem,OrderStatusEnum.PAID.getCode());
+                addOrder(cartItem,"cpnt");
             }
              //新增购物历史记录
             YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();

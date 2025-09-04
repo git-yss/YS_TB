@@ -38,7 +38,9 @@ int addOrder(@Param("cartItem") CartItem cartItem);
 
  int updateStatusById(@Param("code") int code,@Param("id") long id);
 
- int deleteById(@Param("id") long id);
+ int deleteById(@Param("id") long id,@Param("userId") long userId,@Param("itemId") long itemId,@Param("status") int status);
+
+ List<YsOrder> selectsById(@Param("id") long id);
 
  Map<String, Object> selectDetailById(@Param("orderId")long orderId);
 }
