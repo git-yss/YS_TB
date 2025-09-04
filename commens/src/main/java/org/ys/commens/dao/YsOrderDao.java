@@ -42,6 +42,6 @@ int addOrder(@Param("cartItem") CartItem cartItem);
 
  List<YsOrder> selectsById(@Param("id") long id);
 
- Map<String, Object> selectDetailById(@Param("orderId")long orderId);
+ List<Map<String, Object>> selectDetailById(@Param("orderId")long orderId);
 }
 

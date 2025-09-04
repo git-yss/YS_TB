@@ -92,7 +92,7 @@ CREATE TABLE `ys_shopping_history`  (
                                         `id` bigint NOT NULL COMMENT '订单ID',
                                         `user_id` bigint NOT NULL COMMENT '用户id',
                                         `goods_id` bigint NOT NULL COMMENT '商品id',
-                                        PRIMARY KEY (`id`) USING BTREE,
+    
                                         INDEX `IDX_USER_ID`(`user_id` ASC, `goods_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 

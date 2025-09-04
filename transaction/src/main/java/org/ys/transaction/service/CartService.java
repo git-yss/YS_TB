@@ -46,7 +46,7 @@ public interface CartService {
      * @param userId  orderId 用户id  订单id
      * @return
      */
-    CommentResult goPay( String userId, String orderId);
+    CommentResult goPay( String userId, String[] orderIds);
 
     /**
      * 秒杀单品

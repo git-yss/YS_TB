@@ -52,6 +52,19 @@ public class ShoppingController {
     }
 
     /**
+     * 普通商品结算订单接口
+     * @param item  订单id  用户id
+     * @return
+     */
+    @RequestMapping("goPay")
+    @ResponseBody
+    public CommentResult goPay(@RequestBody Map<String, Object> item){
+        String userId = item.get("userId").toString();
+        String[] orderIds = item.get("orderIds").toString().split(",");
+        return  service.goPay( userId, orderIds);
+    }
+
+    /**
      * 秒杀商品结算接口
      * @param map
      * @return

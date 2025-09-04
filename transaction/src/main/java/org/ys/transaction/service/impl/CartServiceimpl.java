@@ -134,13 +134,13 @@ public class CartServiceimpl  implements CartService {
         String userId = maps.get("userId").toString();
         String items = maps.get("items").toString();
         String cartKey = SHOP_CAR_PREFIX + userId;
-        RMap<String, String> cartMap = redissonClient.getMap(cartKey);
+        RMap<String, String> cartMap = redissonClient.getMap(cartKey,new StringCodec());
         long orderId = IDUtils.genOrderId();//生成订单
 
-        String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;//用户普通订单key
+        String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"_"+orderId;//用户普通订单key
         RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
         // 同时设置dump键（不过期）,用作过期后获取值的备用key
-        String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;
+        String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId+"_"+orderId;
         RMap<String, String> dumpMap = redissonClient.getMap(dumpKey, new StringCodec());
         ArrayList<CartItem> cartItems = new ArrayList<>();
         for (String itemId : items.split(",")) {
@@ -149,6 +149,8 @@ public class CartServiceimpl  implements CartService {
             cartItems.add(cartItem);
             map.put(itemId, JsonUtils.objectToJson(cartItem));
             dumpMap.put(itemId, JsonUtils.objectToJson(cartItem));
+            //将购物车中相关的信息清除掉
+            cartMap.remove(itemId);
         }
         map.expire(normalOrderTimeOut, TimeUnit.DAYS);
         //使用线程池异步执行添加数据库普通订单，扣库存
@@ -167,44 +169,50 @@ public class CartServiceimpl  implements CartService {
     }
 
     @Override
-    public CommentResult goPay(String userId, String orderId) {
-        //获取redis订单信息
-        String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"-"+orderId;//用户普通订单key
-        RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
+    public CommentResult goPay(String userId, String[] orderIds) {
+        for (String orderId : orderIds) {
+            //获取redis订单信息
+            String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"_"+orderId;//用户普通订单key
+            RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
 
-       //获取余额
-        YsUser ysUser = userDao.selectById(Long.valueOf(userId));
-        //数据库商品价格
-        List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.parseLong(orderId));
-        if(ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(OrderStatusEnum.PENDING_PAYMENT.getCode())){
-            for (YsOrder ysOrder : ysOrders) {
-                String itemId = String.valueOf(ysOrder.getGoodsId());
-                YsGoods goods = goodsDao.selectGoodById(Long.valueOf(itemId));
-                BigDecimal price = goods.getPrice();
-                ysUser.setBalance(ysUser.getBalance().subtract(price));
+            //获取余额
+            YsUser ysUser = userDao.selectById(Long.valueOf(userId));
+            //数据库商品价格
+            List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.parseLong(orderId));
+            if(ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(String.valueOf( OrderStatusEnum.PENDING_PAYMENT.getCode()))){
+                for (YsOrder ysOrder : ysOrders) {
+                    String itemId = String.valueOf(ysOrder.getGoodsId());
+                    YsGoods goods = goodsDao.selectGoodById(Long.valueOf(itemId));
+                    BigDecimal price = goods.getPrice();
+                    ysUser.setBalance(ysUser.getBalance().subtract(price));
+
+                    //新增购物历史记录
+                    YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();
+                    ysShoppingHistory.setId(Long.valueOf(orderId));
+                    ysShoppingHistory.setUserId(Long.valueOf(userId));
+                    ysShoppingHistory.setGoodsId(Long.valueOf(itemId));
+                    shoppingHistoryDao.insert(ysShoppingHistory);
+
+                }
+                // 扣除对应余额(不会有并发问题，只会一次支付一个订单)
+                userDao.updateBalanceById(ysUser);
+                //修改订单状态
+                int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), Long.parseLong(orderId));
+                if(i>0){
+                    log.info("订单支付状态修改成功！");
+                    map.delete();
+                }
+                //  发送邮件购买成功，地址为多少多少！；
+                jmsTemplate.convertAndSend("mail.queue", orderId);
+            }else{
+                log.info("补偿订单，触发防悬挂");
+                //异步线程还未执行生成订单，支付已经就绪，需要帮他生成订单
+                ArrayList<CartItem> items = new ArrayList<>();
+                for (String itemdId : map.keySet()) {
+                    items.add(JsonUtils.jsonToPojo(map.get(itemdId), CartItem.class));
+                }
+                addOrderNormal(items,"cpnt");
             }
-            // 扣除对应余额(不会有并发问题，只会一次支付一个订单)
-            userDao.updateBalanceById(ysUser);
-            //修改订单状态
-            int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), Long.parseLong(orderId));
-            if(i>0){
-                log.info("订单支付状态修改成功！");
-                map.delete();
-            }
-            //新增购物历史记录
-            YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();
-            ysShoppingHistory.setId(cartItem.getId());
-            ysShoppingHistory.setUserId(Long.valueOf(userId));
-            ysShoppingHistory.setGoodsId(Long.valueOf(itemId));
-            shoppingHistoryDao.insert(ysShoppingHistory);
-            //  发送邮件购买成功，地址为多少多少！；
-            jmsTemplate.convertAndSend("mail.queue", cartItem.getId());
-        }else{
-            //todo
-            log.info("补偿订单，触发防悬挂");
-            //异步线程还未执行生成订单，支付已经就绪，需要帮他生成订单
-            cartItem.setNum(1);//秒杀场景都是扣1个
-            addOrderNormal(cartItem,"cpnt");
         }
         return CommentResult.ok();
     }
@@ -236,7 +244,8 @@ public class CartServiceimpl  implements CartService {
 
         List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.valueOf(orderId));
         //返还库存
-        if (ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(OrderStatusEnum.PENDING_PAYMENT.getCode())) {
+        int code = OrderStatusEnum.PENDING_PAYMENT.getCode();
+        if (ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(String.valueOf( code))) {
             for (YsOrder ysOrder : ysOrders) {
                 if(ysOrder.getGoodsId().equals(item.getItemId())){
                     goodsDao.increaseStock(item.getItemId(), item.getNum());

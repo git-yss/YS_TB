@@ -1,6 +1,7 @@
 package org.ys.commens.enums;
 
 public enum OrderStatusEnum {
+    INIT(0, "初始化"),
     ORDER_CREATING(1, "生成订单中"),
     PENDING_PAYMENT(2, "待支付"),
     PAID(3, "已支付"),

@@ -13,7 +13,9 @@ import org.ys.transaction.service.CartService;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 秒杀场景消息监听进行新增订单和结算时发送邮件
@@ -84,16 +86,18 @@ public class OrderMessageListener {
         // 新增购物订单
         try {
             // 处理订单消息
-            Map<String, Object> map = ysOrderDao.selectDetailById(orderId);
+            List<Map<String, Object>> maps = ysOrderDao.selectDetailById(orderId);
+            String userEmail = maps.get(0).get("email").toString();
+            String introduce = maps.stream().map(map -> map.get("introduce").toString()).collect(Collectors.joining("、"));
             // 手动确认消息
             message.acknowledge();
             SimpleMailMessage email = new SimpleMailMessage();
             email.setFrom("811570083@qq.com");
-            email.setTo(map.get("email").toString());
+            email.setTo(userEmail);
             email.setSubject("交易提示");
-            email.setText(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", map.get("orderId").toString(), map.get("username").toString(), map.get("introduce").toString(), map.get("addr").toString()));
+            email.setText(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).get("username").toString(), introduce, maps.get(0).get("addr").toString()));
             mailSender.send(email);
-            log.info(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", map.get("orderId").toString(), map.get("username").toString(), map.get("introduce").toString(), map.get("addr").toString()));
+            log.info(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).get("username").toString(), introduce, maps.get(0).get("addr").toString()));
         } catch (Exception e) {
             // 发生异常时，消息会重新入队
             log.error("邮件发送失败: {}", e);
