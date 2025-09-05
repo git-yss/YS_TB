@@ -465,4 +465,9 @@ public class CartServiceimpl  implements CartService {
         return CommentResult.ok();
     }
 
+    @Override
+    public CommentResult showOrder(Long userId) {
+        return CommentResult.ok(ysOrderDao.selectsByUserId(userId));
+    }
+
 }

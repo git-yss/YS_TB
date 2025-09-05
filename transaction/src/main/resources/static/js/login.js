@@ -21,6 +21,7 @@ var mainApp = new Vue({
                     username: this.username,
                     password: this.password
                 };
+                sessionStorage.setItem('loginUser', this.username)
                 fetchData(contextPath+'/login',params,function () {
                     window.location.href = 'shopping.html';
                 },this)

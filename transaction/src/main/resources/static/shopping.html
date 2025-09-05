@@ -19,15 +19,13 @@
 
     <div class="search-bar">
       <el-input placeholder="搜索商品..." v-model="searchKeyword">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="queryAllGoods(1)"></el-button>
       </el-input>
     </div>
 
     <div class="nav-links">
       <a href="#" class="nav-link">首页</a>
-      <a href="#" class="nav-link">分类</a>
       <a href="#" class="nav-link">促销</a>
-      <a href="#" class="nav-link">品牌</a>
       <div class="cart-icon" @click="showCart = true">
         <i class="el-icon-shopping-cart-full" style="font-size: 24px;"></i>
         <span class="cart-count">{{ cartItemCount }}</span>
@@ -43,7 +41,7 @@
           <el-dropdown-item v-if="isLoggedIn">
             <a href="#" @click="logout">退出</a>
           </el-dropdown-item>
-          <el-dropdown-item v-if="isLoggedIn" @click="toShoppingCar">我的订单</el-dropdown-item>
+          <el-dropdown-item v-if="isLoggedIn" @click="toShoppingOrder">我的订单</el-dropdown-item>
           <el-dropdown-item>个人中心</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

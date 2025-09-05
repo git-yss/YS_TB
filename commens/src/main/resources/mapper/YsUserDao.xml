@@ -37,9 +37,7 @@
     <select id="queryUser" resultType="org.ys.commens.entity.YsUser">
         select * from ys_tb.ys_user where id=#{username} and password=#{password}
     </select>
-    <select id="queryAllGoodsPage" resultType="org.ys.commens.entity.YsGoods">
-        select * from ys_tb.ys_goods limit #{page.current}, #{page.size}
-    </select>
+
     <select id="selectById" resultType="org.ys.commens.entity.YsUser">
         select * from ys_tb.ys_user where id=#{id}
     </select>

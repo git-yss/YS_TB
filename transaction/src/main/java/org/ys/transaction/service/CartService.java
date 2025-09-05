@@ -83,4 +83,6 @@ public interface CartService {
      * @return
      */
     CommentResult goSeckillSettlement(String itemId, String userId) throws JsonProcessingException;
+
+    CommentResult showOrder(Long userId);
 }

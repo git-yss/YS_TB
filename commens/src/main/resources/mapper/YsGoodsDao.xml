@@ -39,6 +39,16 @@
         select * from ys_tb.ys_goods where id = #{itemId} for update
     </select>
 
+    <!-- 如果需要自定义查询条件的分页查询 -->
+    <select id="queryAllGoodsPage" resultType="org.ys.commens.entity.YsGoods">
+        select * from ys_tb.ys_goods
+        <where>
+            <if test="map.searchKeyword != null">
+                and introduce like concat('%',#{map.searchKeyword},'%')
+            </if>
+        </where>
+    </select>
+
 
 </mapper>
 

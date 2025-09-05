@@ -1,6 +1,7 @@
 package org.ys.commens.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.ys.commens.entity.YsGoods;
@@ -21,6 +22,6 @@ public interface YsUserDao extends BaseMapper<YsUser> {
     YsUser  selectById(Long id);
     int  updateBalanceById(@Param("ysUser") YsUser ysUser);
 
-    List<YsGoods> queryAllGoodsPage(@Param("page") Page<YsGoods> page, @Param("map")  Map<String, Object> map);
+
 }
 

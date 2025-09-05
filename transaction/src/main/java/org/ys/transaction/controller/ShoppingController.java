@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+@RequestMapping("shoppingCar")
 @RestController
 public class ShoppingController {
     @Resource
@@ -51,6 +52,11 @@ public class ShoppingController {
         return  service.goSettlement(items);
     }
 
+    @RequestMapping("showOrder")
+    @ResponseBody
+    public CommentResult showOrder(@RequestBody Map<String, Object> map){
+        return  service.showOrder(Long.valueOf(map.get("userId").toString()));
+    }
     /**
      * 普通商品结算订单接口
      * @param item  订单id  用户id

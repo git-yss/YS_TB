@@ -7,12 +7,15 @@ window.onload = function () {
             loginDialogVisible: true,
             totalProducts: 100,    // 总商品数量
             currentPage: 1,      // 当前页码
-            pageSize: 20,        // 每页显示数量
+            pageSize: 5,        // 每页显示数量
             // 搜索和筛选
             searchKeyword: '',
+            user: '',//登陆人
             currentCategory: 1,
             priceRange: [0, 50000],
             selectedBrands: [],
+            orderList: [],//订单
+            spCarList: [],//购物车
 
             // 购物车
             cartItemCount: 0,
@@ -65,9 +68,44 @@ window.onload = function () {
             }
         },
         mounted() {
+            //所有商品
             this.queryAllGoods();
+            //所有订单
+            this.queryOrder();
+            //所有购物车
+            this.queryShoppingCar();
+            this.user =sessionStorage.getItem('loginUser')
         },
         methods: {
+            //我的购物车页面
+            toShoppingCar(){
+
+            },
+            // 查询我的购物车
+            queryShoppingCar(){
+                let _this =this
+                let params = {
+                    userId: this.user,
+                };
+                fetchData(contextPath+'/shoppingCar/showCart',params,function (data) {
+                    _this.spCarList = data.data.records;
+                    _this.cartItemCount = data.data.records.length;
+                },this)
+            },
+            //我的订单页面
+            toShoppingOrder(){
+
+            },
+            // 查询所有订单
+            queryOrder(){
+                let _this =this
+                let params = {
+                    userId: this.user,
+                };
+                fetchData(contextPath+'/shoppingCar/showOrder',params,function (data) {
+                    _this.orderList = data.data.records;
+                },this)
+            },
             queryAllGoods(page = 1){
                 let _this =this
                 let params = {
@@ -89,11 +127,22 @@ window.onload = function () {
             // 添加到购物车
             addToCart(product) {
                 this.cartItemCount++;
-                this.$message({
-                    message: `已添加 ${product.name} 到购物车`,
-                    type: 'success',
-                    duration: 1500
-                });
+                let _this =this
+                let params={
+                    userId:this.user,
+                    itemId:product.id,
+                    image:product.image,
+                    introduce:product.introduce,
+                    num:1,
+                }
+                fetchData(contextPath+'/shoppingCar/addCart',params,function (data) {
+                    _this.$message({
+                        message: `已添加 ${product.name} 到购物车`,
+                        type: 'success',
+                        duration: 1500
+                    });
+                },this)
+
             },
             // 添加到收藏
             addToWishlist(product) {

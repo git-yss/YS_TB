@@ -113,12 +113,13 @@ INSERT INTO `ys_user` VALUES (12345, '杨顺', '123456', '25', '1', 5800.00, '81
 -- ----------------------------
 DROP TABLE IF EXISTS `ys_user_addr`;
 CREATE TABLE `ys_user_addr`  (
-                                 `id` bigint NOT NULL COMMENT 'ID',
-                                 `user_id` bigint NOT NULL COMMENT '用户id',
+                                 `id` bigint(20) NOT NULL COMMENT 'ID',
+                                 `user_id` bigint(20) NOT NULL COMMENT '用户id',
                                  `addr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址',
+                                 `isMain` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否主地址 1=是  0=不是',
                                  PRIMARY KEY (`id`) USING BTREE,
-                                 UNIQUE INDEX `IDX_USER_ID`(`user_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+                                 UNIQUE INDEX `IDX_USER_ID`(`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ys_user_addr

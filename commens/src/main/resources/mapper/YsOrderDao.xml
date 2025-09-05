@@ -67,8 +67,12 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
         WHERE
             o.user_id = us.id
           AND o.goods_id = goods.id
+          and addr.ismain ='1' --主地址默认
           AND us.id = addr.user_id
           AND o.id = #{orderId}
+    </select>
+    <select id="selectsByUserId" resultType="org.ys.commens.entity.YsOrder">
+        select * from ys_tb.ys_order where user_id = #{userId} order by addtime desc
     </select>
 
 </mapper>
