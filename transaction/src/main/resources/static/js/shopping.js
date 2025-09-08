@@ -3,7 +3,6 @@ window.onload = function () {
         el: '#app',
         data: {
             // 用户状态
-            isLoggedIn: true,
             loginDialogVisible: true,
             totalProducts: 100,    // 总商品数量
             currentPage: 1,      // 当前页码
@@ -19,7 +18,6 @@ window.onload = function () {
 
             // 购物车
             cartItemCount: 0,
-            showCart: false,
 
             // 分类数据
             categories: [
@@ -70,16 +68,18 @@ window.onload = function () {
         mounted() {
             //所有商品
             this.queryAllGoods();
-            //所有订单
-            this.queryOrder();
-            //所有购物车
-            this.queryShoppingCar();
             this.user =sessionStorage.getItem('loginUser')
+            if(this.user){
+                //所有订单
+                this.queryOrder();
+                //所有购物车
+                this.queryShoppingCar();
+            }
         },
         methods: {
             //我的购物车页面
             toShoppingCar(){
-
+                window.location.href = 'shoppingCar.html';
             },
             // 查询我的购物车
             queryShoppingCar(){
@@ -94,7 +94,12 @@ window.onload = function () {
             },
             //我的订单页面
             toShoppingOrder(){
+               window.location.href = 'shoppingOrder.html';
+            },
 
+            //我的个人中心
+            toMyzone(){
+                window.location.href = 'myzone.html';
             },
             // 查询所有订单
             queryOrder(){
@@ -126,22 +131,35 @@ window.onload = function () {
             },
             // 添加到购物车
             addToCart(product) {
-                this.cartItemCount++;
-                let _this =this
-                let params={
-                    userId:this.user,
-                    itemId:product.id,
-                    image:product.image,
-                    introduce:product.introduce,
-                    num:1,
+                //
+                if( this.spCarList.filter(item => item.id === product.id).length>0){
+                    this.$message({
+                        message: `请勿重复添加 ${product.name} 到购物车`,
+                        type: 'info',
+                        duration: 1000
+                    })
                 }
-                fetchData(contextPath+'/shoppingCar/addCart',params,function (data) {
-                    _this.$message({
-                        message: `已添加 ${product.name} 到购物车`,
-                        type: 'success',
-                        duration: 1500
-                    });
-                },this)
+                if(this.user){
+                    this.cartItemCount++;
+                    let _this =this
+                    let params={
+                        userId:this.user,
+                        itemId:product.id,
+                        image:product.image,
+                        introduce:product.introduce,
+                        num:1,
+                    }
+                    fetchData(contextPath+'/shoppingCar/addCart',params,function (data) {
+                        _this.$message({
+                            message: `已添加 ${product.name} 到购物车`,
+                            type: 'success',
+                            duration: 1500
+                        });
+                    },this)
+                }else{
+                    window.location.href = 'login.html';
+                }
+
 
             },
             // 添加到收藏
@@ -155,14 +173,13 @@ window.onload = function () {
 
             // 登录
             login() {
-                this.isLoggedIn = true;
-                this.loginDialogVisible = false;
-                this.$message.success('登录成功！');
+                window.location.href = '/login.html';
             },
 
             // 退出登录
             logout() {
-                this.isLoggedIn = false;
+                this.user =null;
+                sessionStorage.removeItem('loginUser')
                 this.$message('您已退出登录');
             }
         }
