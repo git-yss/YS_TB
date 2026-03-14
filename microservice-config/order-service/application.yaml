@@ -1,0 +1,70 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: public
+        group: DEFAULT_GROUP
+      config:
+        server-addr: localhost:8848
+        namespace: public
+        group: DEFAULT_GROUP
+        file-extension: yaml
+  datasource:
+    url: jdbc:mysql://localhost:3306/ys_tb?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# Seata 配置
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: ys_tx_group
+  service:
+    vgroup-mapping:
+      ys_tx_group: default
+    grouplist:
+      default: localhost:8091
+  config:
+    type: nacos
+    nacos:
+      server-addr: localhost:8848
+      namespace: public
+      group: SEATA_GROUP
+  registry:
+    type: nacos
+    nacos:
+      server-addr: localhost:8848
+      namespace: public
+      group: SEATA_GROUP
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: org.ys.orderservice.entity
+  global-config:
+    db-config:
+      update-strategy: IGNORED
+
+# Redis 配置
+spring.redis:
+  mode: single
+  address: redis://127.0.0.1:6379
+  database: 0
+
+# ActiveMQ 配置
+spring.activemq:
+  broker-url: tcp://localhost:61616
+  user: admin
+  password: admin
+
+# 日志配置
+logging:
+  level:
+    org.ys.orderservice: debug

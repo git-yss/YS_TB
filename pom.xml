@@ -30,6 +30,8 @@
         <web.version>2.7.15</web.version>
         <redisson.version>3.23.2</redisson.version>
         <activemq.version>5.16.6</activemq.version>
+        <spring-security.version>2.7.15</spring-security.version>
+        <bcrypt.version>0.10.2</bcrypt.version>
     </properties>
     <dependencyManagement>
     <dependencies>
@@ -38,6 +40,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${web.version}</version>
+        </dependency>
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <!-- BCrypt密码加密 -->
+        <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>${bcrypt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>

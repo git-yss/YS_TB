@@ -20,8 +20,9 @@ import java.util.Map;
 public interface YsUserDao extends BaseMapper<YsUser> {
     YsUser  queryUser(@Param("username") String username,@Param("password") String password);
     YsUser  selectById(Long id);
+    YsUser  selectByName(String username);
+    YsUser  selectByEmail(String email);
     int  updateBalanceById(@Param("ysUser") YsUser ysUser);
-
 
 }
 

@@ -43,13 +43,17 @@
     <select id="queryAllGoodsPage" resultType="org.ys.commens.entity.YsGoods">
         select * from ys_tb.ys_goods
         <where>
-            <if test="map.searchKeyword != null">
-                and introduce like concat('%',#{map.searchKeyword},'%')
+            <if test="map.searchKeyword != null and map.searchKeyword != ''">
+                and (name like concat('%',#{map.searchKeyword},'%')
+                or introduce like concat('%',#{map.searchKeyword},'%')
+                or brand like concat('%',#{map.searchKeyword},'%'))
+            </if>
+            <if test="map.categoryId != null and map.categoryId != 0">
+                and category_id = #{map.categoryId}
             </if>
         </where>
+        order by id desc
     </select>
 
 
 </mapper>
-
-

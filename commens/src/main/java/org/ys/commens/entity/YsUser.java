@@ -32,7 +32,10 @@ public class YsUser  {
     private String email;
     //电话号码
     private String tel;
-
+    //状态：1=正常，0=封禁
+    private String status;
+    //注册时间
+    private java.time.LocalDateTime createTime;
 
     public Long getId() {
         return id;
@@ -96,6 +99,22 @@ public class YsUser  {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public java.time.LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(java.time.LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
 }
