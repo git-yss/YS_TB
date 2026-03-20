@@ -43,6 +43,8 @@ public class CartServiceImpl implements CartService {
     private static final String STOCK_LOCK = "seckill:lock:itemId:";
     //用户秒杀订单key
     private static final String USER_ORDER_PREFIX = "seckill:user:order:";
+
+    private static final String USER_RECORD_PREFIX = "seckill:user:record:";
     //用户购物车key
     private static final String SHOP_CAR_PREFIX = "shoppingCar:order:";
     //用户订单key
@@ -98,7 +100,7 @@ public class CartServiceImpl implements CartService {
 
             // 30日过期
             map.expire(shoppinCarTimeOut, TimeUnit.DAYS);
-            return CommentResult.ok();
+            return CommentResult.success();
         } catch (Exception e) {
             log.error("添加购物车失败: {}", e.getMessage(), e);
             return CommentResult.error("添加购物车失败: " + e.getMessage());
@@ -112,7 +114,7 @@ public class CartServiceImpl implements CartService {
 
         // 刷新过期时间
         cartMap.expire(shoppinCarTimeOut, TimeUnit.DAYS);
-        return  CommentResult.ok(cartMap);
+        return  CommentResult.success(cartMap);
     }
 
     @Override
@@ -121,7 +123,7 @@ public class CartServiceImpl implements CartService {
             String cartKey = SHOP_CAR_PREFIX + userId;
             RMap<String, String> cartMap = redissonClient.getMap(cartKey, new StringCodec());
             cartMap.remove(String.valueOf(itemId));
-            return CommentResult.ok();
+            return CommentResult.success();
         } catch (Exception e) {
             log.error("删除购物车商品失败: {}", e.getMessage(), e);
             return CommentResult.error("删除购物车商品失败: " + e.getMessage());
@@ -165,7 +167,7 @@ public class CartServiceImpl implements CartService {
             }
         });
 
-        return CommentResult.ok(orderId);
+        return CommentResult.success(orderId);
     }
 
     @Override
@@ -214,7 +216,7 @@ public class CartServiceImpl implements CartService {
                 addOrderNormal(items,"cpnt");
             }
         }
-        return CommentResult.ok();
+        return CommentResult.success();
     }
     @Override
     public void addOrderNormal(ArrayList<CartItem> cartItems,String way) {
@@ -294,7 +296,7 @@ public class CartServiceImpl implements CartService {
                     order.expire(orderTimeOut, TimeUnit.MINUTES);
                     //6、发送消息
                     jmsTemplate.convertAndSend("seckill.order.queue", updatedItemJson);
-                    return CommentResult.ok("秒杀成功");
+                    return CommentResult.success("秒杀成功");
 
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -385,6 +387,7 @@ public class CartServiceImpl implements CartService {
             String userRecordKey = USER_RECORD_PREFIX + userId + ":record";
 
             // 获取商品信息
+            RMap<String, String> map = redissonClient.getMap(stockKey, new StringCodec());
             String itemJson = map.get(itemId);
             CartItem item = JsonUtils.jsonToPojo(itemJson, CartItem.class);
 
@@ -423,7 +426,7 @@ public class CartServiceImpl implements CartService {
 
                 // 发送消息
                 jmsTemplate.convertAndSend("seckill.order.queue", updatedItemJson);
-                return CommentResult.ok("秒杀成功");
+                return CommentResult.success("秒杀成功");
             } else {
                 return CommentResult.error(result.toString());
             }
@@ -521,7 +524,7 @@ public class CartServiceImpl implements CartService {
             log.error("初始化秒杀商品失败: {}", e.getMessage(), e);
             return CommentResult.error("初始化秒杀商品失败");
         }
-        return CommentResult.ok();
+        return CommentResult.success();
     }
 
     @Override
@@ -567,12 +570,12 @@ public class CartServiceImpl implements CartService {
         }
 
 
-        return CommentResult.ok();
+        return CommentResult.success();
     }
 
     @Override
     public CommentResult showOrder(Long userId) {
-        return CommentResult.ok(ysOrderDao.selectsByUserId(userId));
+        return CommentResult.success(ysOrderDao.selectsByUserId(userId));
     }
 
 }

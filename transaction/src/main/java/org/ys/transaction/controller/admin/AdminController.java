@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ys.commens.pojo.CommentResult;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +31,15 @@ public class AdminController {
      * 后台登录
      */
     @PostMapping("/login")
-    public CommentResult login(@RequestBody Map<String, String> params) {
+    public CommentResult login(@RequestBody Map<String, String> params, HttpServletRequest request) {
         String username = params.get("username");
         String password = params.get("password");
-        return adminUserService.adminLogin(username, password);
+        CommentResult result = adminUserService.adminLogin(username, password);
+        // AdminInterceptor 依赖 session 中的 adminUser 判断是否已登录
+        if (result != null && result.getStatus() != null && result.getStatus() == 200 && result.getData() != null) {
+            request.getSession().setAttribute("adminUser", result.getData());
+        }
+        return result;
     }
 
     /**

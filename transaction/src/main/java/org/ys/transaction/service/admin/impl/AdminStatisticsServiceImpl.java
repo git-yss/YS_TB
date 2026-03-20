@@ -78,7 +78,7 @@ public class AdminStatisticsServiceImpl implements AdminStatisticsService {
         QueryWrapper<YsOrder> wrapper = new QueryWrapper<>();
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         wrapper.ge("addtime", startOfDay);
-        return ysOrderDao.selectCount(wrapper);
+        return Long.valueOf(ysOrderDao.selectCount(wrapper));
     }
 
     private Long getTodayUsersCount() {

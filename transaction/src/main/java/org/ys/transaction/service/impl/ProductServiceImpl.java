@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
             resultMap.put("pages", resultPage.getPages());
 
             log.info("商品搜索成功: keyword={}, categoryId={}, total={}", keyword, categoryId, resultPage.getTotal());
-            return CommentResult.ok(resultMap);
+            return CommentResult.success(resultMap);
         } catch (Exception e) {
             log.error("商品搜索失败: {}", e.getMessage(), e);
             return CommentResult.error("商品搜索失败: " + e.getMessage());
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             // 这里应该从category表查询，暂时返回空列表，待创建CategoryDao后完善
             log.info("获取商品分类列表成功");
-            return CommentResult.ok("分类列表待实现");
+            return CommentResult.success("分类列表待实现");
         } catch (Exception e) {
             log.error("获取商品分类列表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取商品分类列表失败: " + e.getMessage());
@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             // 这里应该从category表查询，待创建CategoryDao后完善
             log.info("获取子分类成功: parentId={}", parentId);
-            return CommentResult.ok("子分类列表待实现");
+            return CommentResult.success("子分类列表待实现");
         } catch (Exception e) {
             log.error("获取子分类失败: parentId={}, error={}", parentId, e.getMessage(), e);
             return CommentResult.error("获取子分类失败: " + e.getMessage());
@@ -104,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
             log.info("获取商品详情成功: goodsId={}", goodsId);
-            return CommentResult.ok(goods);
+            return CommentResult.success(goods);
         } catch (Exception e) {
             log.error("获取商品详情失败: goodsId={}, error={}", goodsId, e.getMessage(), e);
             return CommentResult.error("获取商品详情失败: " + e.getMessage());
@@ -141,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
             resultMap.put("pages", resultPage.getPages());
 
             log.info("获取分类商品成功: categoryId={}, total={}", categoryId, resultPage.getTotal());
-            return CommentResult.ok(resultMap);
+            return CommentResult.success(resultMap);
         } catch (Exception e) {
             log.error("获取分类商品失败: categoryId={}, error={}", categoryId, e.getMessage(), e);
             return CommentResult.error("获取分类商品失败: " + e.getMessage());
@@ -164,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
             IPage<YsGoods> resultPage = ysGoodsDao.queryAllGoodsPage(page, queryMap);
 
             log.info("获取热门商品成功: limit={}", limit);
-            return CommentResult.ok(resultPage.getRecords());
+            return CommentResult.success(resultPage.getRecords());
         } catch (Exception e) {
             log.error("获取热门商品失败: limit={}, error={}", limit, e.getMessage(), e);
             return CommentResult.error("获取热门商品失败: " + e.getMessage());

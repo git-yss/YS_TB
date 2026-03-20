@@ -4,7 +4,6 @@ package org.ys.commens.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,6 +52,12 @@ public class YsOrder   {
     private String refundReason;
 //退款金额
     private BigDecimal refundAmount;
+
+// 以下字段用于订单详情查询（join 查询可能返回冗余字段）
+    private String goodsName; // 商品名称（join 查询返回）
+    private String goodsImage; // 商品图片（join 查询返回）
+    private String username;   // 用户名（join 查询返回）
+    private String userTel;    // 用户手机号（join 查询返回）
 
 public Long getId() {
         return id;
@@ -222,4 +227,7 @@ public Long getId() {
         this.userTel = userTel;
     }
 
+    public void setGoods(YsGoods goods) {
+
+    }
 }

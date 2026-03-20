@@ -18,6 +18,7 @@ import org.ys.transaction.service.CartService;
 import org.ys.transaction.service.OrderDetailService;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +77,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             // 订单状态枚举
             orderDetail.put("statusEnum", getOrderStatusName(order.getStatus()));
 
-            return CommentResult.ok(orderDetail);
+            return CommentResult.success(orderDetail);
         } catch (Exception e) {
             log.error("获取订单详情失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("获取订单详情失败: " + e.getMessage());
@@ -127,7 +128,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             result.put("pageSize", orderPage.getSize());
             result.put("pages", orderPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取用户订单列表失败: userId={}, status={}, error={}", userId, status, e.getMessage(), e);
             return CommentResult.error("获取订单列表失败: " + e.getMessage());
@@ -160,7 +161,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             order.setStatus(String.valueOf(OrderStatusEnum.REFUNDING.getCode()));
             order.setRefundReason(reason);
             order.setRefundAmount(refundAmount);
-            order.setRefundTime(new Date());
+            order.setRefundTime(LocalDateTime.now());
             orderDao.updateById(order);
 
             // 退还库存
@@ -173,7 +174,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
             log.info("退款申请成功: orderId={}, goodsId={}, refundAmount={}", 
                 orderId, goodsId, refundAmount);
-            return CommentResult.ok("退款申请已提交");
+            return CommentResult.success("退款申请已提交");
         } catch (Exception e) {
             log.error("申请退款失败: {}", e.getMessage(), e);
             return CommentResult.error("申请退款失败: " + e.getMessage());
@@ -216,7 +217,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
 
             log.info("取消退款成功: orderId={}", orderId);
-            return CommentResult.ok("退款已取消");
+            return CommentResult.success("退款已取消");
         } catch (Exception e) {
             log.error("取消退款失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("取消退款失败: " + e.getMessage());
@@ -241,11 +242,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
             // 更新订单状态为已完成
             order.setStatus(String.valueOf(OrderStatusEnum.FINISHED.getCode()));
-            order.setFinishTime(new Date());
+            order.setFinishTime(LocalDateTime.now());
             orderDao.updateById(order);
 
             log.info("确认收货成功: orderId={}", orderId);
-            return CommentResult.ok("确认收货成功");
+            return CommentResult.success("确认收货成功");
         } catch (Exception e) {
             log.error("确认收货失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("确认收货失败: " + e.getMessage());
@@ -279,7 +280,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
 
             log.info("取消订单成功: orderId={}", orderId);
-            return CommentResult.ok("订单已取消");
+            return CommentResult.success("订单已取消");
         } catch (Exception e) {
             log.error("取消订单失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("取消订单失败: " + e.getMessage());
@@ -314,27 +315,27 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             
             // 根据发货时间生成模拟轨迹
             if (order.getShipTime() != null) {
-                traces.add(createTrace(order.getShipTime(), "您的订单已发货"));
-                
-                // 模拟物流中转
-                long shipTime = order.getShipTime().getTime();
-                long currentTime = System.currentTimeMillis();
-                
-                if (currentTime - shipTime > 24 * 60 * 60 * 1000) { // 超过1天
-                    Date transitTime = new Date(shipTime + 12 * 60 * 60 * 1000);
-                    traces.add(createTrace(transitTime, "您的订单正在配送中"));
-                }
-                
-                if (order.getFinishTime() != null) {
-                    traces.add(createTrace(order.getFinishTime(), "您的订单已签收"));
-                } else if (currentTime - shipTime > 48 * 60 * 60 * 1000) { // 超过2天
-                    traces.add(createTrace(new Date(currentTime), "您的订单正在派送中"));
-                }
+//                traces.add(createTrace(order.getShipTime(), "您的订单已发货"));
+//
+//                // 模拟物流中转
+//                long shipTime = order.getShipTime().getTime();
+//                long currentTime = System.currentTimeMillis();
+//
+//                if (currentTime - shipTime > 24 * 60 * 60 * 1000) { // 超过1天
+//                    Date transitTime = new Date(shipTime + 12 * 60 * 60 * 1000);
+//                    traces.add(createTrace(transitTime, "您的订单正在配送中"));
+//                }
+//
+//                if (order.getFinishTime() != null) {
+//                    traces.add(createTrace(order.getFinishTime(), "您的订单已签收"));
+//                } else if (currentTime - shipTime > 48 * 60 * 60 * 1000) { // 超过2天
+//                    traces.add(createTrace(new Date(currentTime), "您的订单正在派送中"));
+//                }
             }
 
             logisticsInfo.put("traces", traces);
 
-            return CommentResult.ok(logisticsInfo);
+            return CommentResult.success(logisticsInfo);
         } catch (Exception e) {
             log.error("查询物流信息失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("查询物流信息失败: " + e.getMessage());
@@ -366,7 +367,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             cartService.addCart(cartItem);
 
             log.info("重新购买成功: userId={}, orderId={}", userId, orderId);
-            return CommentResult.ok("已加入购物车");
+            return CommentResult.success("已加入购物车");
         } catch (Exception e) {
             log.error("重新购买失败: userId={}, orderId={}, error={}", userId, orderId, e.getMessage(), e);
             return CommentResult.error("重新购买失败: " + e.getMessage());
@@ -400,7 +401,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 Integer.valueOf(order.getStatus()));
 
             log.info("删除订单成功: userId={}, orderId={}", userId, orderId);
-            return CommentResult.ok("订单已删除");
+            return CommentResult.success("订单已删除");
         } catch (Exception e) {
             log.error("删除订单失败: userId={}, orderId={}, error={}", userId, orderId, e.getMessage(), e);
             return CommentResult.error("删除订单失败: " + e.getMessage());
@@ -425,7 +426,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             int statusCode = Integer.parseInt(status);
             for (OrderStatusEnum statusEnum : OrderStatusEnum.values()) {
                 if (statusEnum.getCode() == statusCode) {
-                    return statusEnum.getDesc();
+                    return statusEnum.getDescription();
                 }
             }
         } catch (NumberFormatException e) {

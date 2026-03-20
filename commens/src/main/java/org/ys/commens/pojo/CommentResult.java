@@ -18,14 +18,14 @@ public class CommentResult implements Serializable {
     // 消息
     private String msg;
 
-    public static CommentResult ok(){
+    public static CommentResult success(){
         CommentResult br =new CommentResult();
         br.setStatus(200);
         br.setMsg("OK");
         return br;
     }
 
-    public static CommentResult ok(Object data){
+    public static CommentResult success(Object data){
         CommentResult br =new CommentResult();
         br.setStatus(HttpStatus.OK.value());
         br.setMsg("OK");

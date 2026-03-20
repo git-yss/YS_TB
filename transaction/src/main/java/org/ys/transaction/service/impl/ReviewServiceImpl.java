@@ -107,7 +107,7 @@ public class ReviewServiceImpl implements ReviewService {
             if (result > 0) {
                 log.info("用户评价成功: orderId={}, goodsId={}, userId={}, rating={}", 
                     orderId, goodsId, userId, rating);
-                return CommentResult.ok("评价成功");
+                return CommentResult.success("评价成功");
             } else {
                 return CommentResult.error("评价失败");
             }
@@ -141,7 +141,7 @@ public class ReviewServiceImpl implements ReviewService {
             result.put("pageSize", reviewPage.getSize());
             result.put("pages", reviewPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取商品评价失败: goodsId={}, error={}", goodsId, e.getMessage(), e);
             return CommentResult.error("获取评价失败: " + e.getMessage());
@@ -175,7 +175,7 @@ public class ReviewServiceImpl implements ReviewService {
             result.put("pageSize", reviewPage.getSize());
             result.put("pages", reviewPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取用户评价失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("获取评价失败: " + e.getMessage());
@@ -208,7 +208,7 @@ public class ReviewServiceImpl implements ReviewService {
 
             if (result > 0) {
                 log.info("商家回复评价成功: reviewId={}", reviewId);
-                return CommentResult.ok("回复成功");
+                return CommentResult.success("回复成功");
             } else {
                 return CommentResult.error("回复失败");
             }
@@ -244,7 +244,7 @@ public class ReviewServiceImpl implements ReviewService {
             stats.put("total", totalCount);
             stats.put("avgRating", avgRatingStr);
 
-            return CommentResult.ok(stats);
+            return CommentResult.success(stats);
         } catch (Exception e) {
             log.error("获取评价统计失败: goodsId={}, error={}", goodsId, e.getMessage(), e);
             return CommentResult.error("获取统计失败: " + e.getMessage());

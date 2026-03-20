@@ -3,6 +3,7 @@ package org.ys.transaction.service.admin.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.http.HttpStatus;
 import org.ys.commens.dao.YsOrderDao;
 import org.ys.commens.dao.YsUserDao;
 import org.ys.commens.entity.YsOrder;
@@ -236,7 +237,7 @@ public class AdminUserServiceImpl implements AdminUserService {
             int successCount = 0;
             for (Long userId : userIds) {
                 CommentResult result = banUser(userId, "批量封禁");
-                if (result.isSuccess()) {
+                if (result.getStatus().equals(HttpStatus.OK.value())) {
                     successCount++;
                 }
             }
@@ -253,7 +254,7 @@ public class AdminUserServiceImpl implements AdminUserService {
             int successCount = 0;
             for (Long userId : userIds) {
                 CommentResult result = unbanUser(userId);
-                if (result.isSuccess()) {
+                if (result.getStatus().equals(HttpStatus.OK.value())) {
                     successCount++;
                 }
             }

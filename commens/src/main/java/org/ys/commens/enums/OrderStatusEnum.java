@@ -6,7 +6,12 @@ public enum OrderStatusEnum {
     PENDING_PAYMENT(2, "待支付"),
     PAID(3, "已支付"),
     CANCELLED(4, "已取消"),
-    EXPIRECANCELLED(5, "过期取消");
+    EXPIRECANCELLED(5, "过期取消"),
+    SHIPPED(6, "已发货"),
+    REFUNDED(8, "已退款"),
+    REFUNDING(9, "退款中"),
+    COMPLETED(7, "已发货"),
+    FINISHED(10, "已完成");
 
     private final int code;
     private final String description;

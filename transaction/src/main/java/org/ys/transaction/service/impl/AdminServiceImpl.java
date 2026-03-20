@@ -59,13 +59,11 @@ public class AdminServiceImpl implements AdminService {
             goods.setInventory(Integer.parseInt(params.get("inventory").toString()));
             goods.setImage((String) params.get("image"));
             goods.setCategory((String) params.get("category"));
-            goods.setCategoryId(params.get("categoryId") != null ? 
-                Long.parseLong(params.get("categoryId").toString()) : null);
 
             int result = goodsDao.insert(goods);
             if (result > 0) {
                 log.info("添加商品成功: goodsId={}", goods.getId());
-                return CommentResult.ok("商品添加成功");
+                return CommentResult.success("商品添加成功");
             } else {
                 return CommentResult.error("商品添加失败");
             }
@@ -92,13 +90,10 @@ public class AdminServiceImpl implements AdminService {
             goods.setInventory(Integer.parseInt(params.get("inventory").toString()));
             goods.setImage((String) params.get("image"));
             goods.setCategory((String) params.get("category"));
-            goods.setCategoryId(params.get("categoryId") != null ? 
-                Long.parseLong(params.get("categoryId").toString()) : null);
-
             int result = goodsDao.updateById(goods);
             if (result > 0) {
                 log.info("更新商品成功: goodsId={}", goodsId);
-                return CommentResult.ok("商品更新成功");
+                return CommentResult.success("商品更新成功");
             } else {
                 return CommentResult.error("商品更新失败");
             }
@@ -114,7 +109,7 @@ public class AdminServiceImpl implements AdminService {
             int result = goodsDao.deleteById(goodsId);
             if (result > 0) {
                 log.info("删除商品成功: goodsId={}", goodsId);
-                return CommentResult.ok("商品删除成功");
+                return CommentResult.success("商品删除成功");
             } else {
                 return CommentResult.error("商品删除失败");
             }
@@ -135,7 +130,7 @@ public class AdminServiceImpl implements AdminService {
             // 使用一个状态字段来表示上下架
             // 这里简化处理，实际应该在goods表添加status字段
             log.info("更新商品状态: goodsId={}, status={}", goodsId, status);
-            return CommentResult.ok("状态更新成功");
+            return CommentResult.success("状态更新成功");
         } catch (Exception e) {
             log.error("更新商品状态失败: {}", e.getMessage(), e);
             return CommentResult.error("更新失败: " + e.getMessage());
@@ -180,7 +175,7 @@ public class AdminServiceImpl implements AdminService {
             result.put("pageSize", goodsPage.getSize());
             result.put("pages", goodsPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取商品列表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取列表失败: " + e.getMessage());
@@ -225,7 +220,7 @@ public class AdminServiceImpl implements AdminService {
             result.put("pageSize", orderPage.getSize());
             result.put("pages", orderPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取订单列表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取列表失败: " + e.getMessage());
@@ -248,12 +243,12 @@ public class AdminServiceImpl implements AdminService {
             order.setStatus("3"); // 3=已发货
             order.setLogisticsNo(logisticsNo);
             order.setLogisticsCompany(logisticsCompany);
-            order.setShipTime(new Date());
+            order.setShipTime(LocalDateTime.now());
 
             int result = orderDao.updateById(order);
             if (result > 0) {
                 log.info("订单发货成功: orderId={}", orderId);
-                return CommentResult.ok("发货成功");
+                return CommentResult.success("发货成功");
             } else {
                 return CommentResult.error("发货失败");
             }
@@ -276,20 +271,20 @@ public class AdminServiceImpl implements AdminService {
             if (approve) {
                 // 同意退款
                 order.setStatus("6"); // 6=已退款
-                order.setRefundTime(new Date());
+                order.setRefundTime(LocalDateTime.now());
                 
                 // 扣减库存
                 goodsDao.increaseStock(order.getGoodsId(), order.getQuantity());
                 
                 log.info("退款申请通过: orderId={}", orderId);
-                return CommentResult.ok("退款处理成功");
+                return CommentResult.success("退款处理成功");
             } else {
                 // 拒绝退款
                 order.setStatus("1"); // 回到已支付状态
                 order.setRefundReason("商家拒绝: " + remark);
                 
                 log.info("退款申请拒绝: orderId={}", orderId);
-                return CommentResult.ok("已拒绝退款申请");
+                return CommentResult.success("已拒绝退款申请");
             }
         } catch (Exception e) {
             log.error("处理退款失败: orderId={}, error={}", orderId, e.getMessage(), e);
@@ -337,7 +332,7 @@ public class AdminServiceImpl implements AdminService {
             result.put("pageSize", userPage.getSize());
             result.put("pages", userPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取用户列表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取列表失败: " + e.getMessage());
@@ -352,12 +347,12 @@ public class AdminServiceImpl implements AdminService {
                 return CommentResult.error("用户不存在");
             }
 
-            user.setStatus(status);
+            user.setStatus(String.valueOf(status));
             int result = userDao.updateById(user);
 
             if (result > 0) {
                 log.info("更新用户状态成功: userId={}, status={}", userId, status);
-                return CommentResult.ok("状态更新成功");
+                return CommentResult.success("状态更新成功");
             } else {
                 return CommentResult.error("状态更新失败");
             }
@@ -381,7 +376,7 @@ public class AdminServiceImpl implements AdminService {
             int result = userDao.updateById(user);
             if (result > 0) {
                 log.info("重置用户密码成功: userId={}", userId);
-                return CommentResult.ok("密码重置成功");
+                return CommentResult.success("密码重置成功");
             } else {
                 return CommentResult.error("密码重置失败");
             }
@@ -410,7 +405,7 @@ public class AdminServiceImpl implements AdminService {
             }
             statistics.put("totalSales", totalSales);
 
-            return CommentResult.ok(statistics);
+            return CommentResult.success(statistics);
         } catch (Exception e) {
             log.error("获取统计数据失败: {}", e.getMessage(), e);
             return CommentResult.error("获取统计失败: " + e.getMessage());
@@ -426,7 +421,7 @@ public class AdminServiceImpl implements AdminService {
             report.put("sales", new java.util.Random().nextDouble() * 10000);
             report.put("orders", new java.util.Random().nextInt(100));
 
-            return CommentResult.ok(report);
+            return CommentResult.success(report);
         } catch (Exception e) {
             log.error("获取销售报表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取报表失败: " + e.getMessage());
@@ -441,7 +436,7 @@ public class AdminServiceImpl implements AdminService {
             analysis.put("newUsers", new java.util.Random().nextInt(100));
             analysis.put("userRetention", new java.util.Random().nextDouble());
 
-            return CommentResult.ok(analysis);
+            return CommentResult.success(analysis);
         } catch (Exception e) {
             log.error("获取用户分析失败: {}", e.getMessage(), e);
             return CommentResult.error("获取分析失败: " + e.getMessage());
@@ -458,7 +453,7 @@ public class AdminServiceImpl implements AdminService {
             config1.put("value", "智能电商平台");
             configs.add(config1);
 
-            return CommentResult.ok(configs);
+            return CommentResult.success(configs);
         } catch (Exception e) {
             log.error("获取系统配置失败: {}", e.getMessage(), e);
             return CommentResult.error("获取配置失败: " + e.getMessage());
@@ -469,7 +464,7 @@ public class AdminServiceImpl implements AdminService {
     public CommentResult updateConfig(Map<String, Object> params) {
         try {
             log.info("更新系统配置: {}", params);
-            return CommentResult.ok("配置更新成功");
+            return CommentResult.success("配置更新成功");
         } catch (Exception e) {
             log.error("更新系统配置失败: {}", e.getMessage(), e);
             return CommentResult.error("更新失败: " + e.getMessage());
@@ -489,7 +484,7 @@ public class AdminServiceImpl implements AdminService {
             // 这里需要调用CartService的initSeckillItem方法
 
             log.info("创建秒杀活动成功: goodsId={}", goodsId);
-            return CommentResult.ok("秒杀活动创建成功");
+            return CommentResult.success("秒杀活动创建成功");
         } catch (Exception e) {
             log.error("创建秒杀活动失败: {}", e.getMessage(), e);
             return CommentResult.error("创建失败: " + e.getMessage());
@@ -500,7 +495,7 @@ public class AdminServiceImpl implements AdminService {
     public CommentResult updateSeckillActivity(Map<String, Object> params) {
         try {
             log.info("更新秒杀活动: {}", params);
-            return CommentResult.ok("秒杀活动更新成功");
+            return CommentResult.success("秒杀活动更新成功");
         } catch (Exception e) {
             log.error("更新秒杀活动失败: {}", e.getMessage(), e);
             return CommentResult.error("更新失败: " + e.getMessage());
@@ -511,7 +506,7 @@ public class AdminServiceImpl implements AdminService {
     public CommentResult deleteSeckillActivity(Long activityId) {
         try {
             log.info("删除秒杀活动: activityId={}", activityId);
-            return CommentResult.ok("秒杀活动删除成功");
+            return CommentResult.success("秒杀活动删除成功");
         } catch (Exception e) {
             log.error("删除秒杀活动失败: activityId={}, error={}", activityId, e.getMessage(), e);
             return CommentResult.error("删除失败: " + e.getMessage());
@@ -535,7 +530,7 @@ public class AdminServiceImpl implements AdminService {
             activity.put("status", 1); // 1=进行中
             activities.add(activity);
 
-            return CommentResult.ok(activities);
+            return CommentResult.success(activities);
         } catch (Exception e) {
             log.error("获取秒杀活动列表失败: {}", e.getMessage(), e);
             return CommentResult.error("获取列表失败: " + e.getMessage());
@@ -546,7 +541,7 @@ public class AdminServiceImpl implements AdminService {
     public CommentResult startSeckillActivity(Long activityId) {
         try {
             log.info("启动秒杀活动: activityId={}", activityId);
-            return CommentResult.ok("秒杀活动已启动");
+            return CommentResult.success("秒杀活动已启动");
         } catch (Exception e) {
             log.error("启动秒杀活动失败: activityId={}, error={}", activityId, e.getMessage(), e);
             return CommentResult.error("启动失败: " + e.getMessage());
@@ -557,7 +552,7 @@ public class AdminServiceImpl implements AdminService {
     public CommentResult stopSeckillActivity(Long activityId) {
         try {
             log.info("停止秒杀活动: activityId={}", activityId);
-            return CommentResult.ok("秒杀活动已停止");
+            return CommentResult.success("秒杀活动已停止");
         } catch (Exception e) {
             log.error("停止秒杀活动失败: activityId={}, error={}", activityId, e.getMessage(), e);
             return CommentResult.error("停止失败: " + e.getMessage());

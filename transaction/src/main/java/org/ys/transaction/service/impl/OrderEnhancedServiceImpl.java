@@ -76,7 +76,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             result.put("statusDesc", getStatusDesc(order.getStatus()));
 
             log.info("获取订单详情成功: orderId={}", orderId);
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取订单详情失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("获取订单详情失败: " + e.getMessage());
@@ -121,7 +121,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             orderDao.updateById(order);
 
             log.info("用户申请退款成功: orderId={}, userId={}", orderId, userId);
-            return CommentResult.ok("退款申请已提交，等待商家处理");
+            return CommentResult.success("退款申请已提交，等待商家处理");
         } catch (Exception e) {
             log.error("申请退款失败: orderId={}, userId={}, error={}", orderId, userId, e.getMessage(), e);
             return CommentResult.error("申请退款失败: " + e.getMessage());
@@ -163,7 +163,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
                 goodsDao.increaseStock(order.getGoodsId(), order.getQuantity());
 
                 log.info("商家同意退款成功: orderId={}, refundAmount={}", orderId, refundAmount);
-                return CommentResult.ok("退款处理成功");
+                return CommentResult.success("退款处理成功");
             } else {
                 // 拒绝退款
                 // 更新订单状态回退到已支付或已发货状态
@@ -174,7 +174,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
                 }
 
                 log.info("商家拒绝退款: orderId={}", orderId);
-                return CommentResult.ok("已拒绝退款");
+                return CommentResult.success("已拒绝退款");
             }
         } catch (Exception e) {
             log.error("处理退款失败: orderId={}, error={}", orderId, e.getMessage(), e);
@@ -203,7 +203,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             orderDao.updateById(order);
 
             log.info("更新物流信息成功: orderId={}, logisticsNo={}", orderId, logisticsNo);
-            return CommentResult.ok("物流信息更新成功");
+            return CommentResult.success("物流信息更新成功");
         } catch (Exception e) {
             log.error("更新物流信息失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("更新物流信息失败: " + e.getMessage());
@@ -283,7 +283,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             result.put("tracking", trackingInfo);
 
             log.info("获取物流追踪信息成功: orderId={}", orderId);
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取物流追踪信息失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("获取物流追踪信息失败: " + e.getMessage());
@@ -323,7 +323,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             orderDao.updateById(order);
 
             log.info("用户确认收货成功: orderId={}, userId={}", orderId, userId);
-            return CommentResult.ok("确认收货成功");
+            return CommentResult.success("确认收货成功");
         } catch (Exception e) {
             log.error("确认收货失败: orderId={}, userId={}, error={}", orderId, userId, e.getMessage(), e);
             return CommentResult.error("确认收货失败: " + e.getMessage());
@@ -363,7 +363,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             orderDao.updateById(order);
 
             log.info("用户取消订单成功: orderId={}, userId={}", orderId, userId);
-            return CommentResult.ok("订单已取消");
+            return CommentResult.success("订单已取消");
         } catch (Exception e) {
             log.error("取消订单失败: orderId={}, userId={}, error={}", orderId, userId, e.getMessage(), e);
             return CommentResult.error("取消订单失败: " + e.getMessage());
@@ -400,7 +400,7 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
             orderDao.updateById(order);
 
             log.info("商家发货成功: orderId={}, logisticsNo={}", orderId, logisticsNo);
-            return CommentResult.ok("发货成功");
+            return CommentResult.success("发货成功");
         } catch (Exception e) {
             log.error("发货失败: orderId={}, error={}", orderId, e.getMessage(), e);
             return CommentResult.error("发货失败: " + e.getMessage());
@@ -417,8 +417,8 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
 
         try {
             int code = Integer.parseInt(status);
-            OrderStatusEnum statusEnum = OrderStatusEnum.getByCode(code);
-            return statusEnum != null ? statusEnum.getDesc() : "未知状态";
+            OrderStatusEnum statusEnum = OrderStatusEnum.fromCode(code);
+            return statusEnum != null ? statusEnum.getDescription() : "未知状态";
         } catch (Exception e) {
             return "未知状态";
         }

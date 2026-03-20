@@ -59,7 +59,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             int result = favoriteDao.insert(favorite);
             if (result > 0) {
                 log.info("添加收藏成功: userId={}, goodsId={}", userId, goodsId);
-                return CommentResult.ok("收藏成功");
+                return CommentResult.success("收藏成功");
             } else {
                 return CommentResult.error("收藏失败");
             }
@@ -85,7 +85,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             int result = favoriteDao.deleteById(favorite.getId());
             if (result > 0) {
                 log.info("取消收藏成功: userId={}, goodsId={}", userId, goodsId);
-                return CommentResult.ok("取消收藏成功");
+                return CommentResult.success("取消收藏成功");
             } else {
                 return CommentResult.error("取消收藏失败");
             }
@@ -104,7 +104,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             Map<String, Object> result = new HashMap<>();
             result.put("isFavorited", favorite != null);
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("检查收藏状态失败: userId={}, goodsId={}, error={}", userId, goodsId, e.getMessage(), e);
             return CommentResult.error("检查失败: " + e.getMessage());
@@ -145,7 +145,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             result.put("pageSize", favoritePage.getSize());
             result.put("pages", favoritePage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取用户收藏列表失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("获取收藏列表失败: " + e.getMessage());
@@ -177,7 +177,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             }
 
             log.info("批量取消收藏成功: userId={}, successCount={}", userId, successCount);
-            return CommentResult.ok("成功取消" + successCount + "个收藏");
+            return CommentResult.success("成功取消" + successCount + "个收藏");
         } catch (Exception e) {
             log.error("批量取消收藏失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("批量取消失败: " + e.getMessage());

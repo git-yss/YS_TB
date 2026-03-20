@@ -24,6 +24,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 添加限流拦截器
         registry.addInterceptor(rateLimitInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/static/**", "/login.html");
+                .excludePathPatterns(
+                        "/static/**",
+                        "/login.html",
+                        "/login",
+                        "/register",
+                        "/shopping.html",
+                        "/myzone.html",
+                        "/shoppingCar.html",
+                        "/shoppingOrder.html",
+                        "/css/**",
+                        "/js/**",
+                        "/commen/**"
+                );
     }
 }

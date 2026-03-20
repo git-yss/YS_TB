@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -34,15 +36,15 @@ public class YsCoupon {
     /** 每人限领数量 */
     private Integer perUserLimit;
     /** 有效期开始 */
-    private Date validStartTime;
+    private LocalDateTime validStartTime;
     /** 有效期结束 */
-    private Date validEndTime;
+    private LocalDateTime validEndTime;
     /** 状态：0=禁用 1=有效 */
     private Integer status;
     /** 创建时间 */
-    private Date createdAt;
+    private LocalDateTime createdAt;
     /** 更新时间 */
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -60,14 +62,14 @@ public class YsCoupon {
     public void setUsedCount(Integer usedCount) { this.usedCount = usedCount; }
     public Integer getPerUserLimit() { return perUserLimit; }
     public void setPerUserLimit(Integer perUserLimit) { this.perUserLimit = perUserLimit; }
-    public Date getValidStartTime() { return validStartTime; }
-    public void setValidStartTime(Date validStartTime) { this.validStartTime = validStartTime; }
-    public Date getValidEndTime() { return validEndTime; }
-    public void setValidEndTime(Date validEndTime) { this.validEndTime = validEndTime; }
+    public LocalDateTime getValidStartTime() { return validStartTime; }
+    public void setValidStartTime(LocalDateTime validStartTime) { this.validStartTime = validStartTime; }
+    public LocalDateTime getValidEndTime() { return validEndTime; }
+    public void setValidEndTime(LocalDateTime validEndTime) { this.validEndTime = validEndTime; }
     public Integer getStatus() { return status; }
     public void setStatus(Integer status) { this.status = status; }
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
-    public Date getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -75,8 +75,7 @@ public class UserServiceImpl implements UserService {
             user.setEmail(email);
             user.setTel(tel);
             user.setBalance(java.math.BigDecimal.ZERO);
-            user.setStatus(1);
-            user.setRegisterTime(new java.util.Date());
+            user.setStatus(String.valueOf(1));
 
             // 生成用户ID（简单实现，实际应该使用IDUtils）
             user.setId(System.currentTimeMillis());
@@ -85,7 +84,7 @@ public class UserServiceImpl implements UserService {
             int result = userDao.insert(user);
             if (result > 0) {
                 log.info("用户注册成功: username={}", username);
-                return CommentResult.ok("注册成功");
+                return CommentResult.success("注册成功");
             } else {
                 return CommentResult.error("注册失败");
             }
@@ -120,7 +119,7 @@ public class UserServiceImpl implements UserService {
             mailSender.send(message);
 
             log.info("密码重置邮件已发送: email={}", email);
-            return CommentResult.ok("重置邮件已发送到您的邮箱，请查收");
+            return CommentResult.success("重置邮件已发送到您的邮箱，请查收");
         } catch (Exception e) {
             log.error("发送密码重置邮件失败: {}", e.getMessage(), e);
             return CommentResult.error("发送邮件失败: " + e.getMessage());
@@ -155,7 +154,7 @@ public class UserServiceImpl implements UserService {
             markTokenUsed(token);
 
             log.info("密码重置成功: userId={}", userId);
-            return CommentResult.ok("密码重置成功");
+            return CommentResult.success("密码重置成功");
         } catch (Exception e) {
             log.error("密码重置失败: {}", e.getMessage(), e);
             return CommentResult.error("密码重置失败: " + e.getMessage());
@@ -187,7 +186,7 @@ public class UserServiceImpl implements UserService {
             userDao.updateById(user);
 
             log.info("密码修改成功: userId={}", userId);
-            return CommentResult.ok("密码修改成功");
+            return CommentResult.success("密码修改成功");
         } catch (Exception e) {
             log.error("密码修改失败: {}", e.getMessage(), e);
             return CommentResult.error("密码修改失败: " + e.getMessage());
@@ -218,7 +217,7 @@ public class UserServiceImpl implements UserService {
             userDao.updateById(user);
 
             log.info("用户信息更新成功: userId={}", userId);
-            return CommentResult.ok("信息更新成功");
+            return CommentResult.success("信息更新成功");
         } catch (Exception e) {
             log.error("用户信息更新失败: {}", e.getMessage(), e);
             return CommentResult.error("更新失败: " + e.getMessage());
@@ -235,11 +234,11 @@ public class UserServiceImpl implements UserService {
             }
 
             // 更新头像
-            user.setAvatar(avatarUrl);
+            //user.setAvatar(avatarUrl);
             userDao.updateById(user);
 
             log.info("头像更新成功: userId={}", userId);
-            return CommentResult.ok("头像更新成功");
+            return CommentResult.success("头像更新成功");
         } catch (Exception e) {
             log.error("头像更新失败: {}", e.getMessage(), e);
             return CommentResult.error("更新失败: " + e.getMessage());
@@ -263,12 +262,12 @@ public class UserServiceImpl implements UserService {
             userInfo.put("balance", user.getBalance());
             userInfo.put("email", user.getEmail());
             userInfo.put("tel", user.getTel());
-            userInfo.put("avatar", user.getAvatar());
-            userInfo.put("registerTime", user.getRegisterTime());
-            userInfo.put("lastLoginTime", user.getLastLoginTime());
+           // userInfo.put("avatar", user.getAvatar());
+           // userInfo.put("registerTime", user.getRegisterTime());
+           // userInfo.put("lastLoginTime", user.getLastLoginTime());
             userInfo.put("status", user.getStatus());
 
-            return CommentResult.ok(userInfo);
+            return CommentResult.success(userInfo);
         } catch (Exception e) {
             log.error("获取用户信息失败: {}", e.getMessage(), e);
             return CommentResult.error("获取信息失败: " + e.getMessage());

@@ -16,6 +16,7 @@ import org.ys.transaction.service.CouponService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,16 +54,16 @@ public class CouponServiceImpl implements CouponService {
             coupon.setTotalCount(params.get("totalCount") != null ? Integer.valueOf(params.get("totalCount").toString()) : 0);
             coupon.setUsedCount(0);
             coupon.setPerUserLimit(params.get("perUserLimit") != null ? Integer.valueOf(params.get("perUserLimit").toString()) : 1);
-            coupon.setValidStartTime(params.get("validStartTime") != null ? (Date) params.get("validStartTime") : new Date());
-            coupon.setValidEndTime(params.get("validEndTime") != null ? (Date) params.get("validEndTime") : new Date());
+            coupon.setValidStartTime(params.get("validStartTime") != null ? (LocalDateTime) params.get("validStartTime") : LocalDateTime.now());
+            coupon.setValidEndTime(params.get("validEndTime") != null ? (LocalDateTime) params.get("validEndTime") : LocalDateTime.now());
             coupon.setStatus(params.get("status") != null ? Integer.valueOf(params.get("status").toString()) : 1);
-            Date now = new Date();
+            LocalDateTime now = LocalDateTime.now();
             coupon.setCreatedAt(now);
             coupon.setUpdatedAt(now);
 
             int result = couponDao.insert(coupon);
             if (result > 0) {
-                return CommentResult.ok("优惠券创建成功");
+                return CommentResult.success("优惠券创建成功");
             } else {
                 return CommentResult.error("优惠券创建失败");
             }
@@ -93,11 +94,11 @@ public class CouponServiceImpl implements CouponService {
             }
 
             // 检查优惠券是否在有效期内
-            Date now = new Date();
-            if (coupon.getValidStartTime() != null && now.before(coupon.getValidStartTime())) {
+            LocalDateTime now = LocalDateTime.now();
+            if (coupon.getValidStartTime() != null && now.isBefore(coupon.getValidStartTime())) {
                 return CommentResult.error("优惠券不在有效期内");
             }
-            if (coupon.getValidEndTime() != null && now.after(coupon.getValidEndTime())) {
+            if (coupon.getValidEndTime() != null && now.isAfter(coupon.getValidEndTime())) {
                 return CommentResult.error("优惠券不在有效期内");
             }
 
@@ -122,7 +123,7 @@ public class CouponServiceImpl implements CouponService {
             userCoupon.setUserId(userId);
             userCoupon.setCouponId(couponId);
             userCoupon.setStatus(0); // 未使用
-            userCoupon.setGetTime(new Date());
+            userCoupon.setGetTime(LocalDateTime.now());
             userCoupon.setExpireTime(coupon.getValidEndTime());
 
             int result = userCouponDao.insert(userCoupon);
@@ -132,7 +133,7 @@ public class CouponServiceImpl implements CouponService {
                 couponDao.updateById(coupon);
 
                 log.info("用户领取优惠券成功: userId={}, couponId={}", userId, couponId);
-                return CommentResult.ok("领取成功");
+                return CommentResult.success("领取成功");
             } else {
                 return CommentResult.error("领取失败");
             }
@@ -174,7 +175,7 @@ public class CouponServiceImpl implements CouponService {
                 userCoupon.setCoupon(coupon);
 
                 // 检查是否过期
-                if (new Date().after(userCoupon.getExpireTime()) && userCoupon.getStatus() == 0) {
+                if (LocalDateTime.now().isAfter(userCoupon.getExpireTime()) && userCoupon.getStatus() == 0) {
                     userCoupon.setStatus(2); // 标记为已过期
                 }
             }
@@ -187,7 +188,7 @@ public class CouponServiceImpl implements CouponService {
             result.put("pageSize", couponPage.getSize());
             result.put("pages", couponPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取用户优惠券失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("获取优惠券失败: " + e.getMessage());
@@ -201,7 +202,7 @@ public class CouponServiceImpl implements CouponService {
             QueryWrapper<YsUserCoupon> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user_id", userId);
             queryWrapper.eq("status", 0); // 未使用
-            queryWrapper.gt("expire_time", new Date()); // 未过期
+            queryWrapper.gt("expire_time", LocalDateTime.now()); // 未过期
 
             List<YsUserCoupon> userCoupons = userCouponDao.selectList(queryWrapper);
 
@@ -218,7 +219,7 @@ public class CouponServiceImpl implements CouponService {
                 }
             }
 
-            return CommentResult.ok(availableCoupons);
+            return CommentResult.success(availableCoupons);
         } catch (Exception e) {
             log.error("获取可用优惠券失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("获取优惠券失败: " + e.getMessage());
@@ -240,11 +241,11 @@ public class CouponServiceImpl implements CouponService {
             // 更新优惠券状态为已使用
             userCoupon.setStatus(1);
             userCoupon.setOrderId(orderId);
-            userCoupon.setUseTime(new Date());
+            userCoupon.setUseTime(LocalDateTime.now());
             userCouponDao.updateById(userCoupon);
 
             log.info("使用优惠券成功: userId={}, couponId={}, orderId={}", userId, couponId, orderId);
-            return CommentResult.ok("优惠券使用成功");
+            return CommentResult.success("优惠券使用成功");
         } catch (Exception e) {
             log.error("使用优惠券失败: userId={}, couponId={}, error={}", userId, couponId, e.getMessage(), e);
             return CommentResult.error("使用失败: " + e.getMessage());
@@ -259,7 +260,7 @@ public class CouponServiceImpl implements CouponService {
                 return CommentResult.error("优惠券不存在");
             }
 
-            return CommentResult.ok(coupon);
+            return CommentResult.success(coupon);
         } catch (Exception e) {
             log.error("获取优惠券详情失败: couponId={}, error={}", couponId, e.getMessage(), e);
             return CommentResult.error("获取详情失败: " + e.getMessage());
@@ -292,7 +293,7 @@ public class CouponServiceImpl implements CouponService {
             result.put("pageSize", couponPage.getSize());
             result.put("pages", couponPage.getPages());
 
-            return CommentResult.ok(result);
+            return CommentResult.success(result);
         } catch (Exception e) {
             log.error("获取优惠券列表失败: error={}", e.getMessage(), e);
             return CommentResult.error("获取列表失败: " + e.getMessage());
@@ -315,14 +316,14 @@ public class CouponServiceImpl implements CouponService {
             if (params.get("minAmount") != null) coupon.setMinAmount(new BigDecimal(params.get("minAmount").toString()));
             if (params.get("totalCount") != null) coupon.setTotalCount(Integer.valueOf(params.get("totalCount").toString()));
             if (params.get("perUserLimit") != null) coupon.setPerUserLimit(Integer.valueOf(params.get("perUserLimit").toString()));
-            if (params.get("validStartTime") != null) coupon.setValidStartTime((Date) params.get("validStartTime"));
-            if (params.get("validEndTime") != null) coupon.setValidEndTime((Date) params.get("validEndTime"));
+            if (params.get("validStartTime") != null) coupon.setValidStartTime((LocalDateTime) params.get("validStartTime"));
+            if (params.get("validEndTime") != null) coupon.setValidEndTime((LocalDateTime) params.get("validEndTime"));
             if (params.get("status") != null) coupon.setStatus(Integer.valueOf(params.get("status").toString()));
-            coupon.setUpdatedAt(new Date());
+            coupon.setUpdatedAt(LocalDateTime.now());
 
             int result = couponDao.updateById(coupon);
             if (result > 0) {
-                return CommentResult.ok("更新成功");
+                return CommentResult.success("更新成功");
             } else {
                 return CommentResult.error("更新失败");
             }
@@ -337,7 +338,7 @@ public class CouponServiceImpl implements CouponService {
         try {
             int result = couponDao.deleteById(couponId);
             if (result > 0) {
-                return CommentResult.ok("删除成功");
+                return CommentResult.success("删除成功");
             } else {
                 return CommentResult.error("删除失败");
             }

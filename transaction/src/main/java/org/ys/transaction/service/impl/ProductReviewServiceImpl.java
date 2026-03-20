@@ -90,7 +90,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
             log.info("商品评价添加成功: userId={}, goodsId={}, orderId={}, rating={}",
                     userId, goodsId, orderId, rating);
-            return CommentResult.ok("评价成功");
+            return CommentResult.success("评价成功");
         } catch (Exception e) {
             log.error("添加商品评价失败: {}", e.getMessage(), e);
             return CommentResult.error("添加商品评价失败: " + e.getMessage());
@@ -134,7 +134,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             resultMap.put("pages", resultPage.getPages());
 
             log.info("获取商品评价列表成功: goodsId={}, total={}", goodsId, resultPage.getTotal());
-            return CommentResult.ok(resultMap);
+            return CommentResult.success(resultMap);
         } catch (Exception e) {
             log.error("获取商品评价列表失败: goodsId={}, error={}", goodsId, e.getMessage(), e);
             return CommentResult.error("获取商品评价列表失败: " + e.getMessage());
@@ -169,7 +169,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             resultMap.put("pages", resultPage.getPages());
 
             log.info("获取用户评价列表成功: userId={}, total={}", userId, resultPage.getTotal());
-            return CommentResult.ok(resultMap);
+            return CommentResult.success(resultMap);
         } catch (Exception e) {
             log.error("获取用户评价列表失败: userId={}, error={}", userId, e.getMessage(), e);
             return CommentResult.error("获取用户评价列表失败: " + e.getMessage());
@@ -186,7 +186,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             Map<String, Object> stats = productReviewDao.getGoodsRatingStats(goodsId);
 
             log.info("获取商品评价统计成功: goodsId={}", goodsId);
-            return CommentResult.ok(stats);
+            return CommentResult.success(stats);
         } catch (Exception e) {
             log.error("获取商品评价统计失败: goodsId={}, error={}", goodsId, e.getMessage(), e);
             return CommentResult.error("获取商品评价统计失败: " + e.getMessage());
@@ -219,7 +219,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             productReviewDao.updateById(review);
 
             log.info("商家回复评价成功: reviewId={}", reviewId);
-            return CommentResult.ok("回复成功");
+            return CommentResult.success("回复成功");
         } catch (Exception e) {
             log.error("商家回复评价失败: reviewId={}, error={}", reviewId, e.getMessage(), e);
             return CommentResult.error("商家回复评价失败: " + e.getMessage());

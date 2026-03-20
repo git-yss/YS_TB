@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -23,10 +24,10 @@ public class YsUserCoupon {
     private Long couponId;
     /** 状态：0=未使用 1=已使用 2=已过期 */
     private Integer status;
-    private Date getTime;
-    private Date expireTime;
+    private LocalDateTime getTime;
+    private LocalDateTime expireTime;
     private Long orderId;
-    private Date useTime;
+    private LocalDateTime useTime;
 
     /** 关联优惠券详情（非表字段） */
     @TableField(exist = false)
@@ -40,14 +41,14 @@ public class YsUserCoupon {
     public void setCouponId(Long couponId) { this.couponId = couponId; }
     public Integer getStatus() { return status; }
     public void setStatus(Integer status) { this.status = status; }
-    public Date getGetTime() { return getTime; }
-    public void setGetTime(Date getTime) { this.getTime = getTime; }
-    public Date getExpireTime() { return expireTime; }
-    public void setExpireTime(Date expireTime) { this.expireTime = expireTime; }
+    public LocalDateTime getGetTime() { return getTime; }
+    public void setGetTime(LocalDateTime getTime) { this.getTime = getTime; }
+    public LocalDateTime getExpireTime() { return expireTime; }
+    public void setExpireTime(LocalDateTime expireTime) { this.expireTime = expireTime; }
     public Long getOrderId() { return orderId; }
     public void setOrderId(Long orderId) { this.orderId = orderId; }
-    public Date getUseTime() { return useTime; }
-    public void setUseTime(Date useTime) { this.useTime = useTime; }
+    public LocalDateTime getUseTime() { return useTime; }
+    public void setUseTime(LocalDateTime useTime) { this.useTime = useTime; }
     public YsCoupon getCoupon() { return coupon; }
     public void setCoupon(YsCoupon coupon) { this.coupon = coupon; }
 }

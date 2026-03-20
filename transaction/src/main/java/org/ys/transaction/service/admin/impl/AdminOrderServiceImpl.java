@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.http.HttpStatus;
 import org.ys.commens.dao.YsGoodsDao;
 import org.ys.commens.dao.YsOrderDao;
 import org.ys.commens.dao.YsUserDao;
@@ -151,7 +152,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
                 String logisticsNo = orderData.get("logisticsNo") != null ? orderData.get("logisticsNo").toString() : null;
 
                 CommentResult result = shipOrder(orderId, logisticsCompany, logisticsNo);
-                if (result.isSuccess()) {
+                if (result.getStatus().equals(HttpStatus.OK.value())) {
                     successCount++;
                 }
             }

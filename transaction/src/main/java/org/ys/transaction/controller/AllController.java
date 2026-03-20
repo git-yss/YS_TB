@@ -22,7 +22,7 @@ public class AllController {
     @ResponseBody
     public CommentResult login(@RequestBody Map<String, Object> map){
         service.login(map);
-        return new CommentResult().ok();
+        return new CommentResult().success();
     }
 
     @RequestMapping("queryAllGoodsPage")
@@ -30,6 +30,6 @@ public class AllController {
     public CommentResult queryAllGoods(@RequestBody Map<String, Object> map){
         //分页查询
         Page<YsGoods> list =  service.queryAllGoods(map);
-        return new CommentResult().ok(list);
+        return new CommentResult().success(list);
     }
 }

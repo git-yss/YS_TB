@@ -39,7 +39,21 @@ public class SecurityConfig {
             // 配置授权规则
             .authorizeRequests()
             // 允许登录、注册等公开接口
-            .antMatchers("/all/login", "/all/register", "/static/**", "/login.html").permitAll()
+            .antMatchers(
+                    "/all/login",
+                    "/all/register",
+                    "/login",
+                    "/register",
+                    "/static/**",
+                    "/login.html",
+                    "/shopping.html",
+                    "/myzone.html",
+                    "/shoppingCar.html",
+                    "/shoppingOrder.html",
+                    "/css/**",
+                    "/js/**",
+                    "/commen/**"
+            ).permitAll()
             // 其他接口需要认证
             .anyRequest().authenticated()
             .and()
