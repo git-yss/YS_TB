@@ -6,7 +6,6 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.ys.commens.entity.YsOrder;
-import org.ys.commens.entity.YsOrder;
 import org.ys.commens.vo.CartItem;
 
 /**

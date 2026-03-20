@@ -30,9 +30,9 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
    </insert>
 
     <insert id="addOrder">
-        insert into ys_tb.ys_order(id, user_id, goods_id, status)
+        insert into ys_tb.ys_order(id, user_id, goods_id, status, quantity, unit_price, total_amount)
         values
-        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.itemId}, #{cartItem.statusEnum})
+        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.itemId}, #{cartItem.statusEnum}, #{cartItem.num}, #{cartItem.price}, #{cartItem.price})
     </insert>
     <update id="updateStatusById">
         update ys_tb.ys_order set status = #{code} where id = #{id}

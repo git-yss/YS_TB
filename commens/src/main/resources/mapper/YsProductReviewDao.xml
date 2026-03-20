@@ -53,4 +53,10 @@
         and goods_id = #{goodsId}
         limit 1
     </select>
+    <!-- 根据商品ID分页查询评价（供 MyBatis-Plus 分页插件使用） -->
+    <select id="selectByGoodsId" resultMap="YsProductReviewMap">
+        select * from ys_tb.ys_product_review
+        where goods_id = #{goodsId}
+        order by created_at desc
+    </select>
 </mapper>

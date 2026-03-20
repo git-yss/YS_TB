@@ -30,7 +30,6 @@
         <web.version>2.7.15</web.version>
         <redisson.version>3.23.2</redisson.version>
         <activemq.version>5.16.6</activemq.version>
-        <spring-security.version>2.7.15</spring-security.version>
         <bcrypt.version>0.10.2</bcrypt.version>
     </properties>
     <dependencyManagement>
@@ -41,11 +40,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${web.version}</version>
         </dependency>
-        <!-- Spring Security -->
+        <!-- Spring Security（仅指定 starter 版本，勿定义 spring-security.version 属性） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${web.version}</version>
+        </dependency>
+        <!-- Spring Boot Data JPA（供子模块或传递依赖解析版本） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${web.version}</version>
         </dependency>
         <!-- BCrypt密码加密 -->
         <dependency>
@@ -84,6 +89,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <version>${web.version}</version>
             <optional>true</optional>
         </dependency>
         <!-- Lombok -->

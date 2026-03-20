@@ -1,0 +1,603 @@
+2026-03-20 20:53:51.902 [restartedMain] INFO  org.ys.transaction.TransactionApplication - Starting TransactionApplication using Java 1.8.0_311 on YS with PID 10540 (D:\programing\myCode\智能电商平台\transaction\target\classes started by 81157 in D:\programing\myCode\智能电商平台)
+2026-03-20 20:53:51.903 [restartedMain] DEBUG org.ys.transaction.TransactionApplication - Running with Spring Boot v2.7.15, Spring v5.3.29
+2026-03-20 20:53:51.905 [restartedMain] INFO  org.ys.transaction.TransactionApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-20 20:53:51.956 [restartedMain] INFO  o.s.b.d.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-20 20:53:51.957 [restartedMain] INFO  o.s.b.d.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-20 20:53:52.865 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-20 20:53:52.867 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-20 20:53:52.885 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2026-03-20 20:53:52.979 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsCategoryDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsCouponDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsGoodsDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsOrderDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsProductFavoriteDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsProductReviewDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsShoppingHistoryDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserAddrDao.class]
+2026-03-20 20:53:52.980 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserCouponDao.class]
+2026-03-20 20:53:52.981 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserDao.class]
+2026-03-20 20:53:52.981 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysCategoryDao' and 'org.ys.commens.dao.YsCategoryDao' mapperInterface
+2026-03-20 20:53:52.981 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysCategoryDao'.
+2026-03-20 20:53:52.982 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysCouponDao' and 'org.ys.commens.dao.YsCouponDao' mapperInterface
+2026-03-20 20:53:52.982 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysCouponDao'.
+2026-03-20 20:53:52.982 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysGoodsDao' and 'org.ys.commens.dao.YsGoodsDao' mapperInterface
+2026-03-20 20:53:52.982 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysGoodsDao'.
+2026-03-20 20:53:52.982 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysOrderDao' and 'org.ys.commens.dao.YsOrderDao' mapperInterface
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysOrderDao'.
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysProductFavoriteDao' and 'org.ys.commens.dao.YsProductFavoriteDao' mapperInterface
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysProductFavoriteDao'.
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysProductReviewDao' and 'org.ys.commens.dao.YsProductReviewDao' mapperInterface
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysProductReviewDao'.
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysShoppingHistoryDao' and 'org.ys.commens.dao.YsShoppingHistoryDao' mapperInterface
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysShoppingHistoryDao'.
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserAddrDao' and 'org.ys.commens.dao.YsUserAddrDao' mapperInterface
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserAddrDao'.
+2026-03-20 20:53:52.983 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserCouponDao' and 'org.ys.commens.dao.YsUserCouponDao' mapperInterface
+2026-03-20 20:53:52.984 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserCouponDao'.
+2026-03-20 20:53:52.984 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserDao' and 'org.ys.commens.dao.YsUserDao' mapperInterface
+2026-03-20 20:53:52.984 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserDao'.
+2026-03-20 20:53:53.707 [restartedMain] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-03-20 20:53:53.716 [restartedMain] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-20 20:53:53.716 [restartedMain] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.79]
+2026-03-20 20:53:53.751 [restartedMain] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-20 20:53:53.752 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1794 ms
+2026-03-20 20:53:54.070 [restartedMain] INFO  org.redisson.Version - Redisson 3.23.2
+2026-03-20 20:53:54.361 [redisson-netty-2-4] INFO  o.r.connection.pool.MasterPubSubConnectionPool - 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2026-03-20 20:53:54.394 [redisson-netty-2-19] INFO  org.redisson.connection.pool.MasterConnectionPool - 24 connections initialized for 127.0.0.1/127.0.0.1:6379
+2026-03-20 20:53:54.444 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-20 20:53:54.554 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-20 20:53:54.647 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Registered plugin: 'com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor@b42ae59'
+2026-03-20 20:53:54.698 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insertBatch
+2026-03-20 20:53:54.698 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insertOrUpdateBatch
+2026-03-20 20:53:54.797 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.decreaseStock
+2026-03-20 20:53:54.798 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.increaseStock
+2026-03-20 20:53:54.798 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectGoodById
+2026-03-20 20:53:54.800 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.queryAllGoodsPage
+2026-03-20 20:53:54.820 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insert
+2026-03-20 20:53:54.822 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.delete
+2026-03-20 20:53:54.824 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteByMap
+2026-03-20 20:53:54.824 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteById
+2026-03-20 20:53:54.825 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteBatchIds
+2026-03-20 20:53:54.827 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.update
+2026-03-20 20:53:54.828 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.updateById
+2026-03-20 20:53:54.829 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectById
+2026-03-20 20:53:54.830 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectBatchIds
+2026-03-20 20:53:54.831 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectByMap
+2026-03-20 20:53:54.833 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectOne
+2026-03-20 20:53:54.834 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectCount
+2026-03-20 20:53:54.836 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectMaps
+2026-03-20 20:53:54.838 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectMapsPage
+2026-03-20 20:53:54.839 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectObjs
+2026-03-20 20:53:54.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectList
+2026-03-20 20:53:54.842 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectPage
+2026-03-20 20:53:54.842 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsGoodsDao.xml]'
+2026-03-20 20:53:54.855 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insertBatch
+2026-03-20 20:53:54.855 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insertOrUpdateBatch
+2026-03-20 20:53:54.855 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.addOrder
+2026-03-20 20:53:54.856 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.updateStatusById
+2026-03-20 20:53:54.856 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteById
+2026-03-20 20:53:54.856 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectsById
+2026-03-20 20:53:54.857 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectDetailById
+2026-03-20 20:53:54.857 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectsByUserId
+2026-03-20 20:53:54.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insert
+2026-03-20 20:53:54.861 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.delete
+2026-03-20 20:53:54.862 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteByMap
+2026-03-20 20:53:54.863 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsOrderDao.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-03-20 20:53:54.864 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteBatchIds
+2026-03-20 20:53:54.865 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.update
+2026-03-20 20:53:54.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.updateById
+2026-03-20 20:53:54.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectById
+2026-03-20 20:53:54.867 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectBatchIds
+2026-03-20 20:53:54.868 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectByMap
+2026-03-20 20:53:54.869 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectOne
+2026-03-20 20:53:54.870 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectCount
+2026-03-20 20:53:54.871 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectMaps
+2026-03-20 20:53:54.872 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectMapsPage
+2026-03-20 20:53:54.874 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectObjs
+2026-03-20 20:53:54.875 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectList
+2026-03-20 20:53:54.876 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectPage
+2026-03-20 20:53:54.876 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsOrderDao.xml]'
+2026-03-20 20:53:54.887 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.queryReviewsByGoodsId
+2026-03-20 20:53:54.888 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.queryReviewsByUserId
+2026-03-20 20:53:54.888 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.getGoodsRatingStats
+2026-03-20 20:53:54.888 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.checkReviewed
+2026-03-20 20:53:54.888 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectByGoodsId
+2026-03-20 20:53:54.890 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.insert
+2026-03-20 20:53:54.892 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.delete
+2026-03-20 20:53:54.892 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteByMap
+2026-03-20 20:53:54.893 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteById
+2026-03-20 20:53:54.894 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteBatchIds
+2026-03-20 20:53:54.894 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.update
+2026-03-20 20:53:54.895 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.updateById
+2026-03-20 20:53:54.895 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectById
+2026-03-20 20:53:54.896 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectBatchIds
+2026-03-20 20:53:54.897 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectByMap
+2026-03-20 20:53:54.898 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectOne
+2026-03-20 20:53:54.899 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectCount
+2026-03-20 20:53:54.899 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectMaps
+2026-03-20 20:53:54.900 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectMapsPage
+2026-03-20 20:53:54.901 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectObjs
+2026-03-20 20:53:54.902 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectList
+2026-03-20 20:53:54.903 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectPage
+2026-03-20 20:53:54.903 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsProductReviewDao.xml]'
+2026-03-20 20:53:54.907 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.insert
+2026-03-20 20:53:54.908 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsShoppingHistoryDao.insert] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.Insert]
+2026-03-20 20:53:54.909 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.delete
+2026-03-20 20:53:54.910 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteByMap
+2026-03-20 20:53:54.910 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteById
+2026-03-20 20:53:54.911 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteBatchIds
+2026-03-20 20:53:54.912 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.update
+2026-03-20 20:53:54.912 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.updateById
+2026-03-20 20:53:54.912 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectById
+2026-03-20 20:53:54.913 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectBatchIds
+2026-03-20 20:53:54.915 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectByMap
+2026-03-20 20:53:54.916 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectOne
+2026-03-20 20:53:54.917 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectCount
+2026-03-20 20:53:54.918 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectMaps
+2026-03-20 20:53:54.918 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectMapsPage
+2026-03-20 20:53:54.919 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectObjs
+2026-03-20 20:53:54.920 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectList
+2026-03-20 20:53:54.921 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectPage
+2026-03-20 20:53:54.921 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsShoppingHistoryDao.xml]'
+2026-03-20 20:53:54.931 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insertBatch
+2026-03-20 20:53:54.932 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insertOrUpdateBatch
+2026-03-20 20:53:54.933 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insert
+2026-03-20 20:53:54.934 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.delete
+2026-03-20 20:53:54.934 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteByMap
+2026-03-20 20:53:54.935 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteById
+2026-03-20 20:53:54.936 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteBatchIds
+2026-03-20 20:53:54.936 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.update
+2026-03-20 20:53:54.937 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.updateById
+2026-03-20 20:53:54.937 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectById
+2026-03-20 20:53:54.938 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectBatchIds
+2026-03-20 20:53:54.938 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectByMap
+2026-03-20 20:53:54.939 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectOne
+2026-03-20 20:53:54.940 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectCount
+2026-03-20 20:53:54.941 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectMaps
+2026-03-20 20:53:54.941 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectMapsPage
+2026-03-20 20:53:54.942 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectObjs
+2026-03-20 20:53:54.943 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectList
+2026-03-20 20:53:54.943 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectPage
+2026-03-20 20:53:54.944 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsUserAddrDao.xml]'
+2026-03-20 20:53:54.954 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insertBatch
+2026-03-20 20:53:54.955 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insertOrUpdateBatch
+2026-03-20 20:53:54.955 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.queryUser
+2026-03-20 20:53:54.955 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectById
+2026-03-20 20:53:54.955 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.updateBalanceById
+2026-03-20 20:53:54.957 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insert
+2026-03-20 20:53:54.958 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.delete
+2026-03-20 20:53:54.959 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteByMap
+2026-03-20 20:53:54.959 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteById
+2026-03-20 20:53:54.960 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteBatchIds
+2026-03-20 20:53:54.961 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.update
+2026-03-20 20:53:54.962 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.updateById
+2026-03-20 20:53:54.962 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsUserDao.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-03-20 20:53:54.963 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectBatchIds
+2026-03-20 20:53:54.963 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectByMap
+2026-03-20 20:53:54.964 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectOne
+2026-03-20 20:53:54.965 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectCount
+2026-03-20 20:53:54.965 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectMaps
+2026-03-20 20:53:54.966 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectMapsPage
+2026-03-20 20:53:54.967 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectObjs
+2026-03-20 20:53:54.968 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectList
+2026-03-20 20:53:54.968 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectPage
+2026-03-20 20:53:54.969 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsUserDao.xml]'
+2026-03-20 20:53:55.404 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.insert
+2026-03-20 20:53:55.405 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.delete
+2026-03-20 20:53:55.406 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteByMap
+2026-03-20 20:53:55.406 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteById
+2026-03-20 20:53:55.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteBatchIds
+2026-03-20 20:53:55.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.update
+2026-03-20 20:53:55.408 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.updateById
+2026-03-20 20:53:55.408 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectById
+2026-03-20 20:53:55.409 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectBatchIds
+2026-03-20 20:53:55.409 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectByMap
+2026-03-20 20:53:55.410 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectOne
+2026-03-20 20:53:55.411 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectCount
+2026-03-20 20:53:55.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectMaps
+2026-03-20 20:53:55.413 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectMapsPage
+2026-03-20 20:53:55.413 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectObjs
+2026-03-20 20:53:55.414 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectList
+2026-03-20 20:53:55.415 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectPage
+2026-03-20 20:53:55.420 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.insert
+2026-03-20 20:53:55.421 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.delete
+2026-03-20 20:53:55.421 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteByMap
+2026-03-20 20:53:55.422 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteById
+2026-03-20 20:53:55.423 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteBatchIds
+2026-03-20 20:53:55.423 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.update
+2026-03-20 20:53:55.424 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.updateById
+2026-03-20 20:53:55.424 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectById
+2026-03-20 20:53:55.425 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectBatchIds
+2026-03-20 20:53:55.425 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectByMap
+2026-03-20 20:53:55.426 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectOne
+2026-03-20 20:53:55.427 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectCount
+2026-03-20 20:53:55.428 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectMaps
+2026-03-20 20:53:55.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectMapsPage
+2026-03-20 20:53:55.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectObjs
+2026-03-20 20:53:55.430 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectList
+2026-03-20 20:53:55.431 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectPage
+2026-03-20 20:53:55.439 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.insert
+2026-03-20 20:53:55.439 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.delete
+2026-03-20 20:53:55.440 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteByMap
+2026-03-20 20:53:55.441 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteById
+2026-03-20 20:53:55.441 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteBatchIds
+2026-03-20 20:53:55.442 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.update
+2026-03-20 20:53:55.443 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.updateById
+2026-03-20 20:53:55.443 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectById
+2026-03-20 20:53:55.443 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectBatchIds
+2026-03-20 20:53:55.444 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectByMap
+2026-03-20 20:53:55.445 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectOne
+2026-03-20 20:53:55.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectCount
+2026-03-20 20:53:55.447 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectMaps
+2026-03-20 20:53:55.448 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectMapsPage
+2026-03-20 20:53:55.448 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectObjs
+2026-03-20 20:53:55.449 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectList
+2026-03-20 20:53:55.450 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectPage
+2026-03-20 20:53:55.455 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.insert
+2026-03-20 20:53:55.456 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.delete
+2026-03-20 20:53:55.457 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteByMap
+2026-03-20 20:53:55.458 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteById
+2026-03-20 20:53:55.458 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteBatchIds
+2026-03-20 20:53:55.459 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.update
+2026-03-20 20:53:55.459 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.updateById
+2026-03-20 20:53:55.460 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectById
+2026-03-20 20:53:55.460 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectBatchIds
+2026-03-20 20:53:55.461 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectByMap
+2026-03-20 20:53:55.462 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectOne
+2026-03-20 20:53:55.462 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectCount
+2026-03-20 20:53:55.463 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectMaps
+2026-03-20 20:53:55.464 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectMapsPage
+2026-03-20 20:53:55.464 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectObjs
+2026-03-20 20:53:55.465 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectList
+2026-03-20 20:53:55.466 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectPage
+2026-03-20 20:53:55.478 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'seckillLuaScript': Invocation of init method failed; nested exception is java.lang.Error: Unresolved compilation problem: 
+	The method readAllBytes() is undefined for the type InputStream
+
+2026-03-20 20:53:55.491 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-20 20:53:55.497 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-20 20:53:55.499 [restartedMain] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-20 20:53:55.509 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2026-03-20 20:53:55.527 [restartedMain] ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'seckillLuaScript': Invocation of init method failed; nested exception is java.lang.Error: Unresolved compilation problem: 
+	The method readAllBytes() is undefined for the type InputStream
+
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:160)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:440)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1796)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:921)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
+	at org.ys.transaction.TransactionApplication.main(TransactionApplication.java:14)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	The method readAllBytes() is undefined for the type InputStream
+
+	at org.ys.transaction.service.impl.SeckillLuaScript.init(SeckillLuaScript.java:36)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:389)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:333)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:157)
+	... 23 common frames omitted
+2026-03-20 20:56:16.819 [restartedMain] INFO  org.ys.transaction.TransactionApplication - Starting TransactionApplication using Java 1.8.0_311 on YS with PID 16176 (D:\programing\myCode\智能电商平台\transaction\target\classes started by 81157 in D:\programing\myCode\智能电商平台)
+2026-03-20 20:56:16.820 [restartedMain] DEBUG org.ys.transaction.TransactionApplication - Running with Spring Boot v2.7.15, Spring v5.3.29
+2026-03-20 20:56:16.820 [restartedMain] INFO  org.ys.transaction.TransactionApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-20 20:56:16.853 [restartedMain] INFO  o.s.b.d.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-20 20:56:16.853 [restartedMain] INFO  o.s.b.d.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-20 20:56:17.453 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-20 20:56:17.453 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-20 20:56:17.479 [restartedMain] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsCategoryDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsCouponDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsGoodsDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsOrderDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsProductFavoriteDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsProductReviewDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsShoppingHistoryDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserAddrDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserCouponDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [D:\programing\myCode\智能电商平台\commens\target\classes\org\ys\commens\dao\YsUserDao.class]
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysCategoryDao' and 'org.ys.commens.dao.YsCategoryDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysCategoryDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysCouponDao' and 'org.ys.commens.dao.YsCouponDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysCouponDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysGoodsDao' and 'org.ys.commens.dao.YsGoodsDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysGoodsDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysOrderDao' and 'org.ys.commens.dao.YsOrderDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysOrderDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysProductFavoriteDao' and 'org.ys.commens.dao.YsProductFavoriteDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysProductFavoriteDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysProductReviewDao' and 'org.ys.commens.dao.YsProductReviewDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysProductReviewDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysShoppingHistoryDao' and 'org.ys.commens.dao.YsShoppingHistoryDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysShoppingHistoryDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserAddrDao' and 'org.ys.commens.dao.YsUserAddrDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserAddrDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserCouponDao' and 'org.ys.commens.dao.YsUserCouponDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserCouponDao'.
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'ysUserDao' and 'org.ys.commens.dao.YsUserDao' mapperInterface
+2026-03-20 20:56:17.553 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'ysUserDao'.
+2026-03-20 20:56:18.241 [restartedMain] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-03-20 20:56:18.248 [restartedMain] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-20 20:56:18.248 [restartedMain] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.79]
+2026-03-20 20:56:18.279 [restartedMain] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-20 20:56:18.279 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1426 ms
+2026-03-20 20:56:18.579 [restartedMain] INFO  org.redisson.Version - Redisson 3.23.2
+2026-03-20 20:56:18.865 [redisson-netty-2-4] INFO  o.r.connection.pool.MasterPubSubConnectionPool - 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2026-03-20 20:56:18.895 [redisson-netty-2-19] INFO  org.redisson.connection.pool.MasterConnectionPool - 24 connections initialized for 127.0.0.1/127.0.0.1:6379
+2026-03-20 20:56:18.955 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-20 20:56:19.063 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-20 20:56:19.158 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Registered plugin: 'com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor@4e73ee88'
+2026-03-20 20:56:19.209 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insertBatch
+2026-03-20 20:56:19.210 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insertOrUpdateBatch
+2026-03-20 20:56:19.307 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.decreaseStock
+2026-03-20 20:56:19.307 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.increaseStock
+2026-03-20 20:56:19.312 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectGoodById
+2026-03-20 20:56:19.313 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.queryAllGoodsPage
+2026-03-20 20:56:19.332 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.insert
+2026-03-20 20:56:19.332 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.delete
+2026-03-20 20:56:19.337 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteByMap
+2026-03-20 20:56:19.338 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteById
+2026-03-20 20:56:19.339 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.deleteBatchIds
+2026-03-20 20:56:19.340 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.update
+2026-03-20 20:56:19.340 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.updateById
+2026-03-20 20:56:19.340 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectById
+2026-03-20 20:56:19.340 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectBatchIds
+2026-03-20 20:56:19.340 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectByMap
+2026-03-20 20:56:19.345 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectOne
+2026-03-20 20:56:19.347 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectCount
+2026-03-20 20:56:19.348 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectMaps
+2026-03-20 20:56:19.348 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectMapsPage
+2026-03-20 20:56:19.348 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectObjs
+2026-03-20 20:56:19.348 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectList
+2026-03-20 20:56:19.355 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsGoodsDao.selectPage
+2026-03-20 20:56:19.355 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsGoodsDao.xml]'
+2026-03-20 20:56:19.357 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insertBatch
+2026-03-20 20:56:19.357 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insertOrUpdateBatch
+2026-03-20 20:56:19.357 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.addOrder
+2026-03-20 20:56:19.357 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.updateStatusById
+2026-03-20 20:56:19.357 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteById
+2026-03-20 20:56:19.362 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectsById
+2026-03-20 20:56:19.362 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectDetailById
+2026-03-20 20:56:19.362 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectsByUserId
+2026-03-20 20:56:19.365 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.insert
+2026-03-20 20:56:19.365 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.delete
+2026-03-20 20:56:19.365 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteByMap
+2026-03-20 20:56:19.365 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsOrderDao.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-03-20 20:56:19.365 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.deleteBatchIds
+2026-03-20 20:56:19.370 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.update
+2026-03-20 20:56:19.371 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.updateById
+2026-03-20 20:56:19.372 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectById
+2026-03-20 20:56:19.372 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectBatchIds
+2026-03-20 20:56:19.373 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectByMap
+2026-03-20 20:56:19.373 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectOne
+2026-03-20 20:56:19.373 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectCount
+2026-03-20 20:56:19.373 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectMaps
+2026-03-20 20:56:19.379 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectMapsPage
+2026-03-20 20:56:19.380 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectObjs
+2026-03-20 20:56:19.381 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectList
+2026-03-20 20:56:19.382 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsOrderDao.selectPage
+2026-03-20 20:56:19.382 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsOrderDao.xml]'
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.queryReviewsByGoodsId
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.queryReviewsByUserId
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.getGoodsRatingStats
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.checkReviewed
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectByGoodsId
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.insert
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.delete
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteByMap
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteById
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.deleteBatchIds
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.update
+2026-03-20 20:56:19.388 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.updateById
+2026-03-20 20:56:19.395 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectById
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectBatchIds
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectByMap
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectOne
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectCount
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectMaps
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectMapsPage
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectObjs
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectList
+2026-03-20 20:56:19.396 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductReviewDao.selectPage
+2026-03-20 20:56:19.396 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsProductReviewDao.xml]'
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.insert
+2026-03-20 20:56:19.407 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsShoppingHistoryDao.insert] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.Insert]
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.delete
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteByMap
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteById
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.deleteBatchIds
+2026-03-20 20:56:19.407 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.update
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.updateById
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectById
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectBatchIds
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectByMap
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectOne
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectCount
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectMaps
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectMapsPage
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectObjs
+2026-03-20 20:56:19.412 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectList
+2026-03-20 20:56:19.421 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsShoppingHistoryDao.selectPage
+2026-03-20 20:56:19.421 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsShoppingHistoryDao.xml]'
+2026-03-20 20:56:19.421 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insertBatch
+2026-03-20 20:56:19.421 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insertOrUpdateBatch
+2026-03-20 20:56:19.425 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.insert
+2026-03-20 20:56:19.425 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.delete
+2026-03-20 20:56:19.425 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteByMap
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteById
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.deleteBatchIds
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.update
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.updateById
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectById
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectBatchIds
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectByMap
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectOne
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectCount
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectMaps
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectMapsPage
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectObjs
+2026-03-20 20:56:19.429 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectList
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserAddrDao.selectPage
+2026-03-20 20:56:19.437 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsUserAddrDao.xml]'
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insertBatch
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insertOrUpdateBatch
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.queryUser
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectById
+2026-03-20 20:56:19.437 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.updateBalanceById
+2026-03-20 20:56:19.442 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.insert
+2026-03-20 20:56:19.442 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.delete
+2026-03-20 20:56:19.442 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteByMap
+2026-03-20 20:56:19.445 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteById
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.deleteBatchIds
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.update
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.updateById
+2026-03-20 20:56:19.446 [restartedMain] WARN  c.b.mybatisplus.core.injector.AbstractMethod - [org.ys.commens.dao.YsUserDao.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectBatchIds
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectByMap
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectOne
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectCount
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectMaps
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectMapsPage
+2026-03-20 20:56:19.446 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectObjs
+2026-03-20 20:56:19.454 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectList
+2026-03-20 20:56:19.454 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserDao.selectPage
+2026-03-20 20:56:19.455 [restartedMain] DEBUG c.b.m.e.spring.MybatisSqlSessionFactoryBean - Parsed mapper file: 'file [D:\programing\myCode\智能电商平台\commens\target\classes\mapper\YsUserDao.xml]'
+2026-03-20 20:56:19.820 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.insert
+2026-03-20 20:56:19.822 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.delete
+2026-03-20 20:56:19.822 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteByMap
+2026-03-20 20:56:19.822 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteById
+2026-03-20 20:56:19.824 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.deleteBatchIds
+2026-03-20 20:56:19.824 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.update
+2026-03-20 20:56:19.826 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.updateById
+2026-03-20 20:56:19.826 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectById
+2026-03-20 20:56:19.826 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectBatchIds
+2026-03-20 20:56:19.826 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectByMap
+2026-03-20 20:56:19.828 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectOne
+2026-03-20 20:56:19.829 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectCount
+2026-03-20 20:56:19.830 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectMaps
+2026-03-20 20:56:19.831 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectMapsPage
+2026-03-20 20:56:19.832 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectObjs
+2026-03-20 20:56:19.833 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectList
+2026-03-20 20:56:19.833 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCouponDao.selectPage
+2026-03-20 20:56:19.837 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.insert
+2026-03-20 20:56:19.838 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.delete
+2026-03-20 20:56:19.839 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteByMap
+2026-03-20 20:56:19.840 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteById
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.deleteBatchIds
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.update
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.updateById
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectById
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectBatchIds
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectByMap
+2026-03-20 20:56:19.841 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectOne
+2026-03-20 20:56:19.846 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectCount
+2026-03-20 20:56:19.847 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectMaps
+2026-03-20 20:56:19.847 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectMapsPage
+2026-03-20 20:56:19.848 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectObjs
+2026-03-20 20:56:19.849 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectList
+2026-03-20 20:56:19.849 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsCategoryDao.selectPage
+2026-03-20 20:56:19.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.insert
+2026-03-20 20:56:19.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.delete
+2026-03-20 20:56:19.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteByMap
+2026-03-20 20:56:19.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteById
+2026-03-20 20:56:19.859 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.deleteBatchIds
+2026-03-20 20:56:19.862 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.update
+2026-03-20 20:56:19.862 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.updateById
+2026-03-20 20:56:19.862 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectById
+2026-03-20 20:56:19.863 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectBatchIds
+2026-03-20 20:56:19.864 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectByMap
+2026-03-20 20:56:19.865 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectOne
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectCount
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectMaps
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectMapsPage
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectObjs
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectList
+2026-03-20 20:56:19.866 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsUserCouponDao.selectPage
+2026-03-20 20:56:19.874 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.insert
+2026-03-20 20:56:19.877 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.delete
+2026-03-20 20:56:19.877 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteByMap
+2026-03-20 20:56:19.877 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteById
+2026-03-20 20:56:19.877 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.deleteBatchIds
+2026-03-20 20:56:19.879 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.update
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.updateById
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectById
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectBatchIds
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectByMap
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectOne
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectCount
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectMaps
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectMapsPage
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectObjs
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectList
+2026-03-20 20:56:19.880 [restartedMain] DEBUG com.baomidou.mybatisplus.core.MybatisConfiguration - addMappedStatement: org.ys.commens.dao.YsProductFavoriteDao.selectPage
+2026-03-20 20:56:19.992 [restartedMain] INFO  o.s.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6daa69e1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@67246b77, org.springframework.security.web.context.SecurityContextPersistenceFilter@2ceb89d, org.springframework.security.web.header.HeaderWriterFilter@7f1797a, org.springframework.web.filter.CorsFilter@79a68cb6, org.springframework.security.web.authentication.logout.LogoutFilter@9b31580, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@26bbe144, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2094c551, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@9785367, org.springframework.security.web.session.SessionManagementFilter@5eaa3d5e, org.springframework.security.web.access.ExceptionTranslationFilter@159b72aa, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@38145238]
+2026-03-20 20:56:19.994 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'springSecurityFilterChain' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [javax.servlet.Filter]: Factory method 'springSecurityFilterChain' threw exception; nested exception is java.lang.IllegalStateException: Found WebSecurityConfigurerAdapter as well as SecurityFilterChain. Please select just one.
+2026-03-20 20:56:20.004 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-20 20:56:20.006 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-20 20:56:20.013 [restartedMain] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-20 20:56:20.022 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2026-03-20 20:56:20.039 [restartedMain] ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'springSecurityFilterChain' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [javax.servlet.Filter]: Factory method 'springSecurityFilterChain' threw exception; nested exception is java.lang.IllegalStateException: Found WebSecurityConfigurerAdapter as well as SecurityFilterChain. Please select just one.
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:322)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:921)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
+	at org.ys.transaction.TransactionApplication.main(TransactionApplication.java:14)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [javax.servlet.Filter]: Factory method 'springSecurityFilterChain' threw exception; nested exception is java.lang.IllegalStateException: Found WebSecurityConfigurerAdapter as well as SecurityFilterChain. Please select just one.
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 26 common frames omitted
+Caused by: java.lang.IllegalStateException: Found WebSecurityConfigurerAdapter as well as SecurityFilterChain. Please select just one.
+	at org.springframework.util.Assert.state(Assert.java:76)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration.springSecurityFilterChain(WebSecurityConfiguration.java:105)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 27 common frames omitted

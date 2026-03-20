@@ -3,7 +3,6 @@ package org.ys.transaction.controller.admin;
 import org.ys.commens.pojo.CommentResult;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +52,9 @@ public class AdminMarketingController {
 
     /**
      * 删除优惠券
-     @PostMapping("/coupon/delete/{id}")
-     public CommentResult deleteCoupon(@PathVariable Long id) {
+     */
+    @PostMapping("/coupon/delete/{id}")
+    public CommentResult deleteCoupon(@PathVariable Long id) {
         return adminCouponService.deleteCoupon(id);
     }
 

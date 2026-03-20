@@ -53,14 +53,6 @@ public class YsOrder   {
     private String refundReason;
 //退款金额
     private BigDecimal refundAmount;
-//商品名称（非数据库字段，用于查询显示）
-private transient String goodsName;
-//商品图片（非数据库字段，用于查询显示）
-private transient String goodsImage;
-//用户名（非数据库字段，用于查询显示）
-private transient String username;
-//用户电话（非数据库字段，用于查询显示）
-private transient String userTel;
 
 public Long getId() {
         return id;

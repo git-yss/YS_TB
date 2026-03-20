@@ -24,6 +24,9 @@ public class YsProductFavorite {
 
     private Date createdAt;
 
+    /** 关联商品详情（非表字段，用于列表展示） */
+    private transient YsGoods goods;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -55,5 +58,13 @@ public class YsProductFavorite {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public YsGoods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(YsGoods goods) {
+        this.goods = goods;
     }
 }

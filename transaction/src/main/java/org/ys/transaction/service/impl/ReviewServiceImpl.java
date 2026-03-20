@@ -1,5 +1,6 @@
 package org.ys.transaction.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
@@ -7,13 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ys.commens.dao.YsGoodsDao;
 import org.ys.commens.dao.YsOrderDao;
 import org.ys.commens.dao.YsProductReviewDao;
+import org.ys.commens.dao.YsUserDao;
 import org.ys.commens.entity.YsGoods;
 import org.ys.commens.entity.YsOrder;
 import org.ys.commens.entity.YsProductReview;
+import org.ys.commens.entity.YsUser;
 import org.ys.commens.pojo.CommentResult;
 import org.ys.transaction.service.ReviewService;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +42,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Resource
     private YsGoodsDao goodsDao;
+
+    @Resource
+    private YsUserDao userDao;
+
+
 
     @Override
     public CommentResult addReview(Map<String, Object> params) {
@@ -76,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
             }
 
             // 查询用户信息
-            org.ys.commens.dao.YsUserDao userDao = ...; // 需要注入
+
             YsUser user = userDao.selectById(userId);
             if (user == null) {
                 return CommentResult.error("用户不存在");
@@ -194,7 +203,7 @@ public class ReviewServiceImpl implements ReviewService {
 
             // 更新回复
             review.setReplyContent(replyContent);
-            review.setReplyTime(new java.util.Date());
+            review.setReplyTime(LocalDateTime.now());
             int result = reviewDao.updateById(review);
 
             if (result > 0) {
@@ -212,18 +221,29 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public CommentResult getReviewStats(Long goodsId) {
         try {
-            // 查询评价总数
-            Integer totalCount = reviewDao.countByGoodsId(goodsId);
+            // 使用 DAO 的 getGoodsRatingStats 获取统计（total_count、avg_rating）
+            Map<String, Object> ratingStats = reviewDao.getGoodsRatingStats(goodsId);
+            if (ratingStats == null) {
+                ratingStats = new HashMap<>();
+            }
 
-            // 查询平均评分
-            Double avgRating = reviewDao.avgRatingByGoodsId(goodsId);
+            Object totalObj = ratingStats.get("total_count");
+            Integer totalCount = totalObj != null ? ((Number) totalObj).intValue() : 0;
 
-            // 查询各评分数量
+            Object avgObj = ratingStats.get("avg_rating");
+            String avgRatingStr = "0.0";
+            if (avgObj != null) {
+                if (avgObj instanceof Number) {
+                    avgRatingStr = String.format("%.1f", ((Number) avgObj).doubleValue());
+                } else {
+                    avgRatingStr = avgObj.toString();
+                }
+            }
+
             Map<String, Object> stats = new HashMap<>();
             stats.put("total", totalCount);
-            stats.put("avgRating", avgRating != null ? String.format("%.1f", avgRating) : "0.0");
+            stats.put("avgRating", avgRatingStr);
 
-            // 返回统计信息
             return CommentResult.ok(stats);
         } catch (Exception e) {
             log.error("获取评价统计失败: goodsId={}, error={}", goodsId, e.getMessage(), e);

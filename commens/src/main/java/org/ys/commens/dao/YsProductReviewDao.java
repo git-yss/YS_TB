@@ -36,4 +36,6 @@ public interface YsProductReviewDao extends BaseMapper<YsProductReview> {
      * 检查用户是否已评价过该订单商品
      */
     YsProductReview checkReviewed(@Param("orderId") Long orderId, @Param("userId") Long userId, @Param("goodsId") Long goodsId);
+
+    IPage<YsProductReview> selectByGoodsId(Page<YsProductReview> page, Long goodsId);
 }

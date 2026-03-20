@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +35,15 @@ public class SeckillLuaScript {
     public void init() {
         try {
             ClassPathResource resource = new ClassPathResource("lua/seckill.lua");
-            this.seckillLuaScript = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            try (InputStream in = resource.getInputStream();
+                 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[4096];
+                int len;
+                while ((len = in.read(buffer)) != -1) {
+                    baos.write(buffer, 0, len);
+                }
+                this.seckillLuaScript = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load seckill Lua script", e);
         }
