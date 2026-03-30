@@ -3,7 +3,6 @@ package org.ys.transaction.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
-import org.redisson.client.protocol.RedisCommands;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -109,12 +107,25 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CommentResult showCart(Long userId) {
-        String cartKey = SHOP_CAR_PREFIX + userId;
-        RMap<String, String> cartMap = redissonClient.getMap(cartKey);
-
-        // 刷新过期时间
-        cartMap.expire(shoppinCarTimeOut, TimeUnit.DAYS);
-        return  CommentResult.success(cartMap);
+        try {
+            String cartKey = SHOP_CAR_PREFIX + userId;
+            RMap<String, String> cartMap = redissonClient.getMap(cartKey, new StringCodec());
+            cartMap.expire(shoppinCarTimeOut, TimeUnit.DAYS);
+            List<CartItem> items = new ArrayList<>();
+            for (String json : cartMap.readAllValues()) {
+                if (json == null || json.isEmpty()) {
+                    continue;
+                }
+                CartItem item = JsonUtils.jsonToPojo(json, CartItem.class);
+                if (item != null) {
+                    items.add(item);
+                }
+            }
+            return CommentResult.success(items);
+        } catch (Exception e) {
+            log.error("获取购物车失败: {}", e.getMessage(), e);
+            return CommentResult.error("获取购物车失败: " + e.getMessage());
+        }
     }
 
     @Override
@@ -131,43 +142,98 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CommentResult goSettlement( Map<String, Object> maps) {
-        //以redis购物车为准,生成订单，订单过期时间设置为7天
-        String userId = maps.get("userId").toString();
-        String items = maps.get("items").toString();
-        String cartKey = SHOP_CAR_PREFIX + userId;
-        RMap<String, String> cartMap = redissonClient.getMap(cartKey,new StringCodec());
-        long orderId = IDUtils.genOrderId();
-
-        String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId+"_"+orderId;
-        RMap<String, String> map = redissonClient.getMap(normalOrderKey, new StringCodec());
-        // 同时设置dump键（不过期）,用作过期后获取值的备用key
-        String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId+"_"+orderId;
-        RMap<String, String> dumpMap = redissonClient.getMap(dumpKey, new StringCodec());
-        ArrayList<CartItem> cartItems = new ArrayList<>();
-        for (String itemId : items.split(",")) {
-            CartItem cartItem = JsonUtils.jsonToPojo(cartMap.get(itemId), CartItem.class);
-            cartItem.setId(orderId);
-            cartItems.add(cartItem);
-            map.put(itemId, JsonUtils.objectToJson(cartItem));
-            dumpMap.put(itemId, JsonUtils.objectToJson(cartItem));
-            //将购物车中相关的信息清除掉
-            cartMap.remove(itemId);
-        }
-        map.expire(normalOrderTimeOut, TimeUnit.DAYS);
-        //使用线程池异步执行添加数据库普通订单，扣库存
-        CompletableFuture.runAsync(()->{
-            try {
-                addOrderNormal(cartItems,"");
-            } catch (Exception e) {
-                log.error("添加普通订单失败: {}", e.getMessage(), e);
-                //走补偿机制 清理redis购物车
-                RMap<String, String> carMap = redissonClient.getMap(normalOrderKey, new StringCodec());
-                carMap.delete();
+    public CommentResult updateCartNum(Long itemId, Long userId, Integer num) {
+        try {
+            if (itemId == null || userId == null) {
+                return CommentResult.error("参数错误");
             }
-        });
+            if (num == null || num < 1) {
+                return CommentResult.error("数量必须大于等于1");
+            }
 
-        return CommentResult.success(orderId);
+            String cartKey = SHOP_CAR_PREFIX + userId;
+            RMap<String, String> cartMap = redissonClient.getMap(cartKey, new StringCodec());
+            String itemJson = cartMap.get(String.valueOf(itemId));
+            if (itemJson == null || itemJson.isEmpty()) {
+                return CommentResult.error("购物车中不存在该商品");
+            }
+
+            CartItem cartItem = JsonUtils.jsonToPojo(itemJson, CartItem.class);
+            if (cartItem == null) {
+                return CommentResult.error("购物车数据异常");
+            }
+
+            // 库存校验（防止前端传入超库存数量）
+            int stock = goodsDao.selectGoodById(itemId).getInventory();
+            if (stock < 1) {
+                return CommentResult.error("商品已售罄");
+            }
+            if (num > stock) {
+                num = stock;
+            }
+
+            cartItem.setNum(num);
+            cartMap.put(String.valueOf(itemId), JsonUtils.objectToJson(cartItem));
+            cartMap.expire(shoppinCarTimeOut, TimeUnit.DAYS);
+
+            return CommentResult.success("数量更新成功");
+        } catch (Exception e) {
+            log.error("更新购物车数量失败: {}", e.getMessage(), e);
+            return CommentResult.error("更新购物车数量失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public CommentResult goSettlement( Map<String, Object> maps) {
+        // 以 Redis 购物车为准生成订单。
+        // 关键：先同步落库成功，再清理购物车/写订单缓存；否则落库失败会“看起来没生成订单”。
+        try {
+            String userId = maps.get("userId").toString();
+            String items = maps.get("items").toString();
+            String cartKey = SHOP_CAR_PREFIX + userId;
+            RMap<String, String> cartMap = redissonClient.getMap(cartKey, new StringCodec());
+
+            long orderId = IDUtils.genOrderId();
+
+            ArrayList<CartItem> cartItems = new ArrayList<>();
+            for (String itemId : items.split(",")) {
+                String json = cartMap.get(itemId);
+                if (json == null || json.isEmpty()) {
+                    return CommentResult.error("购物车中不存在商品: " + itemId);
+                }
+                CartItem cartItem = JsonUtils.jsonToPojo(json, CartItem.class);
+                if (cartItem == null) {
+                    return CommentResult.error("购物车数据异常: " + itemId);
+                }
+                cartItem.setId(orderId);
+                cartItems.add(cartItem);
+            }
+
+            // 1) 同步写入 MySQL 订单 & 扣库存（失败则直接返回错误）
+            addOrderNormal(cartItems, "");
+
+            // 2) 落库成功后，写入 Redis 订单缓存，并从购物车移除选中商品
+            String normalOrderKey = NORMAL_USER_ORDER_PREFIX + userId + "_" + orderId;
+            RMap<String, String> orderMap = redissonClient.getMap(normalOrderKey, new StringCodec());
+
+            String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId + "_" + orderId;
+            RMap<String, String> dumpMap = redissonClient.getMap(dumpKey, new StringCodec());
+
+            for (CartItem cartItem : cartItems) {
+                String itemId = String.valueOf(cartItem.getItemId());
+                String v = JsonUtils.objectToJson(cartItem);
+                orderMap.put(itemId, v);
+                dumpMap.put(itemId, v);
+                cartMap.remove(itemId);
+            }
+            orderMap.expire(normalOrderTimeOut, TimeUnit.DAYS);
+
+            return CommentResult.success(orderId);
+        } catch (Exception e) {
+            // 最常见：ys_order 表缺少 quantity/unit_price/total_amount 等字段（未执行 ys_tb_extend.sql）
+            log.error("结算生成订单失败: {}", e.getMessage(), e);
+            return CommentResult.error("生成订单失败: " + e.getMessage());
+        }
     }
 
     @Override
@@ -179,32 +245,60 @@ public class CartServiceImpl implements CartService {
 
             //获取余额
             YsUser ysUser = userDao.selectById(Long.valueOf(userId));
-            //数据库商品价格
+            if (ysUser == null) {
+                return CommentResult.error("用户不存在");
+            }
+
+            //数据库订单行（同一 orderId 可能多行商品）
             List<YsOrder> ysOrders = ysOrderDao.selectsById(Long.parseLong(orderId));
             if(ysOrders.size()>0 && ysOrders.get(0).getStatus().equals(String.valueOf( OrderStatusEnum.PENDING_PAYMENT.getCode()))){
-                for (YsOrder ysOrder : ysOrders) {
-                    String itemId = String.valueOf(ysOrder.getGoodsId());
-                    YsGoods goods = goodsDao.selectGoodById(Long.valueOf(itemId));
-                    BigDecimal price = goods.getPrice();
-                    ysUser.setBalance(ysUser.getBalance().subtract(price));
+                BigDecimal totalPay = BigDecimal.ZERO;
 
-                    //新增购物历史记录
+                for (YsOrder ysOrder : ysOrders) {
+                    BigDecimal lineTotal;
+                    if (ysOrder.getTotalAmount() != null) {
+                        lineTotal = ysOrder.getTotalAmount();
+                    } else if (ysOrder.getUnitPrice() != null && ysOrder.getQuantity() != null) {
+                        lineTotal = ysOrder.getUnitPrice().multiply(BigDecimal.valueOf(ysOrder.getQuantity()));
+                    } else {
+                        YsGoods goods = goodsDao.selectGoodById(ysOrder.getGoodsId());
+                        int q = ysOrder.getQuantity() != null ? ysOrder.getQuantity() : 1;
+                        lineTotal = goods.getPrice().multiply(BigDecimal.valueOf(q));
+                    }
+
+                    totalPay = totalPay.add(lineTotal);
+                }
+
+                if (ysUser.getBalance() == null || ysUser.getBalance().compareTo(totalPay) < 0) {
+                    return CommentResult.error("余额不足，需支付：" + totalPay);
+                }
+
+                //扣余额
+                ysUser.setBalance(ysUser.getBalance().subtract(totalPay));
+                userDao.updateBalanceById(ysUser);
+
+                //新增购物历史记录（按行记录商品）
+                for (YsOrder ysOrder : ysOrders) {
                     YsShoppingHistory ysShoppingHistory = new YsShoppingHistory();
                     ysShoppingHistory.setId(Long.valueOf(orderId));
                     ysShoppingHistory.setUserId(Long.valueOf(userId));
-                    ysShoppingHistory.setGoodsId(Long.valueOf(itemId));
+                    ysShoppingHistory.setGoodsId(ysOrder.getGoodsId());
                     shoppingHistoryDao.insert(ysShoppingHistory);
-
                 }
-                // 扣除对应余额(不会有并发问题，只会一次支付一个订单)
-                userDao.updateBalanceById(ysUser);
-                //修改订单状态
+
+                //修改订单状态（同一订单号多行，按 id 更新即可）
                 int i = ysOrderDao.updateStatusById(OrderStatusEnum.PAID.getCode(), Long.parseLong(orderId));
                 if(i>0){
                     log.info("订单支付状态修改成功！");
                     map.delete();
+                    
+                    // 同时删除 dump 备份数据
+                    String dumpKey = "dump:" + NORMAL_USER_ORDER_PREFIX + userId + "_" + orderId;
+                    RMap<String, String> dumpMap = redissonClient.getMap(dumpKey, new StringCodec());
+                    dumpMap.delete();
+                    log.info("订单支付成功，已清理 Redis 缓存和 dump 备份数据：orderId={}", orderId);
                 }
-                //  发送邮件购买成功，地址为多少多少！
+                // 发送邮件购买成功
                 jmsTemplate.convertAndSend("mail.queue", orderId);
             }else{
                 log.info("补偿订单，触发防悬挂");

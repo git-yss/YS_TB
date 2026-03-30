@@ -2,6 +2,7 @@ package org.ys.commens.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -54,9 +55,13 @@ public class YsOrder   {
     private BigDecimal refundAmount;
 
 // 以下字段用于订单详情查询（join 查询可能返回冗余字段）
+    @TableField(exist = false)
     private String goodsName; // 商品名称（join 查询返回）
+    @TableField(exist = false)
     private String goodsImage; // 商品图片（join 查询返回）
+    @TableField(exist = false)
     private String username;   // 用户名（join 查询返回）
+    @TableField(exist = false)
     private String userTel;    // 用户手机号（join 查询返回）
 
 public Long getId() {

@@ -31,11 +31,8 @@ public class ProductController {
     @RequestMapping("search")
     @ResponseBody
     public CommentResult searchProducts(@RequestBody Map<String, Object> map) {
-        String keyword = map.get("keyword") != null ? map.get("keyword").toString() : null;
-        Long categoryId = map.get("categoryId") != null ? Long.valueOf(map.get("categoryId").toString()) : null;
-        Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
-        Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
-        return productService.searchProducts(keyword, categoryId, pageNum, pageSize);
+        // 透传多条件过滤参数给 service（pageNum/pageSize/categoryId/brand/priceMin/priceMax/inventoryMin/sort）
+        return productService.searchProducts(map);
     }
 
     /**

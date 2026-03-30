@@ -21,8 +21,7 @@ public class AllController {
     @RequestMapping("login")
     @ResponseBody
     public CommentResult login(@RequestBody Map<String, Object> map){
-        service.login(map);
-        return new CommentResult().success();
+        return service.login(map);
     }
 
     @RequestMapping("queryAllGoodsPage")

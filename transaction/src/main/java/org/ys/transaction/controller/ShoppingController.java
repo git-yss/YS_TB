@@ -12,7 +12,6 @@ import org.ys.transaction.service.CartService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 @RequestMapping("shoppingCar")
@@ -38,6 +37,18 @@ public class ShoppingController {
     @ResponseBody
     public CommentResult deleteById(@RequestBody Map<String, Object> map){
         return  service.deleteById(Long.valueOf(map.get("itemId").toString()),Long.valueOf(map.get("userId").toString()));
+    }
+
+    /**
+     * 更新购物车商品数量
+     */
+    @RequestMapping("updateCartNum")
+    @ResponseBody
+    public CommentResult updateCartNum(@RequestBody Map<String, Object> map){
+        Long itemId = Long.valueOf(map.get("itemId").toString());
+        Long userId = Long.valueOf(map.get("userId").toString());
+        Integer num = Integer.valueOf(map.get("num").toString());
+        return service.updateCartNum(itemId, userId, num);
     }
 
 

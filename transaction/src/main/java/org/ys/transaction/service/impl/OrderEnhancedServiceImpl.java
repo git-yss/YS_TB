@@ -355,12 +355,22 @@ public class OrderEnhancedServiceImpl implements OrderEnhancedService {
                 return CommentResult.error("当前订单状态不支持取消");
             }
 
+            // 取消订单前，返还库存（同一订单可能多行商品）
+            for (YsOrder o : orders) {
+                Integer q = o.getQuantity() != null ? o.getQuantity() : 1;
+                if (o.getGoodsId() != null && q > 0) {
+                    goodsDao.increaseStock(o.getGoodsId(), q);
+                }
+            }
+
             // 更新订单状态为已取消
             orderDao.updateStatusById(OrderStatusEnum.CANCELLED.getCode(), orderId);
 
             // 保存取消原因
-            order.setRefundReason(cancelReason);
-            orderDao.updateById(order);
+            for (YsOrder o : orders) {
+                o.setRefundReason(cancelReason);
+                orderDao.updateById(o);
+            }
 
             log.info("用户取消订单成功: orderId={}, userId={}", orderId, userId);
             return CommentResult.success("订单已取消");

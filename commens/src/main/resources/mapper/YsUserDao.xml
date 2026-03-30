@@ -22,6 +22,13 @@
             #{entity.email}, #{entity.tel})
         </foreach>
     </insert>
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel)
+        values
+            (#{entity.id}, #{entity.username}, #{entity.password}, #{entity.age}, #{entity.sex}, #{entity.balance},
+            #{entity.email}, #{entity.tel})
+    </insert>
+
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
         insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel)
@@ -35,11 +42,19 @@
         values(sex) , balance = values(balance) , email = values(email) , tel = values(tel)
     </insert>
     <select id="queryUser" resultType="org.ys.commens.entity.YsUser">
-        select * from ys_tb.ys_user where id=#{username} and password=#{password}
+        select * from ys_tb.ys_user where username=#{username} and password=#{password}
     </select>
 
     <select id="selectById" resultType="org.ys.commens.entity.YsUser">
         select * from ys_tb.ys_user where id=#{id}
+    </select>
+
+    <select id="selectByName" resultType="org.ys.commens.entity.YsUser">
+        select * from ys_tb.ys_user where username=#{username} limit 1
+    </select>
+
+    <select id="selectByEmail" resultType="org.ys.commens.entity.YsUser">
+        select * from ys_tb.ys_user where email=#{email} limit 1
     </select>
 
     <!-- updateById方法的SQL映射 -->

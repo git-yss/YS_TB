@@ -10,6 +10,7 @@
         <result property="inventory" column="inventory" jdbcType="INTEGER"/>
         <result property="image" column="image" jdbcType="VARCHAR"/>
         <result property="category" column="category" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <!-- 批量插入 -->
@@ -40,7 +41,7 @@
     </select>
 
     <!-- 如果需要自定义查询条件的分页查询 -->
-    <select id="queryAllGoodsPage" resultType="org.ys.commens.entity.YsGoods">
+    <select id="queryAllGoodsPage" resultMap="YsGoodsMap">
         select * from ys_tb.ys_goods
         <where>
             <if test="map.searchKeyword != null and map.searchKeyword != ''">
@@ -51,8 +52,27 @@
             <if test="map.categoryId != null and map.categoryId != 0">
                 and category_id = #{map.categoryId}
             </if>
+            <if test="map.brand != null and map.brand != ''">
+                and brand like concat('%',#{map.brand},'%')
+            </if>
+            <if test="map.priceMin != null">
+                and price &gt;= #{map.priceMin}
+            </if>
+            <if test="map.priceMax != null">
+                and price &lt;= #{map.priceMax}
+            </if>
+            <if test="map.inventoryMin != null">
+                and inventory &gt;= #{map.inventoryMin}
+            </if>
         </where>
-        order by id desc
+        <choose>
+            <when test="map.sortColumn != null and map.sortOrder != null">
+                order by ${map.sortColumn} ${map.sortOrder}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
     </select>
 
 

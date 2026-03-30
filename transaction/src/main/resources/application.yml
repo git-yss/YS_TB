@@ -1,18 +1,24 @@
 spring:
+  application:
+    name: ys-tb
   datasource:
     url: jdbc:mysql://localhost:3306/ys_tb?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
+    database-name: ys_tb
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
     port: 6379
-    password: 
+    password:
     timeout: 3000ms
   activemq:
     broker-url: tcp://localhost:61616
     user: admin
     password: admin
+    pool:
+      enabled: true
+      max-connections: 50
   jpa:
     hibernate:
       ddl-auto: update
@@ -43,19 +49,43 @@ spring:
       logout-success-url: /admin/login
   thymeleaf:
     cache: false
-  mybatis-plus:
-    configuration:
-      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    global-config:
-      db-config:
-        id-type: auto
-        logic-delete-field: status
-        logic-delete-value: 1
-        logic-not-delete-value: 0
-    mapper-locations: classpath:mapper/*.xml
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+    default-property-inclusion: non_null
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: org.ys.commens.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      update-strategy: IGNORED
+      logic-delete-field: status
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 server:
   port: 8080
+
+redis:
+  mode: single
+  address: redis://127.0.0.1:6379
+  password:
+  timeout: 3000
+  database: 0
+  pool:
+    max-active: 64
+    max-idle: 24
+    min-idle: 8
+    max-wait: 3000
 
 seckill:
   orderTimeOut: 30
@@ -68,6 +98,9 @@ logging:
   level:
     org.ys.transaction: debug
     org.ys.commens: debug
+    org.ys.commens.dao: debug
+    com.baomidou.mybatisplus: debug
+    org.mybatis: debug
   file:
     name: logs/transaction.log
   pattern:

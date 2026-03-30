@@ -35,6 +35,15 @@ public interface CartService {
     CommentResult deleteById(Long itemId, Long userId);
 
     /**
+     * 更新购物车中商品数量（Redis 为准）
+     *
+     * @param itemId 商品ID
+     * @param userId 用户ID
+     * @param num 新数量
+     */
+    CommentResult updateCartNum(Long itemId, Long userId, Integer num);
+
+    /**
      * 普通商品结算订单
      * @param items  商品id集合  用户id
      * @return

@@ -10,10 +10,13 @@ import org.ys.commens.dao.YsGoodsDao;
 import org.ys.commens.entity.YsGoods;
 import org.ys.commens.entity.YsUser;
 import org.ys.commens.dao.YsUserDao;
+import org.ys.commens.pojo.CommentResult;
+import org.ys.commens.utils.PasswordEncoderUtil;
 import org.ys.transaction.service.IndexService;
 
-
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -26,14 +29,38 @@ public class AllServiceImpl implements IndexService {
     private YsGoodsDao ysGoodsDao;
 
     @Override
-    public void login(Map<String, Object> map) {
-        String username = map.get("username") != null ? map.get("username").toString() : "";
+    public CommentResult login(Map<String, Object> map) {
+        String username = map.get("username") != null ? map.get("username").toString().trim() : "";
         String password = map.get("password") != null ? map.get("password").toString() : "";
 
-        YsUser user = ysUserDao.queryUser(username, password);
-        if (ObjectUtils.isEmpty(user)) {
-            throw new RuntimeException("账号密码错误");
+        if (username.isEmpty() || password.isEmpty()) {
+            return CommentResult.error("用户名和密码不能为空");
         }
+
+        YsUser user = ysUserDao.selectByName(username);
+        if (ObjectUtils.isEmpty(user) || !PasswordEncoderUtil.matches(password, user.getPassword())) {
+            return CommentResult.error("账号或密码错误");
+        }
+        if (!"1".equals(user.getStatus())) {
+            return CommentResult.error("账号已封禁");
+        }
+
+        String token = Base64.getUrlEncoder().withoutPadding().encodeToString(
+                (user.getId() + ":" + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8));
+
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", user.getId());
+        userInfo.put("username", user.getUsername());
+        userInfo.put("email", user.getEmail());
+        userInfo.put("tel", user.getTel());
+        userInfo.put("balance", user.getBalance());
+        userInfo.put("status", user.getStatus());
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        data.put("userInfo", userInfo);
+
+        return CommentResult.success(data);
     }
 
     @Override

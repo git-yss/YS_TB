@@ -23,6 +23,7 @@ public interface YsUserDao extends BaseMapper<YsUser> {
     YsUser  selectByName(String username);
     YsUser  selectByEmail(String email);
     int  updateBalanceById(@Param("ysUser") YsUser ysUser);
+    int  insert(@Param("entity") YsUser ysUser);
 
 }
 

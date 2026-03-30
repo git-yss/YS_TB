@@ -27,6 +27,15 @@ export function deleteFromCart(itemId, userId) {
   })
 }
 
+// 更新购物车中商品数量
+export function updateCartNum(itemId, userId, num) {
+  return request({
+    url: '/shoppingCar/updateCartNum',
+    method: 'post',
+    data: { itemId, userId, num }
+  })
+}
+
 // 结算
 export function settleCart(data) {
   return request({

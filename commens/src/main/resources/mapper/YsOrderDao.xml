@@ -8,6 +8,18 @@
         <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
         <result property="status" column="status" jdbcType="VARCHAR"/>
         <result property="addtime" column="addTime" jdbcType="TIMESTAMP"/>
+        <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+        <result property="unitPrice" column="unit_price" jdbcType="DECIMAL"/>
+        <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+        <result property="payMethod" column="pay_method" jdbcType="VARCHAR"/>
+        <result property="logisticsNo" column="logistics_no" jdbcType="VARCHAR"/>
+        <result property="logisticsCompany" column="logistics_company" jdbcType="VARCHAR"/>
+        <result property="shipTime" column="ship_time" jdbcType="TIMESTAMP"/>
+        <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+        <result property="finishTime" column="finish_time" jdbcType="TIMESTAMP"/>
+        <result property="refundTime" column="refund_time" jdbcType="TIMESTAMP"/>
+        <result property="refundReason" column="refund_reason" jdbcType="VARCHAR"/>
+        <result property="refundAmount" column="refund_amount" jdbcType="DECIMAL"/>
     </resultMap>
 
     <!-- 批量插入 -->
@@ -32,7 +44,7 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
     <insert id="addOrder">
         insert into ys_tb.ys_order(id, user_id, goods_id, status, quantity, unit_price, total_amount)
         values
-        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.itemId}, #{cartItem.statusEnum}, #{cartItem.num}, #{cartItem.price}, #{cartItem.price})
+        (#{cartItem.id}, #{cartItem.userId}, #{cartItem.itemId}, #{cartItem.statusEnum}, #{cartItem.num}, #{cartItem.price}, (#{cartItem.price} * #{cartItem.num}))
     </insert>
     <update id="updateStatusById">
         update ys_tb.ys_order set status = #{code} where id = #{id}
@@ -47,7 +59,7 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
             and goods_id=#{itemId}
         </if>
     </delete>
-    <select id="selectsById" resultType="org.ys.commens.entity.YsOrder">
+    <select id="selectsById" resultMap="YsOrderMap">
         select * from ys_tb.ys_order where id = #{id}
 
     </select>
@@ -67,12 +79,12 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
         WHERE
             o.user_id = us.id
           AND o.goods_id = goods.id
-          and addr.ismain ='1' --主地址默认
+          and addr.is_main = '1'
           AND us.id = addr.user_id
           AND o.id = #{orderId}
     </select>
-    <select id="selectsByUserId" resultType="org.ys.commens.entity.YsOrder">
-        select * from ys_tb.ys_order where user_id = #{userId} order by addtime desc
+    <select id="selectsByUserId" resultMap="YsOrderMap">
+        select * from ys_tb.ys_order where user_id = #{userId} order by addTime desc
     </select>
 
 </mapper>

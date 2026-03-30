@@ -8,12 +8,12 @@
             <span class="logo-text">智能电商平台</span>
           </div>
           <div class="header-nav">
-            <el-menu mode="horizontal" :default-active="activeMenu" class="nav-menu">
-              <el-menu-item index="home">首页</el-menu-item>
-              <el-menu-item index="search">搜索</el-menu-item>
-              <el-menu-item index="cart">购物车</el-menu-item>
-              <el-menu-item index="order">我的订单</el-menu-item>
-              <el-menu-item index="user">个人中心</el-menu-item>
+            <el-menu mode="horizontal" router :default-active="activeMenu" class="nav-menu">
+              <el-menu-item index="/home">首页</el-menu-item>
+              <el-menu-item index="/search">搜索</el-menu-item>
+              <el-menu-item index="/cart">购物车</el-menu-item>
+              <el-menu-item index="/order">我的订单</el-menu-item>
+              <el-menu-item index="/user">个人中心</el-menu-item>
             </el-menu>
           </div>
           <div class="header-actions">
@@ -34,12 +34,12 @@
       
       <el-container>
         <el-aside width="200px" class="aside">
-          <el-menu :default-active="activeMenu" class="aside-menu">
-            <el-menu-item index="home">首页</el-menu-item>
-            <el-menu-item index="search">搜索</el-menu-item>
-            <el-menu-item index="cart">购物车</el-menu-item>
-            <el-menu-item index="order">我的订单</el-menu-item>
-            <el-menu-item index="user">个人中心</el-menu-item>
+          <el-menu router :default-active="activeMenu" class="aside-menu">
+            <el-menu-item index="/home">首页</el-menu-item>
+            <el-menu-item index="/search">搜索</el-menu-item>
+            <el-menu-item index="/cart">购物车</el-menu-item>
+            <el-menu-item index="/order">我的订单</el-menu-item>
+            <el-menu-item index="/user">个人中心</el-menu-item>
           </el-menu>
         </el-aside>
         
@@ -61,7 +61,7 @@ const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 
-const activeMenu = computed(() => route.name?.toString() || 'home')
+const activeMenu = computed(() => route.path || '/home')
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 const userInfo = computed(() => userStore.userInfo)
 

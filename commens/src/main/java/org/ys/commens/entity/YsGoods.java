@@ -32,6 +32,17 @@ import java.math.BigDecimal;
     //分类
         private String category;
 
+    // 分类ID（用于商品多条件查询/分类过滤）
+    private Long categoryId;
+
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
         public Long getId() {
             return id;

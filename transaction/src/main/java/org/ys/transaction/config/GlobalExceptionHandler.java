@@ -9,6 +9,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public CommentResult handleRuntimeException(RuntimeException ex) {
-        return new CommentResult().error(ex.getMessage());
+        return CommentResult.error(ex.getMessage() != null ? ex.getMessage() : "服务器异常");
     }
 }

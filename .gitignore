@@ -47,4 +47,3 @@ dist/
 .env.local
 .env.*.local
 /frontend-vue/node_modules/
-"node_modules/" 

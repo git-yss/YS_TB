@@ -20,7 +20,7 @@ public class PasswordEncoderUtil {
      * @return 加密后的密码
      */
     public static String encode(String rawPassword) {
-        return rawPassword;
+        return encoder.encode(rawPassword);
     }
 
     /**
@@ -31,6 +31,12 @@ public class PasswordEncoderUtil {
      * @return 是否匹配
      */
     public static boolean matches(String rawPassword, String encodedPassword) {
-        return true;
+        if (rawPassword == null || encodedPassword == null) {
+            return false;
+        }
+        if (encodedPassword.startsWith("$2a$") || encodedPassword.startsWith("$2b$") || encodedPassword.startsWith("$2y$")) {
+            return encoder.matches(rawPassword, encodedPassword);
+        }
+        return rawPassword.equals(encodedPassword);
     }
 }

@@ -14,14 +14,20 @@ import java.util.Map;
 public interface ProductService {
 
     /**
-     * 搜索商品
-     * @param keyword 关键词
-     * @param categoryId 分类ID
-     * @param pageNum 页码
-     * @param pageSize 每页数量
+     * 多条件搜索商品（分页）
+     *
+     * filters:
+     * - keyword: 关键词
+     * - categoryId: 分类ID
+     * - brand: 品牌（可选）
+     * - priceMin: 最低价格（可选）
+     * - priceMax: 最高价格（可选）
+     * - inventoryMin: 最小库存（可选）
+     * - sort: 排序方案（可选）
+     * - pageNum / pageSize: 分页参数
      * @return 搜索结果
      */
-    CommentResult searchProducts(String keyword, Long categoryId, Integer pageNum, Integer pageSize);
+    CommentResult searchProducts(Map<String, Object> filters);
 
     /**
      * 获取商品分类列表

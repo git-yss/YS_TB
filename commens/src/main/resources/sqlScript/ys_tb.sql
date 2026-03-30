@@ -59,9 +59,25 @@ CREATE TABLE `ys_order`  (
                              `id` bigint NOT NULL COMMENT 'ID',
                              `user_id` bigint NOT NULL COMMENT '用户id',
                              `goods_id` bigint NULL DEFAULT NULL COMMENT '商品id',
-                             `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单状态',
+                             `quantity` int NOT NULL DEFAULT 1 COMMENT '商品数量',
+                             `unit_price` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '商品单价',
+                             `total_amount` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '订单总金额',
+                             `status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单状态（状态码）',
+                             `pay_method` varchar(20) DEFAULT NULL COMMENT '支付方式：balance=余额支付，wechat=微信支付，alipay=支付宝',
+                             `logistics_no` varchar(50) DEFAULT NULL COMMENT '物流单号',
+                             `logistics_company` varchar(50) DEFAULT NULL COMMENT '物流公司',
                              `addTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '订单时间',
-                             UNIQUE INDEX `IDX_USER_ID`(`id` ASC, `user_id` ASC, `goods_id` ASC) USING BTREE
+                             `ship_time` datetime DEFAULT NULL COMMENT '发货时间',
+                             `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+                             `finish_time` datetime DEFAULT NULL COMMENT '完成时间',
+                             `refund_time` datetime DEFAULT NULL COMMENT '退款时间',
+                             `refund_reason` varchar(500) DEFAULT NULL COMMENT '退款原因',
+                             `refund_amount` decimal(18, 2) DEFAULT NULL COMMENT '退款金额',
+                             UNIQUE INDEX `IDX_USER_ID`(`id` ASC, `user_id` ASC, `goods_id` ASC) USING BTREE,
+                             INDEX `IDX_USER`(`user_id` ASC) USING BTREE,
+                             INDEX `IDX_GOODS`(`goods_id` ASC) USING BTREE,
+                             INDEX `IDX_STATUS`(`status` ASC) USING BTREE,
+                             INDEX `IDX_ADDTIME`(`addTime` DESC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -93,12 +109,13 @@ DROP TABLE IF EXISTS `ys_user`;
 CREATE TABLE `ys_user`  (
                             `id` bigint NOT NULL COMMENT '用户ID',
                             `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
-                            `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+                            `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
                             `age` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '年龄',
                             `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
                             `balance` decimal(18, 2) NOT NULL COMMENT '余额',
                             `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电子邮件',
                             `tel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电话号码',
+                            `status` tinyint NOT NULL DEFAULT 1 COMMENT '账户状态：0=禁用，1=正常',
                             PRIMARY KEY (`id`) USING BTREE,
                             UNIQUE INDEX `IDX_USER_ID`(`id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
@@ -116,7 +133,7 @@ CREATE TABLE `ys_user_addr`  (
                                  `id` bigint(20) NOT NULL COMMENT 'ID',
                                  `user_id` bigint(20) NOT NULL COMMENT '用户id',
                                  `addr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地址',
-                                 `isMain` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '是否主地址 1=是  0=不是',
+                                 `isMain` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '是否主地址 1=是  0=不是',
                                  PRIMARY KEY (`id`) USING BTREE,
                                  UNIQUE INDEX `IDX_USER_ID`(`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
@@ -124,6 +141,6 @@ CREATE TABLE `ys_user_addr`  (
 -- ----------------------------
 -- Records of ys_user_addr
 -- ----------------------------
-INSERT INTO `ys_user_addr` VALUES (1, 12345, '四川省成都市武侯区星语双城5栋一单元420');
+INSERT INTO `ys_user_addr` VALUES (1, 12345, '四川省成都市武侯区星语双城5栋一单元420', '1');
 
 SET FOREIGN_KEY_CHECKS = 1;
