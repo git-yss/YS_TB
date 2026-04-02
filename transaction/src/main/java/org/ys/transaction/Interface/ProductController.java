@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.transaction.Interface.VO.CommentResult;
-import org.ys.transaction.domain.inteface.ProductService;
+import org.ys.transaction.application.ProductApplicationService;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class ProductController {
 
     @Resource
-    private ProductService productService;
+    private ProductApplicationService productApplicationService;
 
     /**
      * 搜索商品
@@ -32,9 +32,9 @@ public class ProductController {
     @ResponseBody
     public CommentResult searchProducts(@RequestBody Map<String, Object> map) {
         try {
-            return CommentResultAssembler.ok(productService.searchProducts(map));
+            return CommentResult.success(productApplicationService.searchProducts(map));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class ProductController {
     @ResponseBody
     public CommentResult getCategoryList() {
         try {
-            return CommentResultAssembler.ok(productService.getCategoryList());
+            return CommentResult.success(productApplicationService.getCategoryList());
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -60,11 +60,17 @@ public class ProductController {
     @RequestMapping("subCategories")
     @ResponseBody
     public CommentResult getSubCategories(@RequestBody Map<String, Object> map) {
-        Long parentId = map.get("parentId") != null ? Long.valueOf(map.get("parentId").toString()) : null;
         try {
-            return CommentResultAssembler.ok(productService.getSubCategories(parentId));
+            if (map.get("parentId") == null) {
+                throw new IllegalArgumentException("parentId不能为空");
+            }
+            Long parentId = Long.valueOf(map.get("parentId").toString());
+            if (parentId <= 0) {
+                throw new IllegalArgumentException("parentId不能为空");
+            }
+            return CommentResult.success(productApplicationService.getSubCategories(parentId));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -76,11 +82,17 @@ public class ProductController {
     @RequestMapping("detail")
     @ResponseBody
     public CommentResult getGoodsDetail(@RequestBody Map<String, Object> map) {
-        Long goodsId = Long.valueOf(map.get("goodsId").toString());
         try {
-            return CommentResultAssembler.ok(productService.getGoodsDetail(goodsId));
+            if (map.get("goodsId") == null) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            Long goodsId = Long.valueOf(map.get("goodsId").toString());
+            if (goodsId <= 0) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            return CommentResult.success(productApplicationService.getGoodsDetail(goodsId));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -96,9 +108,9 @@ public class ProductController {
         Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
         Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
         try {
-            return CommentResultAssembler.ok(productService.getGoodsByCategory(categoryId, pageNum, pageSize));
+            return CommentResult.success(productApplicationService.getGoodsByCategory(categoryId, pageNum, pageSize));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -112,9 +124,9 @@ public class ProductController {
     public CommentResult getHotGoods(@RequestBody Map<String, Object> map) {
         Integer limit = map.get("limit") != null ? Integer.valueOf(map.get("limit").toString()) : null;
         try {
-            return CommentResultAssembler.ok(productService.getHotGoods(limit));
+            return CommentResult.success(productApplicationService.getHotGoods(limit));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 }

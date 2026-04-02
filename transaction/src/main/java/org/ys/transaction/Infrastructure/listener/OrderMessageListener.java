@@ -6,10 +6,12 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import org.ys.commens.dao.YsOrderDao;
-import org.ys.commens.utils.JsonUtils;
+
+import org.ys.transaction.Infrastructure.utils.JsonUtils;
+import org.ys.transaction.application.ShoppingApplicationService;
+import org.ys.transaction.domain.aggregate.OrderAggregate;
+import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.vo.CartItem;
-import org.ys.transaction.domain.inteface.CartService;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -24,10 +26,10 @@ import java.util.stream.Collectors;
 public class OrderMessageListener {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderMessageListener.class);
     @Resource
-    private CartService cartService;
+    private ShoppingApplicationService shoppingApplicationService;
 
     @Resource
-    private YsOrderDao ysOrderDao;
+    private YsOrderRespository ysOrderRespository;
 
     @Resource
     private JmsTemplate jmsTemplate;
@@ -50,7 +52,7 @@ public class OrderMessageListener {
         try {
             // 处理订单消息
             cartItem.setNum(1);//秒杀场景都是扣1个
-            cartService.addOrder(cartItem,"");
+            shoppingApplicationService.addCart(cartItem);
             // 手动确认消息
             message.acknowledge();
             log.info("订单处理成功: 用户ID={}, 商品ID={}", cartItem.getUserId(), cartItem.getItemId());
@@ -86,18 +88,18 @@ public class OrderMessageListener {
         // 新增购物订单
         try {
             // 处理订单消息
-            List<Map<String, Object>> maps = ysOrderDao.selectDetailById(orderId);
-            String userEmail = maps.get(0).get("email").toString();
-            String introduce = maps.stream().map(map -> map.get("introduce").toString()).collect(Collectors.joining("、"));
+            List<OrderAggregate> maps = ysOrderRespository.selectDetailById(orderId);
+            String userEmail = maps.get(0).getUser().getEmail();
+            String introduce = maps.stream().map(map -> map.getGoods().getIntroduce()).collect(Collectors.joining("、"));
             // 手动确认消息
             message.acknowledge();
             SimpleMailMessage email = new SimpleMailMessage();
             email.setFrom("811570083@qq.com");
             email.setTo(userEmail);
             email.setSubject("交易提示");
-            email.setText(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).get("username").toString(), introduce, maps.get(0).get("addr").toString()));
+            email.setText(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).getUser().getUsername(), introduce, maps.get(0).getAddr().getAddr()));
             mailSender.send(email);
-            log.info(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).get("username").toString(), introduce, maps.get(0).get("addr").toString()));
+            log.info(String.format("订单号：%s 的用户 %s 购买了 %s 操作，已经购买成功，将会在三个工作日内发送到 %s ", orderId, maps.get(0).getUser().getUsername(), introduce, maps.get(0).getAddr().getAddr()));
         } catch (Exception e) {
             // 发生异常时，消息会重新入队
             log.error("邮件发送失败: {}", e);

@@ -1,9 +1,7 @@
 package org.ys.transaction.Interface;
 
 import org.springframework.web.bind.annotation.*;
-import org.ys.transaction.domain.inteface.CartService;
-import org.ys.transaction.domain.inteface.OrderEnhancedService;
-import org.ys.transaction.Infrastructure.pojo.YsOrder;
+import org.ys.transaction.application.OrderApplicationService;
 import org.ys.transaction.Interface.VO.CommentResult;
 
 import javax.annotation.Resource;
@@ -17,10 +15,7 @@ import java.util.Map;
 public class OrderController {
 
     @Resource
-    private CartService cartService;
-
-    @Resource
-    private OrderEnhancedService orderEnhancedService;
+    private OrderApplicationService orderApplicationService;
 
     /**
      * 当前用户订单行列表（与 shoppingCar/showOrder 一致，路径更贴近前端路由）
@@ -29,10 +24,16 @@ public class OrderController {
     @ResponseBody
     public CommentResult list(@RequestBody Map<String, Object> body) {
         try {
+            if (body.get("userId") == null) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
             Long userId = Long.valueOf(body.get("userId").toString());
-            return CommentResultAssembler.ok(cartService.showOrder(userId));
+            if (userId <= 0) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
+            return CommentResult.success(orderApplicationService.list(userId));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -42,16 +43,16 @@ public class OrderController {
         try {
             Long orderId = Long.valueOf(body.get("orderId").toString());
             Long userId = Long.valueOf(body.get("userId").toString());
-            Map<String, Object> data = orderEnhancedService.getOrderDetail(orderId);
-            Object ord = data.get("order");
-            if (ord instanceof YsOrder) {
-                if (!userId.equals(((YsOrder) ord).getUserId())) {
-                    return CommentResultAssembler.fail("无权查看该订单");
-                }
+            if (orderId == null || orderId <= 0) {
+                throw new IllegalArgumentException("订单ID不能为空");
             }
-            return CommentResultAssembler.ok(data);
+            if (userId == null) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
+            Map<String, Object> data = orderApplicationService.detail(orderId, userId);
+            return CommentResult.success(data);
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -59,13 +60,25 @@ public class OrderController {
     @ResponseBody
     public CommentResult cancel(@RequestBody Map<String, Object> body) {
         try {
+            if (body.get("orderId") == null) {
+                throw new IllegalArgumentException("订单ID不能为空");
+            }
+            if (body.get("userId") == null) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
             Long orderId = Long.valueOf(body.get("orderId").toString());
             Long userId = Long.valueOf(body.get("userId").toString());
+            if (orderId <= 0) {
+                throw new IllegalArgumentException("订单ID不能为空");
+            }
+            if (userId <= 0) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
             String reason = body.get("cancelReason") != null ? body.get("cancelReason").toString() : "用户取消";
-            orderEnhancedService.cancelOrder(orderId, userId, reason);
-            return CommentResultAssembler.ok("订单已取消");
+            orderApplicationService.cancel(orderId, userId, reason);
+            return CommentResult.success("订单已取消");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -73,12 +86,24 @@ public class OrderController {
     @ResponseBody
     public CommentResult confirmReceipt(@RequestBody Map<String, Object> body) {
         try {
+            if (body.get("orderId") == null) {
+                throw new IllegalArgumentException("订单ID不能为空");
+            }
+            if (body.get("userId") == null) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
             Long orderId = Long.valueOf(body.get("orderId").toString());
             Long userId = Long.valueOf(body.get("userId").toString());
-            orderEnhancedService.confirmReceipt(orderId, userId);
-            return CommentResultAssembler.ok("确认收货成功");
+            if (orderId <= 0) {
+                throw new IllegalArgumentException("订单ID不能为空");
+            }
+            if (userId <= 0) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
+            orderApplicationService.confirmReceipt(orderId, userId);
+            return CommentResult.success("确认收货成功");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 }

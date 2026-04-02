@@ -1,7 +1,9 @@
 package org.ys.transaction.domain.entity;
 
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,12 +14,12 @@ import java.time.LocalDateTime;
  * @author makejava
  * @since 2025-08-31 12:34:48
  */
-@Getter
+@Data
 public class YsOrder {
     private Long id;
-//用户id
+//用户 id
     private Long userId;
-//商品id
+//商品 id
     private Long goodsId;
 //订单状态
     private String status;
@@ -47,6 +49,12 @@ public class YsOrder {
     private String refundReason;
 //退款金额
     private BigDecimal refundAmount;
+
+    /**
+     * 无参构造函数（用于 MapStruct 等框架）
+     */
+    public YsOrder() {
+    }
 
     private YsOrder(Long id,
                     Long userId,

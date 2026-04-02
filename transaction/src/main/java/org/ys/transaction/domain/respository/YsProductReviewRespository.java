@@ -3,6 +3,7 @@ package org.ys.transaction.domain.respository;
 import org.ys.transaction.domain.aggregate.ProductReviewAggregate;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (YsProductReview)表数据库访问层
@@ -31,4 +32,12 @@ public interface YsProductReviewRespository  {
      * 检查用户是否已评价过该订单商品
      */
     ProductReviewAggregate checkReviewed(ProductReviewAggregate aggregate);
+
+    int insert(ProductReviewAggregate aggregate);
+
+    ProductReviewAggregate selectById(ProductReviewAggregate aggregate);
+
+    int updateById(ProductReviewAggregate aggregate);
+
+    Map<String, Object> getGoodsRatingStatsMap(ProductReviewAggregate aggregate);
 }

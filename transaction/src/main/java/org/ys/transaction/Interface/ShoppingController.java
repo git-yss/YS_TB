@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.transaction.Interface.VO.CommentResult;
+import org.ys.transaction.application.ShoppingApplicationService;
 import org.ys.transaction.domain.vo.CartItem;
-import org.ys.transaction.domain.inteface.CartService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -18,16 +18,16 @@ import java.util.Map;
 @RestController
 public class ShoppingController {
     @Resource
-    private CartService service;
+    private ShoppingApplicationService service;
 
     @RequestMapping("addCart")
     @ResponseBody
     public CommentResult addCart(@RequestBody CartItem ysGoods){
         try {
             service.addCart(ysGoods);
-            return CommentResultAssembler.ok();
+            return CommentResult.success();
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -35,9 +35,9 @@ public class ShoppingController {
     @ResponseBody
     public CommentResult showCart(@RequestBody Map<String, Object> map){
         try {
-            return CommentResultAssembler.ok(service.showCart(Long.valueOf(map.get("userId").toString())));
+            return CommentResult.success(service.showCart(Long.valueOf(map.get("userId").toString())));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class ShoppingController {
     public CommentResult deleteById(@RequestBody Map<String, Object> map){
         try {
             service.deleteById(Long.valueOf(map.get("itemId").toString()),Long.valueOf(map.get("userId").toString()));
-            return CommentResultAssembler.ok();
+            return CommentResult.success();
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -63,9 +63,9 @@ public class ShoppingController {
         Integer num = Integer.valueOf(map.get("num").toString());
         try {
             service.updateCartNum(itemId, userId, num);
-            return CommentResultAssembler.ok("数量更新成功");
+            return CommentResult.success("数量更新成功");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -79,9 +79,9 @@ public class ShoppingController {
     @ResponseBody
     public CommentResult goSettlement(@RequestBody Map<String, Object> items){
         try {
-            return CommentResultAssembler.ok(service.goSettlement(items));
+            return CommentResult.success(service.goSettlement(items));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -89,9 +89,9 @@ public class ShoppingController {
     @ResponseBody
     public CommentResult showOrder(@RequestBody Map<String, Object> map){
         try {
-            return CommentResultAssembler.ok(service.showOrder(Long.valueOf(map.get("userId").toString())));
+            return CommentResult.success(service.showOrder(Long.valueOf(map.get("userId").toString())));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
     /**
@@ -106,9 +106,9 @@ public class ShoppingController {
         String[] orderIds = item.get("orderIds").toString().split(",");
         try {
             service.goPay(userId, orderIds);
-            return CommentResultAssembler.ok();
+            return CommentResult.success();
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -122,9 +122,9 @@ public class ShoppingController {
     public CommentResult goSeckillSettlement(@RequestBody Map<String, Object> map) throws JsonProcessingException {
         try {
             service.goSeckillSettlement(map.get("itemId").toString(),map.get("userId").toString());
-            return CommentResultAssembler.ok();
+            return CommentResult.success();
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -138,9 +138,9 @@ public class ShoppingController {
     public CommentResult seckill(@RequestBody Map<String, Object> map){
         try {
             service.seckill(map.get("itemId").toString(),map.get("userId").toString());
-            return CommentResultAssembler.ok("秒杀成功");
+            return CommentResult.success("秒杀成功");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -155,9 +155,9 @@ public class ShoppingController {
         try {
             service.initSeckillItem(map.get("itemId").toString(),new BigDecimal(100),
                     Integer.valueOf(map.get("num").toString()),map.get("expireTime").toString());
-            return CommentResultAssembler.ok();
+            return CommentResult.success();
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 

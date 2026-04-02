@@ -8,6 +8,7 @@ import org.ys.transaction.Infrastructure.dao.YsProductReviewDao;
 import org.ys.transaction.Infrastructure.pojo.YsProductReview;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -48,6 +49,27 @@ public class YsProductReviewPersistent implements YsProductReviewRespository {
         return review == null ? null : toAggregate(review);
     }
 
+    @Override
+    public int insert(ProductReviewAggregate aggregate) {
+        return ysProductReviewDao.insert(toPo(aggregate.getReview()));
+    }
+
+    @Override
+    public ProductReviewAggregate selectById(ProductReviewAggregate aggregate) {
+        YsProductReview review = ysProductReviewDao.selectById(aggregate.getReview().getId());
+        return review == null ? null : toAggregate(review);
+    }
+
+    @Override
+    public int updateById(ProductReviewAggregate aggregate) {
+        return ysProductReviewDao.updateById(toPo(aggregate.getReview()));
+    }
+
+    @Override
+    public Map<String, Object> getGoodsRatingStatsMap(ProductReviewAggregate aggregate) {
+        return ysProductReviewDao.getGoodsRatingStats(aggregate.getReview().getGoodsId());
+    }
+
     private ProductReviewAggregate toAggregate(YsProductReview po) {
         return new ProductReviewAggregate(
                 org.ys.transaction.domain.entity.YsProductReview.rehydrate(
@@ -56,5 +78,23 @@ public class YsProductReviewPersistent implements YsProductReviewRespository {
                         po.getUpdatedAt(), po.getReplyContent(), po.getReplyTime()
                 )
         );
+    }
+
+    private YsProductReview toPo(org.ys.transaction.domain.entity.YsProductReview e) {
+        YsProductReview po = new YsProductReview();
+        po.setId(e.getId());
+        po.setOrderId(e.getOrderId());
+        po.setGoodsId(e.getGoodsId());
+        po.setUserId(e.getUserId());
+        po.setUsername(e.getUsername());
+        po.setRating(e.getRating());
+        po.setContent(e.getContent());
+        po.setImages(e.getImages());
+        po.setIsAnonymous(e.getIsAnonymous());
+        po.setCreatedAt(e.getCreatedAt());
+        po.setUpdatedAt(e.getUpdatedAt());
+        po.setReplyContent(e.getReplyContent());
+        po.setReplyTime(e.getReplyTime());
+        return po;
     }
 }

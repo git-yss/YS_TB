@@ -7,13 +7,15 @@ import org.ys.transaction.domain.respository.YsCategoryRespository;
 import org.ys.transaction.Infrastructure.dao.YsCategoryDao;
 import org.ys.transaction.Infrastructure.pojo.YsCategory;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-@RequiredArgsConstructor
 public class YsCategoryPersistent implements YsCategoryRespository {
-    private final YsCategoryDao ysCategoryDao;
+    @Resource
+    private  YsCategoryDao ysCategoryDao;
+
 
     @Override
     public List<CateGoryAggregate> selectByParentId(CateGoryAggregate aggregate) {

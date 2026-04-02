@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.ys.transaction.Interface.VO.CommentResult;
-import org.ys.transaction.domain.inteface.ProductReviewService;
+import org.ys.transaction.application.ProductReviewApplicationService;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class ProductReviewController {
 
     @Resource
-    private ProductReviewService productReviewService;
+    private ProductReviewApplicationService productReviewApplicationService;
 
     /**
      * 发表商品评价
@@ -31,18 +31,24 @@ public class ProductReviewController {
     @RequestMapping("add")
     @ResponseBody
     public CommentResult addReview(@RequestBody Map<String, Object> map) {
-        Long orderId = Long.valueOf(map.get("orderId").toString());
-        Long goodsId = Long.valueOf(map.get("goodsId").toString());
-        Long userId = Long.valueOf(map.get("userId").toString());
-        Integer rating = Integer.valueOf(map.get("rating").toString());
-        String content = map.get("content") != null ? map.get("content").toString() : null;
-        String images = map.get("images") != null ? map.get("images").toString() : null;
-        Integer isAnonymous = map.get("isAnonymous") != null ? Integer.valueOf(map.get("isAnonymous").toString()) : null;
         try {
-            productReviewService.addReview(orderId, goodsId, userId, rating, content, images, isAnonymous);
-            return CommentResultAssembler.ok("评价成功");
+            if (map.get("orderId") == null || map.get("goodsId") == null || map.get("userId") == null || map.get("rating") == null) {
+                throw new IllegalArgumentException("参数不完整");
+            }
+            Long orderId = Long.valueOf(map.get("orderId").toString());
+            Long goodsId = Long.valueOf(map.get("goodsId").toString());
+            Long userId = Long.valueOf(map.get("userId").toString());
+            Integer rating = Integer.valueOf(map.get("rating").toString());
+            if (rating < 1 || rating > 5) {
+                throw new IllegalArgumentException("评分必须在1-5星之间");
+            }
+            String content = map.get("content") != null ? map.get("content").toString() : null;
+            String images = map.get("images") != null ? map.get("images").toString() : null;
+            Integer isAnonymous = map.get("isAnonymous") != null ? Integer.valueOf(map.get("isAnonymous").toString()) : null;
+            productReviewApplicationService.addReview(orderId, goodsId, userId, rating, content, images, isAnonymous);
+            return CommentResult.success("评价成功");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -54,13 +60,19 @@ public class ProductReviewController {
     @RequestMapping("listByGoods")
     @ResponseBody
     public CommentResult getReviewsByGoodsId(@RequestBody Map<String, Object> map) {
-        Long goodsId = Long.valueOf(map.get("goodsId").toString());
-        Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
-        Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
         try {
-            return CommentResultAssembler.ok(productReviewService.getReviewsByGoodsId(goodsId, pageNum, pageSize));
+            if (map.get("goodsId") == null) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            Long goodsId = Long.valueOf(map.get("goodsId").toString());
+            if (goodsId <= 0) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
+            Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
+            return CommentResult.success(productReviewApplicationService.getReviewsByGoodsId(goodsId, pageNum, pageSize));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -72,13 +84,19 @@ public class ProductReviewController {
     @RequestMapping("listByUser")
     @ResponseBody
     public CommentResult getReviewsByUserId(@RequestBody Map<String, Object> map) {
-        Long userId = Long.valueOf(map.get("userId").toString());
-        Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
-        Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
         try {
-            return CommentResultAssembler.ok(productReviewService.getReviewsByUserId(userId, pageNum, pageSize));
+            if (map.get("userId") == null) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
+            Long userId = Long.valueOf(map.get("userId").toString());
+            if (userId <= 0) {
+                throw new IllegalArgumentException("用户ID不能为空");
+            }
+            Integer pageNum = map.get("pageNum") != null ? Integer.valueOf(map.get("pageNum").toString()) : null;
+            Integer pageSize = map.get("pageSize") != null ? Integer.valueOf(map.get("pageSize").toString()) : null;
+            return CommentResult.success(productReviewApplicationService.getReviewsByUserId(userId, pageNum, pageSize));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -90,11 +108,17 @@ public class ProductReviewController {
     @RequestMapping("stats")
     @ResponseBody
     public CommentResult getReviewStats(@RequestBody Map<String, Object> map) {
-        Long goodsId = Long.valueOf(map.get("goodsId").toString());
         try {
-            return CommentResultAssembler.ok(productReviewService.getReviewStats(goodsId));
+            if (map.get("goodsId") == null) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            Long goodsId = Long.valueOf(map.get("goodsId").toString());
+            if (goodsId <= 0) {
+                throw new IllegalArgumentException("商品ID不能为空");
+            }
+            return CommentResult.success(productReviewApplicationService.getReviewStats(goodsId));
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 
@@ -106,13 +130,22 @@ public class ProductReviewController {
     @RequestMapping("reply")
     @ResponseBody
     public CommentResult replyReview(@RequestBody Map<String, Object> map) {
-        Long reviewId = Long.valueOf(map.get("reviewId").toString());
-        String replyContent = map.get("replyContent").toString();
         try {
-            productReviewService.replyReview(reviewId, replyContent);
-            return CommentResultAssembler.ok("回复成功");
+            if (map.get("reviewId") == null) {
+                throw new IllegalArgumentException("评价ID不能为空");
+            }
+            Long reviewId = Long.valueOf(map.get("reviewId").toString());
+            if (reviewId <= 0) {
+                throw new IllegalArgumentException("评价ID不能为空");
+            }
+            String replyContent = map.get("replyContent") == null ? "" : map.get("replyContent").toString();
+            if (replyContent.trim().isEmpty()) {
+                throw new IllegalArgumentException("回复内容不能为空");
+            }
+            productReviewApplicationService.replyReview(reviewId, replyContent);
+            return CommentResult.success("回复成功");
         } catch (Exception e) {
-            return CommentResultAssembler.fail(e.getMessage());
+            return CommentResult.error(e.getMessage());
         }
     }
 }

@@ -2,11 +2,15 @@ package org.ys.transaction.Infrastructure.persistent;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.ys.transaction.Infrastructure.conver.UserConver;
+import org.ys.transaction.Infrastructure.pojo.YsUserAddr;
 import org.ys.transaction.domain.aggregate.LoginAggregate;
 import org.ys.transaction.domain.aggregate.UserAggregate;
 import org.ys.transaction.domain.respository.YsUserRespository;
 import org.ys.transaction.Infrastructure.dao.YsUserDao;
 import org.ys.transaction.Infrastructure.pojo.YsUser;
+
+import java.util.ArrayList;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,17 +25,15 @@ public class YsUserPersistent implements YsUserRespository {
     }
 
     @Override
-    public UserAggregate selectAggregateById(UserAggregate aggregate) {
-        YsUser po = ysUserDao.selectById(aggregate.getUser().getId());
-        if (po == null) return null;
-        return new UserAggregate(toEntity(po), aggregate.getAddresses());
+    public UserAggregate selectAggregateById(String userId) {
+        YsUser po = ysUserDao.selectById(userId);
+        return UserConver.INSTANCE.poToAggregate(po,null);
     }
 
     @Override
-    public UserAggregate selectByName(UserAggregate aggregate) {
-        YsUser po = ysUserDao.selectByName(aggregate.getUser().getUsername());
-        if (po == null) return null;
-        return new UserAggregate(toEntity(po), aggregate.getAddresses());
+    public UserAggregate selectByName(String username) {
+        YsUser po = ysUserDao.selectByName(username);
+        return UserConver.INSTANCE.poToAggregate(po,null);
     }
 
     @Override
@@ -47,8 +49,17 @@ public class YsUserPersistent implements YsUserRespository {
     }
 
     @Override
+    public int updateById(UserAggregate aggregate) {
+        return ysUserDao.updateById(toPo(aggregate.getUser()));
+    }
+
+    @Override
     public int insert(UserAggregate aggregate) {
-        return ysUserDao.insert(toPo(aggregate.getUser()));
+        int result = ysUserDao.insert(toPo(aggregate.getUser()));
+        if (result <= 0) {
+            throw new IllegalStateException("注册失败");
+        }
+        return result;
     }
 
     private org.ys.transaction.domain.entity.YsUser toEntity(YsUser po) {

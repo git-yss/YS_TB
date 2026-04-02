@@ -3,6 +3,7 @@ package org.ys.transaction.Interface;
 import org.springframework.web.bind.annotation.*;
 import org.ys.transaction.Interface.VO.CommentResult;
 import org.ys.transaction.application.UserApplicationService;
+import org.ys.transaction.domain.aggregate.UserAggregate;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -24,12 +25,23 @@ public class UserController {
             return CommentResult.error(e.getMessage());
         }
     }
+    @PostMapping("login")
+    @ResponseBody
+    public CommentResult login(@RequestBody Map<String, Object> params) {
+        try {
+            userApplicationService.login(params);
+            return CommentResult.success("登录成功");
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
 
     @GetMapping("info")
     @ResponseBody
     public CommentResult info(@RequestParam("userId") Long userId) {
         try {
-            return CommentResult.success(userApplicationService.getUserInfo(userId));
+            UserAggregate userInfo = userApplicationService.getUserInfo(userId);
+            return CommentResult.success(userInfo);
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }

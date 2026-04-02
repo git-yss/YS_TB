@@ -2,7 +2,8 @@ package org.ys.transaction.Infrastructure.config;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.ys.commens.pojo.CommentResult;
+import org.ys.transaction.Interface.VO.CommentResult;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

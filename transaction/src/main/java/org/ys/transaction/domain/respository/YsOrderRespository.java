@@ -32,6 +32,8 @@ int insertOrUpdateBatch(List<OrderAggregate> entities);
 
 int addOrder(OrderAggregate aggregate);
 
+int updateById(OrderAggregate aggregate);
+
 int updateStatusById(OrderAggregate aggregate);
 
 int deleteById(OrderAggregate aggregate);
@@ -40,7 +42,7 @@ List<OrderAggregate> selectsById(OrderAggregate aggregate);
 
 List<OrderAggregate> selectsByUserId(OrderAggregate aggregate);
 
-OrderAggregate selectDetailById(OrderAggregate aggregate);
+List<OrderAggregate> selectDetailById(long orderId);
 
 OrderAggregate selectAggregateById(OrderAggregate aggregate);
 

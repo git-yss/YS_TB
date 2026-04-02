@@ -2,6 +2,7 @@ package org.ys.transaction.Infrastructure.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.ys.transaction.Infrastructure.pojo.Order;
 import org.ys.transaction.Infrastructure.pojo.YsOrder;
 import org.ys.transaction.domain.vo.CartItem;
 
@@ -43,6 +44,6 @@ int addOrder(@Param("cartItem") CartItem cartItem);
 
  List<YsOrder> selectsByUserId(@Param("userId") long userId);
 
- List<Map<String, Object>> selectDetailById(@Param("orderId")long orderId);
+ List<Order> selectDetailById(@Param("orderId")long orderId);
 }
 

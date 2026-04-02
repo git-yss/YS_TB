@@ -63,7 +63,7 @@ id = values(id) , user_id = values(user_id) , goods_id = values(goods_id) , stat
         select * from ys_tb.ys_order where id = #{id}
 
     </select>
-    <select id="selectDetailById" resultType="java.util.Map">
+    <select id="selectDetailById" resultType="Order">
         SELECT
             addr.addr "addr",
             o.id "orderId",

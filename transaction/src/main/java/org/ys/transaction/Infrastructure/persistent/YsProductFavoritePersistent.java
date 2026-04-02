@@ -1,5 +1,6 @@
 package org.ys.transaction.Infrastructure.persistent;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.ys.transaction.domain.aggregate.ProductFavoriteAggregate;
@@ -31,9 +32,36 @@ public class YsProductFavoritePersistent implements YsProductFavoriteRespository
         return po == null ? null : toAggregate(po);
     }
 
+    @Override
+    public int insert(ProductFavoriteAggregate aggregate) {
+        return ysProductFavoriteDao.insert(toPo(aggregate.getFavorite()));
+    }
+
+    @Override
+    public int deleteById(ProductFavoriteAggregate aggregate) {
+        return ysProductFavoriteDao.deleteById(aggregate.getFavorite().getId());
+    }
+
+    @Override
+    public int deleteByUserAndGoods(ProductFavoriteAggregate aggregate) {
+        QueryWrapper<YsProductFavorite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", aggregate.getFavorite().getUserId())
+                .eq("goods_id", aggregate.getFavorite().getGoodsId());
+        return ysProductFavoriteDao.delete(queryWrapper);
+    }
+
     private ProductFavoriteAggregate toAggregate(YsProductFavorite po) {
         return new ProductFavoriteAggregate(
                 org.ys.transaction.domain.entity.YsProductFavorite.rehydrate(
                         po.getId(), po.getUserId(), po.getGoodsId(), po.getCreatedAt()));
+    }
+
+    private YsProductFavorite toPo(org.ys.transaction.domain.entity.YsProductFavorite favorite) {
+        YsProductFavorite po = new YsProductFavorite();
+        po.setId(favorite.getId());
+        po.setUserId(favorite.getUserId());
+        po.setGoodsId(favorite.getGoodsId());
+        po.setCreatedAt(favorite.getCreatedAt());
+        return po;
     }
 }

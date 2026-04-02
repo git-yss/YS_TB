@@ -6,13 +6,15 @@ import org.ys.transaction.domain.aggregate.UserAggregate;
 public interface YsUserRespository {
     LoginAggregate queryUser(LoginAggregate aggregate);
 
-    UserAggregate selectAggregateById(UserAggregate aggregate);
+    UserAggregate selectAggregateById(String userId);
 
-    UserAggregate selectByName(UserAggregate aggregate);
+    UserAggregate selectByName(String username );
 
     UserAggregate selectByEmail(UserAggregate aggregate);
 
     int updateBalanceById(UserAggregate aggregate);
+
+    int updateById(UserAggregate aggregate);
 
     int insert(UserAggregate aggregate);
 }

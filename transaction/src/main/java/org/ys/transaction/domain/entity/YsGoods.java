@@ -1,5 +1,6 @@
 package org.ys.transaction.domain.entity;
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
      * @author makejava
      * @since 2025-07-23 22:01:18
      */
-@Getter
+@Data
 public class YsGoods {
         private Long id;
     //品牌

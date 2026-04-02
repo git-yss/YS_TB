@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@MapperScan("org.ys.commens.dao")
-@ComponentScan(basePackages = {"org.ys.transaction", "org.ys.commens"})
+@MapperScan("org.ys.transaction.Infrastructure.dao")
 public class TransactionApplication {
 
     public static void main(String[] args) {

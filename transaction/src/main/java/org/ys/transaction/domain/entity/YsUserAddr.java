@@ -1,5 +1,6 @@
 package org.ys.transaction.domain.entity;
 
+import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Getter;
  * @author makejava
  * @since 2025-07-16 19:41:46
  */
-@Getter
+@Data
 public class YsUserAddr{
     //ID
     private Long id;
