@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ys.transaction.Infrastructure.dao.YsCategoryDao">
+    <resultMap id="YsCategoryMap" type="org.ys.transaction.Infrastructure.pojo.YsCategory">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+        <result property="categoryCode" column="category_code" jdbcType="VARCHAR"/>
+        <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectByParentId" resultMap="YsCategoryMap">
+        select *
+        from ys_tb.ys_category
+        where parent_id = #{parentId}
+          and status = 1
+        order by sort_order asc, id asc
+    </select>
+
+    <select id="selectEnabled" resultMap="YsCategoryMap">
+        select *
+        from ys_tb.ys_category
+        where status = 1
+        order by sort_order asc, id asc
+    </select>
+</mapper>

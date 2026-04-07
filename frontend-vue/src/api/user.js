@@ -2,7 +2,7 @@ import request from './index'
 
 export function login(data) {
   return request({
-    url: '/login',
+    url: '/user/login',
     method: 'post',
     data
   })

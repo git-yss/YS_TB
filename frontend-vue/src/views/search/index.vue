@@ -36,7 +36,7 @@
           <el-card shadow="hover" @click="goDetail(item.id)" class="goods-card">
             <el-image :src="item.image || placeholder" fit="cover" style="height: 160px; width: 100%" />
             <div class="meta">
-              <div class="name">{{ item.name }}</div>
+              <div class="name" v-html="formatHighlightedName(item.name)"></div>
               <div class="price">¥{{ item.price }}</div>
             </div>
           </el-card>
@@ -100,6 +100,11 @@ function goDetail(id) {
   router.push(`/goods/${id}`)
 }
 
+function formatHighlightedName(name) {
+  if (!name) return '未知商品'
+  return String(name)
+}
+
 onMounted(() => {
   if (route.query.q) {
     keyword.value = String(route.query.q)
@@ -123,6 +128,12 @@ onMounted(() => {
 .name {
   font-weight: 500;
   margin-bottom: 4px;
+}
+
+.name :deep(em) {
+  color: #f56c6c;
+  font-style: normal;
+  font-weight: 700;
 }
 .price {
   color: #f56c6c;

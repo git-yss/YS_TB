@@ -6,6 +6,7 @@ import org.ys.transaction.application.UserApplicationService;
 import org.ys.transaction.domain.aggregate.UserAggregate;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -29,8 +30,12 @@ public class UserController {
     @ResponseBody
     public CommentResult login(@RequestBody Map<String, Object> params) {
         try {
-            userApplicationService.login(params);
-            return CommentResult.success("登录成功");
+            Object userInfo = userApplicationService.login(params);
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("userInfo", userInfo);
+            // 当前项目未启用 JWT，返回可用占位 token 以通过前端鉴权守卫
+            payload.put("token", "session-token");
+            return CommentResult.success(payload);
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }

@@ -296,14 +296,17 @@ const handleAddReview = () => {
     const gid = goodsId.value
     const res = await listOrders(uid)
     const rows = Array.isArray(res.data) ? res.data : []
-    const eligible = rows.find((o) => String(o.goodsId) === String(gid) && String(o.status) === '3')
+    const eligible = rows.find((o) => {
+      const order = o?.order || o
+      return String(order?.goodsId) === String(gid) && String(order?.status) === '3'
+    })
 
     if (!eligible) {
       ElMessage.warning('未找到可评价订单（需要已支付订单）')
       return
     }
 
-    selectedOrderId.value = eligible.id
+    selectedOrderId.value = eligible?.order?.id || eligible?.id
     reviewDialogVisible.value = true
   })().catch((e) => {
     ElMessage.error(e?.message || '获取订单失败')

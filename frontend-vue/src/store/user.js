@@ -37,8 +37,17 @@ export const useUserStore = defineStore('user', {
     login(payload) {
       if (!payload) return
       const { token, userInfo } = payload
-      if (token) this.setToken(token)
-      if (userInfo) this.setUserInfo(userInfo)
+      // 兼容两种后端返回：
+      // 1) { token, userInfo }
+      // 2) 直接返回用户对象 { id, username, ... }
+      if (typeof token === 'string') this.setToken(token)
+      if (userInfo) {
+        this.setUserInfo(userInfo)
+        return
+      }
+      if (payload.id != null || payload.username != null) {
+        this.setUserInfo(payload)
+      }
     },
     logout() {
       this.userInfo = null

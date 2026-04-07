@@ -27,21 +27,24 @@ export function groupOrderRows(rows) {
   if (!Array.isArray(rows) || rows.length === 0) return []
   const map = new Map()
   for (const row of rows) {
-    const oid = row.id
+    const order = row?.order || row
+    const goods = row?.goods || row
+    const oid = order?.id
+    if (!oid) continue
     const lineTotal =
-      row.totalAmount != null
-        ? Number(row.totalAmount)
-        : Number(row.unitPrice || 0) * (row.quantity || 1)
-    const itemName = row.goodsName || `商品 #${row.goodsId}`
+      order.totalAmount != null
+        ? Number(order.totalAmount)
+        : Number(order.unitPrice || 0) * (order.quantity || 1)
+    const itemName = goods.name || row.goodsName || `商品 #${order.goodsId}`
     if (!map.has(oid)) {
-      const ui = orderStatusUi(row.status)
+      const ui = orderStatusUi(order.status)
       map.set(oid, {
         id: oid,
         orderNumber: String(oid),
-        orderTime: formatDateTime(row.addtime),
+        orderTime: formatDateTime(order.addTime || order.addtime),
         totalAmount: 0,
         status: ui.key,
-        statusCode: String(row.status),
+        statusCode: String(order.status),
         items: []
       })
     }
@@ -49,8 +52,8 @@ export function groupOrderRows(rows) {
     g.totalAmount += lineTotal
     g.items.push({
       name: itemName,
-      price: row.unitPrice != null ? Number(row.unitPrice) : 0,
-      quantity: row.quantity != null ? row.quantity : 1
+      price: order.unitPrice != null ? Number(order.unitPrice) : 0,
+      quantity: order.quantity != null ? order.quantity : 1
     })
   }
   return Array.from(map.values()).sort((a, b) => String(b.orderNumber).localeCompare(String(a.orderNumber)))

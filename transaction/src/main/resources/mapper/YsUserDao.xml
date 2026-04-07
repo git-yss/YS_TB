@@ -15,31 +15,32 @@
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
-        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel)
+        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel, status, create_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.id}, #{entity.username}, #{entity.password}, #{entity.age}, #{entity.sex}, #{entity.balance},
-            #{entity.email}, #{entity.tel})
+            #{entity.email}, #{entity.tel}, #{entity.status}, #{entity.createTime})
         </foreach>
     </insert>
     <insert id="insert" keyProperty="" useGeneratedKeys="true">
-        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel)
+        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel, status, create_time)
         values
             (#{entity.id}, #{entity.username}, #{entity.password}, #{entity.age}, #{entity.sex}, #{entity.balance},
-            #{entity.email}, #{entity.tel})
+            #{entity.email}, #{entity.tel}, #{entity.status}, #{entity.createTime})
     </insert>
 
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
-        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel)
+        insert into ys_tb.ys_user(id, username, password, age, sex, balance, email, tel, status, create_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.id}, #{entity.username}, #{entity.password}, #{entity.age}, #{entity.sex}, #{entity.balance},
-            #{entity.email}, #{entity.tel})
+            #{entity.email}, #{entity.tel}, #{entity.status}, #{entity.createTime})
         </foreach>
         on duplicate key update
         id = values(id) , username = values(username) , password = values(password) , age = values(age) , sex =
-        values(sex) , balance = values(balance) , email = values(email) , tel = values(tel)
+        values(sex) , balance = values(balance) , email = values(email) , tel = values(tel),
+        status = values(status), create_time = values(create_time)
     </insert>
     <select id="queryUser" resultType="org.ys.transaction.Infrastructure.pojo.YsUser">
         select * from ys_tb.ys_user where username=#{username} and password=#{password}
@@ -61,6 +62,23 @@
     <update id="updateBalanceById" parameterType="org.ys.transaction.Infrastructure.pojo.YsUser">
         UPDATE ys_user set balance=#{ysUser.balance} WHERE id = #{ysUser.id}
 
+    </update>
+
+    <!-- 覆盖 BaseMapper.updateById，避免被全局逻辑删除条件(status=0)错误过滤 -->
+    <update id="updateById" parameterType="org.ys.transaction.Infrastructure.pojo.YsUser">
+        update ys_tb.ys_user
+        <set>
+            <if test="et.username != null">username = #{et.username},</if>
+            <if test="et.password != null">password = #{et.password},</if>
+            <if test="et.age != null">age = #{et.age},</if>
+            <if test="et.sex != null">sex = #{et.sex},</if>
+            <if test="et.balance != null">balance = #{et.balance},</if>
+            <if test="et.email != null">email = #{et.email},</if>
+            <if test="et.tel != null">tel = #{et.tel},</if>
+            <if test="et.status != null">status = #{et.status},</if>
+            <if test="et.createTime != null">create_time = #{et.createTime},</if>
+        </set>
+        where id = #{et.id}
     </update>
 
 </mapper>

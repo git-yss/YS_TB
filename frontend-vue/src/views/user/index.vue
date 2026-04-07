@@ -64,7 +64,11 @@ const refreshing = ref(false)
 const updatingProfile = ref(false)
 const changingPwd = ref(false)
 
-const displayUser = computed(() => userStore.userInfo)
+const displayUser = computed(() => {
+  const info = userStore.userInfo
+  // 兼容后端两种返回：直接用户对象 / 聚合对象 { user, addresses }
+  return info?.user || info || null
+})
 
 const profileForm = ref({
   age: '',
@@ -88,12 +92,12 @@ watch(
 )
 
 async function refresh() {
-  const id = userStore.userInfo?.id
+  const id = displayUser.value?.id
   if (!id) return
   refreshing.value = true
   try {
     const res = await getUserInfo(id)
-    userStore.setUserInfo(res.data)
+    userStore.setUserInfo(res.data?.user || res.data)
     ElMessage.success('已更新')
   } catch (e) {
     ElMessage.error(e.message || '刷新失败')
@@ -103,7 +107,7 @@ async function refresh() {
 }
 
 async function submitProfile() {
-  const uid = userStore.userInfo?.id
+  const uid = displayUser.value?.id
   if (!uid) return
   updatingProfile.value = true
   try {
@@ -122,7 +126,7 @@ async function submitProfile() {
 }
 
 async function submitPassword() {
-  const uid = userStore.userInfo?.id
+  const uid = displayUser.value?.id
   if (!uid) return
   if (!pwdForm.value.oldPassword || !pwdForm.value.newPassword) {
     ElMessage.warning('请填写旧密码和新密码')
@@ -146,7 +150,7 @@ async function submitPassword() {
 }
 
 onMounted(() => {
-  if (userStore.userInfo?.id) {
+  if (displayUser.value?.id) {
     refresh()
   }
 })

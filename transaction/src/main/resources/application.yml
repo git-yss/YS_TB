@@ -106,3 +106,23 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+
+app:
+  es:
+    host: localhost
+    port: 9200
+    scheme: http
+    # 别名：对外暴露给查询/写入；物理索引：通过 goods-index-prefix 版本化创建
+    goods-index-alias: ys_goods_alias
+    goods-index-prefix: ys_goods_index_v
+  canal:
+    enabled: false
+    host: 127.0.0.1
+    port: 11111
+    destination: example
+    username:
+    password:
+    batch-size: 200
+    poll-interval-ms: 1000
+    schema: ys_tb
+    goods-table: ys_goods

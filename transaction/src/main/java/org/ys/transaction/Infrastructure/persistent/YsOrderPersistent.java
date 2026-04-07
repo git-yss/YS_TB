@@ -13,9 +13,7 @@ import org.ys.transaction.Infrastructure.dao.YsUserDao;
 import org.ys.transaction.Infrastructure.dao.YsUserAddrDao;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -121,14 +119,16 @@ public class YsOrderPersistent implements YsOrderRespository {
 
     @Override
     public OrderAggregate selectAggregateById(OrderAggregate aggregate) {
-        YsOrder order = ysOrderDao.selectById(aggregate.getOrder().getId());
+        List<YsOrder> rows = ysOrderDao.selectsById(aggregate.getOrder().getId());
+        YsOrder order = (rows == null || rows.isEmpty()) ? null : rows.get(0);
         if (order == null) return null;
         return toAggregate(order);
     }
 
     @Override
     public PayAggregate selectPayAggregateById(PayAggregate aggregate) {
-        YsOrder orderPo = ysOrderDao.selectById(aggregate.getOrder().getId());
+        List<YsOrder> rows = ysOrderDao.selectsById(aggregate.getOrder().getId());
+        YsOrder orderPo = (rows == null || rows.isEmpty()) ? null : rows.get(0);
         if (orderPo == null) return null;
         YsUser userPo = ysUserDao.selectById(orderPo.getUserId());
         if (userPo == null) return null;

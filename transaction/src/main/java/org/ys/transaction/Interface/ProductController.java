@@ -1,6 +1,9 @@
 package org.ys.transaction.Interface;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -125,6 +128,78 @@ public class ProductController {
         Integer limit = map.get("limit") != null ? Integer.valueOf(map.get("limit").toString()) : null;
         try {
             return CommentResult.success(productApplicationService.getHotGoods(limit));
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 重建商品 ES 索引（用于全量初始化/重建）
+     */
+    @PostMapping("es/rebuildIndex")
+    @ResponseBody
+    public CommentResult rebuildEsIndex() {
+        try {
+            return CommentResult.success(productApplicationService.rebuildEsGoodsIndex());
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 增量同步单个商品到 ES（商品变更后可调用）
+     */
+    @PostMapping("es/syncByGoodsId")
+    @ResponseBody
+    public CommentResult syncEsByGoodsId(@RequestBody Map<String, Object> map) {
+        try {
+            if (map.get("goodsId") == null) {
+                throw new IllegalArgumentException("goodsId不能为空");
+            }
+            Long goodsId = Long.valueOf(map.get("goodsId").toString());
+            return CommentResult.success(productApplicationService.syncEsGoodsById(goodsId));
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 搜索联想词（下拉建议）
+     */
+    @GetMapping("es/suggest")
+    @ResponseBody
+    public CommentResult esSuggest(
+            @RequestParam("prefix") String prefix,
+            @RequestParam(value = "size", required = false) Integer size
+    ) {
+        try {
+            return CommentResult.success(productApplicationService.esSuggest(prefix, size));
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 热门搜索词统计（进程内）
+     */
+    @GetMapping("es/hotKeywords")
+    @ResponseBody
+    public CommentResult esHotKeywords(@RequestParam(value = "size", required = false) Integer size) {
+        try {
+            return CommentResult.success(productApplicationService.esHotKeywords(size));
+        } catch (Exception e) {
+            return CommentResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 查看商品搜索别名当前指向的物理索引（用于面试讲解/可运维）
+     */
+    @GetMapping("es/aliasStatus")
+    @ResponseBody
+    public CommentResult esAliasStatus() {
+        try {
+            return CommentResult.success(productApplicationService.esGoodsAliasStatus());
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }

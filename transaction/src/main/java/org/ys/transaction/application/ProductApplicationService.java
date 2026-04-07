@@ -3,6 +3,7 @@ package org.ys.transaction.application;
 import org.springframework.stereotype.Service;
 import org.ys.transaction.application.conver.CategoryConver;
 import org.ys.transaction.application.conver.ProductConver;
+import org.ys.transaction.Infrastructure.es.EsGoodsSearchService;
 import org.ys.transaction.domain.aggregate.CateGoryAggregate;
 import org.ys.transaction.domain.aggregate.GoodsAggregate;
 import org.ys.transaction.domain.entity.YsCategory;
@@ -26,6 +27,9 @@ public class ProductApplicationService {
     @Resource
     private YsCategoryRespository ysCategoryRespository;
 
+    @Resource
+    private EsGoodsSearchService esGoodsSearchService;
+
     public Map<String, Object> searchProducts(Map<String, Object> filters) {
         if (filters == null) filters = Collections.emptyMap();
 
@@ -34,6 +38,16 @@ public class ProductApplicationService {
         if (pageNum < 1) pageNum = 1;
         if (pageSize < 1) pageSize = 10;
 
+        try {
+            return esGoodsSearchService.search(filters, pageNum, pageSize);
+        } catch (Exception ignore) {
+            // Elasticsearch 不可用时降级到数据库查询，保证业务可用性
+        }
+
+        return searchProductsByDb(filters, pageNum, pageSize);
+    }
+
+    private Map<String, Object> searchProductsByDb(Map<String, Object> filters, Integer pageNum, Integer pageSize) {
         Map<String, Object> queryMap = new HashMap<>();
         String keyword = filters.get("keyword") != null ? filters.get("keyword").toString() : null;
         if (keyword != null && !keyword.trim().isEmpty()) queryMap.put("searchKeyword", keyword.trim());
@@ -102,6 +116,49 @@ public class ProductApplicationService {
         resultMap.put("pageSize", pageSize.longValue());
         resultMap.put("pages", 1L);
         return resultMap;
+    }
+
+    public Map<String, Object> rebuildEsGoodsIndex() {
+        try {
+            int count = esGoodsSearchService.rebuildGoodsIndex();
+            Map<String, Object> result = new HashMap<>();
+            result.put("indexedCount", count);
+            return result;
+        } catch (Exception e) {
+            throw new IllegalStateException("重建ES索引失败: " + e.getMessage());
+        }
+    }
+
+    public Map<String, Object> syncEsGoodsById(Long goodsId) {
+        try {
+            boolean ok = esGoodsSearchService.syncGoodsById(goodsId);
+            Map<String, Object> result = new HashMap<>();
+            result.put("goodsId", goodsId);
+            result.put("synced", ok);
+            return result;
+        } catch (Exception e) {
+            throw new IllegalStateException("同步商品到ES失败: " + e.getMessage());
+        }
+    }
+
+    public List<String> esSuggest(String prefix, Integer size) {
+        try {
+            return esGoodsSearchService.suggest(prefix, size == null ? 10 : size);
+        } catch (Exception e) {
+            throw new IllegalStateException("ES联想词查询失败: " + e.getMessage());
+        }
+    }
+
+    public List<Map<String, Object>> esHotKeywords(Integer size) {
+        return esGoodsSearchService.hotKeywords(size == null ? 10 : size);
+    }
+
+    public Map<String, Object> esGoodsAliasStatus() {
+        try {
+            return esGoodsSearchService.aliasStatus();
+        } catch (Exception e) {
+            throw new IllegalStateException("获取 ES 别名状态失败: " + e.getMessage());
+        }
     }
 
     public List<org.ys.transaction.Interface.VO.CategoryVO> getCategoryList() {

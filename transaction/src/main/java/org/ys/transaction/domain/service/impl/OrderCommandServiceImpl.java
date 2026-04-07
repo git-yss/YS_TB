@@ -7,7 +7,6 @@ import org.ys.transaction.domain.aggregate.UserAggregate;
 import org.ys.transaction.domain.entity.YsGoods;
 import org.ys.transaction.domain.entity.YsOrder;
 import org.ys.transaction.domain.entity.YsUser;
-import org.ys.transaction.domain.enums.OrderStatusEnum;
 import org.ys.transaction.domain.respository.YsGoodsRespository;
 import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.respository.YsUserRespository;
@@ -38,7 +37,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         orderAggregate.checkBelongTo(userId);
         orderAggregate.checkCanCancel();
         restoreStock(orderAggregate);
-        ysOrderRespository.updateById(new OrderAggregate(orderAggregate.buildCancelOrder(reason), null, null, null));
+        ysOrderRespository.updateStatusById(new OrderAggregate(orderAggregate.buildCancelOrder(reason), null, null, null));
     }
 
     @Override
@@ -46,7 +45,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         OrderAggregate orderAggregate = load(orderId);
         orderAggregate.checkBelongTo(userId);
         orderAggregate.checkCanConfirmReceipt();
-        ysOrderRespository.updateById(new OrderAggregate(orderAggregate.buildConfirmedReceiptOrder(), null, null, null));
+        ysOrderRespository.updateStatusById(new OrderAggregate(orderAggregate.buildConfirmedReceiptOrder(), null, null, null));
     }
 
     @Override

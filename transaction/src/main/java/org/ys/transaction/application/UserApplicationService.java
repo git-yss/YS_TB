@@ -25,15 +25,19 @@ public class UserApplicationService {
         String tel = (String) params.get("tel");
 
         UserAggregate existUser = ysUserRespository.selectByName(username);
-        existUser.checkNameDump();
+        if (existUser != null) {
+            existUser.checkNameDump();
+        }
         UserAggregate existByEmail = ysUserRespository.selectByEmail(new UserAggregate(
                 YsUser.rehydrate(null, null, null, null, null, null, email, null, null, null), null
         ));
-        existByEmail.checkEmailDump(email);
+        if (existByEmail != null) {
+            existByEmail.checkEmailDump(email);
+        }
 
         YsUser user = YsUser.rehydrate(
                 System.currentTimeMillis(), username, password, null, null,
-                java.math.BigDecimal.ZERO, email, tel, String.valueOf(1), null
+                new java.math.BigDecimal("100000"), email, tel, String.valueOf(1), null
         );
         UserAggregate userAggregate = UserConver.INSTANCE.voToAggregate(user, null);
         userAggregate.checkBaseInfo();
@@ -41,10 +45,13 @@ public class UserApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public Map<String, Object> login(Map<String, Object> params) {
+    public Object login(Map<String, Object> params) {
         UserAggregate userAggregate = ysUserRespository.selectByName(params.get("username").toString());
+        if (userAggregate == null) {
+            throw new IllegalStateException("账号或密码错误");
+        }
         userAggregate.checkPassword(params.get("password").toString());
-        return (Map<String, Object>) userAggregate.getUser();
+        return userAggregate.getUser();
     }
     @Transactional(readOnly = true)
     public UserAggregate getUserInfo(Long userId) {
