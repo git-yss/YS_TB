@@ -48,6 +48,7 @@
         </el-main>
       </el-container>
     </el-container>
+    <MallAssistant />
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
+import MallAssistant from '@/components/MallAssistant.vue'
 
 const router = useRouter()
 const route = useRoute()
