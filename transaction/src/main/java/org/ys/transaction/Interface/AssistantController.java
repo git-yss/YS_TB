@@ -23,7 +23,8 @@ public class AssistantController {
         try {
             String message = body.get("message") == null ? "" : body.get("message").toString();
             Long userId = body.get("userId") == null ? null : Long.valueOf(body.get("userId").toString());
-            return CommentResult.success(assistantApplicationService.chat(userId, message));
+            String sessionId = body.get("sessionId") == null ? null : body.get("sessionId").toString();
+            return CommentResult.success(assistantApplicationService.chat(userId, message, sessionId));
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }

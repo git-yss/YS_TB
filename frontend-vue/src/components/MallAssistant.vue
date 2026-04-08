@@ -57,6 +57,7 @@ const sending = ref(false)
 const input = ref('')
 const listRef = ref(null)
 const userStore = useUserStore()
+const sessionId = ref(localStorage.getItem('assistantSessionId') || '')
 
 const messages = ref([
   { role: 'bot', text: '你好，我是商城助手。可以帮你查询最近订单、支付情况、介绍商品。' }
@@ -72,9 +73,14 @@ async function send() {
   try {
     const res = await assistantChat({
       userId: userStore.userInfo?.id,
-      message: text
+      message: text,
+      sessionId: sessionId.value || undefined
     })
     const data = res.data || {}
+    if (data.sessionId) {
+      sessionId.value = String(data.sessionId)
+      localStorage.setItem('assistantSessionId', sessionId.value)
+    }
     messages.value.push({
       role: 'bot',
       text: data.reply || '收到，我再试试理解你的问题。',
