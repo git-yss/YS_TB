@@ -5,7 +5,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 import org.ys.transaction.domain.port.DistributedLockPort;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -37,4 +37,5 @@ public class RedissonDistributedLockAdapter implements DistributedLockPort {
         }
     }
 }
+
 

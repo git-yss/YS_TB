@@ -5,7 +5,7 @@ import org.ys.transaction.Interface.VO.CommentResult;
 import org.ys.transaction.application.UserApplicationService;
 import org.ys.transaction.domain.aggregate.UserAggregate;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class UserController {
     public CommentResult register(@RequestBody Map<String, Object> params) {
         try {
             userApplicationService.register(params);
-            return CommentResult.success("注册成功");
+            return CommentResult.success("娉ㄥ唽鎴愬姛");
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }
@@ -33,7 +33,7 @@ public class UserController {
             Object userInfo = userApplicationService.login(params);
             Map<String, Object> payload = new HashMap<>();
             payload.put("userInfo", userInfo);
-            // 当前项目未启用 JWT，返回可用占位 token 以通过前端鉴权守卫
+            // 褰撳墠椤圭洰鏈惎鐢?JWT锛岃繑鍥炲彲鐢ㄥ崰浣?token 浠ラ€氳繃鍓嶇閴存潈瀹堝崼
             payload.put("token", "session-token");
             return CommentResult.success(payload);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class UserController {
         String newPassword = params.get("newPassword") != null ? params.get("newPassword").toString() : "";
         try {
             userApplicationService.changePassword(userId, oldPassword, newPassword);
-            return CommentResult.success("密码修改成功");
+            return CommentResult.success("瀵嗙爜淇敼鎴愬姛");
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }
@@ -71,9 +71,10 @@ public class UserController {
     public CommentResult update(@RequestBody Map<String, Object> params) {
         try {
             userApplicationService.updateUserInfo(params);
-            return CommentResult.success("信息更新成功");
+            return CommentResult.success("淇℃伅鏇存柊鎴愬姛");
         } catch (Exception e) {
             return CommentResult.error(e.getMessage());
         }
     }
 }
+

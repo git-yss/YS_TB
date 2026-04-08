@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ys.transaction.application.OrderApplicationService;
 import org.ys.transaction.Interface.VO.CommentResult;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 
 /**

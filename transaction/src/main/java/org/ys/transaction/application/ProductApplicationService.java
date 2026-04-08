@@ -8,10 +8,11 @@ import org.ys.transaction.domain.aggregate.CateGoryAggregate;
 import org.ys.transaction.domain.aggregate.GoodsAggregate;
 import org.ys.transaction.domain.entity.YsCategory;
 import org.ys.transaction.domain.entity.YsGoods;
+import org.ys.transaction.domain.port.NaturalLanguageFilterParserPort;
 import org.ys.transaction.domain.respository.YsCategoryRespository;
 import org.ys.transaction.domain.respository.YsGoodsRespository;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,21 +31,40 @@ public class ProductApplicationService {
     @Resource
     private EsGoodsSearchService esGoodsSearchService;
 
+    @Resource
+    private NaturalLanguageFilterParserPort naturalLanguageFilterParserPort;
+
     public Map<String, Object> searchProducts(Map<String, Object> filters) {
         if (filters == null) filters = Collections.emptyMap();
+        Map<String, Object> mergedFilters = mergeAiFilters(filters);
 
-        Integer pageNum = filters.get("pageNum") != null ? Integer.valueOf(filters.get("pageNum").toString()) : 1;
-        Integer pageSize = filters.get("pageSize") != null ? Integer.valueOf(filters.get("pageSize").toString()) : 10;
+        Integer pageNum = mergedFilters.get("pageNum") != null ? Integer.valueOf(mergedFilters.get("pageNum").toString()) : 1;
+        Integer pageSize = mergedFilters.get("pageSize") != null ? Integer.valueOf(mergedFilters.get("pageSize").toString()) : 10;
         if (pageNum < 1) pageNum = 1;
         if (pageSize < 1) pageSize = 10;
 
         try {
-            return esGoodsSearchService.search(filters, pageNum, pageSize);
+            Map<String, Object> result = esGoodsSearchService.search(mergedFilters, pageNum, pageSize);
+            result.put("appliedFilters", mergedFilters);
+            return result;
         } catch (Exception ignore) {
             // Elasticsearch 不可用时降级到数据库查询，保证业务可用性
-        }
 
-        return searchProductsByDb(filters, pageNum, pageSize);
+            Map<String, Object> result = searchProductsByDb(mergedFilters, pageNum, pageSize);
+            result.put("appliedFilters", mergedFilters);
+            return result;
+        }
+    }
+
+    private Map<String, Object> mergeAiFilters(Map<String, Object> filters) {
+        Map<String, Object> merged = new HashMap<>();
+        String nlQuery = filters.get("nlQuery") == null ? null : filters.get("nlQuery").toString();
+        Map<String, Object> aiFilters = naturalLanguageFilterParserPort.parseNaturalLanguage(nlQuery);
+        if (aiFilters != null) {
+            merged.putAll(aiFilters);
+        }
+        merged.putAll(filters);
+        return merged;
     }
 
     private Map<String, Object> searchProductsByDb(Map<String, Object> filters, Integer pageNum, Integer pageSize) {

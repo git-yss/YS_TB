@@ -16,6 +16,9 @@ spring:
     broker-url: tcp://localhost:61616
     user: admin
     password: admin
+    packages:
+      trust-all: false
+      trusted: org.ys.commens.vo,java.math,java.lang,java.util
     pool:
       enabled: true
       max-connections: 50
@@ -58,6 +61,12 @@ spring:
     serialization:
       write-dates-as-timestamps: true
     default-property-inclusion: non_null
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen3.5:9b
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -115,6 +124,9 @@ app:
     # 别名：对外暴露给查询/写入；物理索引：通过 goods-index-prefix 版本化创建
     goods-index-alias: ys_goods_alias
     goods-index-prefix: ys_goods_index_v
+  ollama:
+    enabled: true
+    parse-timeout-ms: 80000
   canal:
     enabled: false
     host: 127.0.0.1

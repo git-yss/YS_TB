@@ -12,13 +12,12 @@ import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.respository.YsUserRespository;
 import org.ys.transaction.domain.service.OrderCommandService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import java.math.BigDecimal;
 
 /**
- * 订单命令用例实现：负责跨聚合协作、校验与状态流转。
- */
+ * 璁㈠崟鍛戒护鐢ㄤ緥瀹炵幇锛氳礋璐ｈ法鑱氬悎鍗忎綔銆佹牎楠屼笌鐘舵€佹祦杞€? */
 @Service
 public class OrderCommandServiceImpl implements OrderCommandService {
 
@@ -59,7 +58,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     @Override
     public void handleRefund(Long orderId, Boolean approve, String refundReason) {
         if (approve == null) {
-            throw new IllegalArgumentException("处理结果不能为空");
+            throw new IllegalArgumentException("澶勭悊缁撴灉涓嶈兘涓虹┖");
         }
         OrderAggregate aggregate = load(orderId);
         aggregate.checkCanHandleRefund();
@@ -141,4 +140,5 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         }
     }
 }
+
 

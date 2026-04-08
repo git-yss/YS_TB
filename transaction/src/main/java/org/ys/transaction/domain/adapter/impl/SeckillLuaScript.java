@@ -6,8 +6,8 @@ import org.redisson.client.codec.StringCodec;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,3 +103,4 @@ public class SeckillLuaScript {
         return stock != null ? Long.parseLong(stock.toString()) : 0;
     }
 }
+

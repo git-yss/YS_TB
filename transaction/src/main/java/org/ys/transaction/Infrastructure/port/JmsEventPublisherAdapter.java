@@ -4,7 +4,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import org.ys.transaction.domain.port.EventPublisherPort;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Component
 public class JmsEventPublisherAdapter implements EventPublisherPort {
@@ -17,4 +17,5 @@ public class JmsEventPublisherAdapter implements EventPublisherPort {
         jmsTemplate.convertAndSend(topicOrQueue, payload);
     }
 }
+
 

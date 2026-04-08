@@ -5,6 +5,15 @@
         <el-form-item label="关键词">
           <el-input v-model="keyword" placeholder="商品名称" clearable style="width: 240px" @keyup.enter="onSearch" />
         </el-form-item>
+        <el-form-item label="AI描述">
+          <el-input
+            v-model="nlQuery"
+            type="textarea"
+            :rows="2"
+            placeholder="例如：想要一款适合学生的华为手机，预算2000-3000，库存充足"
+            style="width: 320px"
+          />
+        </el-form-item>
         <el-form-item label="品牌">
           <el-input v-model="brand" placeholder="如 苹果/华为" clearable style="width: 160px" @keyup.enter="onSearch" />
         </el-form-item>
@@ -56,6 +65,7 @@ const route = useRoute()
 const router = useRouter()
 
 const keyword = ref('')
+const nlQuery = ref('')
 const brand = ref('')
 const priceMin = ref('')
 const priceMax = ref('')
@@ -72,6 +82,7 @@ async function onSearch() {
   try {
     const res = await searchGoods({
       keyword: keyword.value || undefined,
+      nlQuery: nlQuery.value || undefined,
       categoryId: route.query.categoryId ? Number(route.query.categoryId) : undefined,
       brand: brand.value || undefined,
       priceMin: priceMin.value || undefined,
@@ -111,6 +122,9 @@ onMounted(() => {
   }
   if (route.query.keyword) {
     keyword.value = String(route.query.keyword)
+  }
+  if (route.query.nlQuery) {
+    nlQuery.value = String(route.query.nlQuery)
   }
   if (keyword.value || route.query.categoryId) {
     onSearch()

@@ -14,7 +14,7 @@ import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.service.CartTimeoutCompensationService;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -142,4 +142,5 @@ public class CartTimeoutCompensationServiceImpl implements CartTimeoutCompensati
         }
     }
 }
+
 

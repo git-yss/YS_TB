@@ -9,7 +9,7 @@ import org.ys.transaction.Infrastructure.utils.JsonUtils;
 import org.ys.transaction.domain.port.CartCachePort;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,4 +121,5 @@ public class RedissonCartCacheAdapter implements CartCachePort {
         return v == null || v.isEmpty() ? null : JsonUtils.jsonToPojo(v, CartItem.class);
     }
 }
+
 

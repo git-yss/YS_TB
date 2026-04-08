@@ -13,7 +13,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.ys.transaction.Infrastructure.es.EsGoodsSearchService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

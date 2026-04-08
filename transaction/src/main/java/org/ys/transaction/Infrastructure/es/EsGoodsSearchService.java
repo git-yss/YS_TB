@@ -29,7 +29,8 @@ import org.springframework.stereotype.Service;
 import org.ys.transaction.Infrastructure.dao.YsGoodsDao;
 import org.ys.transaction.Infrastructure.pojo.YsGoods;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;

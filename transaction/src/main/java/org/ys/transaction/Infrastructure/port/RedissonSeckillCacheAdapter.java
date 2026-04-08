@@ -9,7 +9,7 @@ import org.ys.transaction.Infrastructure.utils.JsonUtils;
 import org.ys.transaction.domain.port.SeckillCachePort;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -88,4 +88,5 @@ public class RedissonSeckillCacheAdapter implements SeckillCachePort {
         return result;
     }
 }
+
 

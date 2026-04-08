@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.ys.transaction.Infrastructure.listener.RedisKeyExpirationListener;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class RedisKeyExpirationConfig {
@@ -25,3 +25,4 @@ public class RedisKeyExpirationConfig {
         redissonClient.getPatternTopic("__keyevent@0__:expired", new StringCodec()).addListener(String.class, redisKeyExpirationListener);
     }
 }
+

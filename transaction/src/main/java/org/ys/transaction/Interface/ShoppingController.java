@@ -10,7 +10,7 @@ import org.ys.transaction.Interface.VO.CommentResult;
 import org.ys.transaction.application.ShoppingApplicationService;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -163,3 +163,4 @@ public class ShoppingController {
 
 
 }
+

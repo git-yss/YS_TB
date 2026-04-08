@@ -8,7 +8,7 @@ import org.ys.transaction.domain.aggregate.UserAggregate;
 import org.ys.transaction.domain.entity.YsUser;
 import org.ys.transaction.domain.respository.YsUserRespository;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 
 @Service
@@ -90,3 +90,4 @@ public class UserApplicationService {
 
     }
 }
+

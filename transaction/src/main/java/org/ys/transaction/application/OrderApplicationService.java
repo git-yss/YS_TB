@@ -8,7 +8,7 @@ import org.ys.transaction.domain.entity.YsOrder;
 import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.service.OrderCommandService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;

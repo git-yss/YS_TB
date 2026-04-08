@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.ys.transaction.Interface.VO.CommentResult;
 import org.ys.transaction.application.ProductReviewApplicationService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -149,3 +149,4 @@ public class ProductReviewController {
         }
     }
 }
+

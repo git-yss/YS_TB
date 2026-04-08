@@ -24,7 +24,7 @@ import org.ys.transaction.domain.respository.YsUserRespository;
 import org.ys.transaction.domain.service.CartDomainService;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;

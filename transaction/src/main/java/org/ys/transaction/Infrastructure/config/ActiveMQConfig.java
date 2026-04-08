@@ -4,12 +4,13 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.Session;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Session;
 import java.util.Arrays;
 
 @Configuration
@@ -26,32 +27,40 @@ public class ActiveMQConfig {
     private String password;
 
     @Bean
+    @Primary
     public ConnectionFactory connectionFactory() {
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-        connectionFactory.setBrokerURL(brokerUrl);
-        connectionFactory.setUserName(username);
-        connectionFactory.setPassword(password);
-        connectionFactory.setTrustedPackages(Arrays.asList("org.ys.commens.vo", "java.math", "java.lang", "java.util"));
-        return connectionFactory;
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
+        factory.setBrokerURL(brokerUrl);
+        factory.setUserName(username);
+        factory.setPassword(password);
+        // 设置可信包，允许序列化这些包中的类
+        factory.setTrustedPackages(Arrays.asList(
+            "org.ys.commens.vo",
+            "org.ys.transaction",
+            "java.math",
+            "java.lang",
+            "java.util"
+        ));
+        return factory;
     }
 
     @Bean
-    public JmsTemplate jmsTemplate() {
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
         JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(connectionFactory());
-        // 设置确认模式（虽然对于发送方来说不常用）
+        template.setConnectionFactory(connectionFactory);
         template.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
         template.setPubSubDomain(false); // 使用队列而不是主题
         return template;
     }
+    
     @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory());
-        factory.setConcurrency("1-1");// 1个最小消费者，1个最大消费者
-        // 设置确认模式为客户端手动确认
+        factory.setConnectionFactory(connectionFactory);
+        factory.setConcurrency("1-1");
         factory.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
         return factory;
     }
 
 }
+

@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 限流拦截器
- * 基于Redis实现接口访问频率限制（防刷机制）
+ * 闄愭祦鎷︽埅鍣?
+ * 鍩轰簬Redis瀹炵幇鎺ュ彛璁块棶棰戠巼闄愬埗锛堥槻鍒锋満鍒讹級
  *
  * @author makejava
  * @since 2025-07-16
@@ -134,3 +134,4 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         response.getWriter().write("{\"code\":" + status + ",\"msg\":\"" + message + "\"}");
     }
 }
+

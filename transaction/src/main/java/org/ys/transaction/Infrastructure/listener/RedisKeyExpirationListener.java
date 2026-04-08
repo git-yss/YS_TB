@@ -4,7 +4,7 @@ import org.redisson.api.listener.PatternMessageListener;
 import org.springframework.stereotype.Component;
 import org.ys.transaction.domain.service.CartTimeoutCompensationService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Component
 public class RedisKeyExpirationListener implements PatternMessageListener<String> {
@@ -17,3 +17,4 @@ public class RedisKeyExpirationListener implements PatternMessageListener<String
         cartTimeoutCompensationService.onRedisKeyExpired(expiredKey);
     }
 }
+

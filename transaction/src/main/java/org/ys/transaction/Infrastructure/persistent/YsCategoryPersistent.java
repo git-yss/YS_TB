@@ -7,7 +7,7 @@ import org.ys.transaction.domain.respository.YsCategoryRespository;
 import org.ys.transaction.Infrastructure.dao.YsCategoryDao;
 import org.ys.transaction.Infrastructure.pojo.YsCategory;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 

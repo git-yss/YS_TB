@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.ys.transaction.domain.service.CartDomainService;
 import org.ys.transaction.domain.vo.CartItem;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -63,3 +63,4 @@ public class ShoppingApplicationService {
         cartDomainService.initSeckillItem(itemId, price, num, expireTime);
     }
 }
+

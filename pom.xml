@@ -5,14 +5,13 @@
 
 
     <modules>
-        <module>commens</module>
         <module>transaction</module>
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.ys</groupId>
@@ -23,14 +22,15 @@
     <description>电商项目</description>
 
     <properties>
-        <java.version>8</java.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <java.version>17</java.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <mysql.version>8.0.33</mysql.version>
         <lombok.version>1.18.28</lombok.version>
-        <web.version>2.7.15</web.version>
+        <web.version>3.2.5</web.version>
         <redisson.version>3.23.2</redisson.version>
-        <activemq.version>5.16.6</activemq.version>
         <bcrypt.version>0.10.2</bcrypt.version>
+        <spring-ai.version>1.0.0</spring-ai.version>
+        <elasticsearch.version>7.17.22</elasticsearch.version>
     </properties>
     <dependencyManagement>
     <dependencies>
@@ -59,13 +59,13 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
-            <version>${activemq.version}</version>
+            <artifactId>activemq-client-jakarta</artifactId>
+            <version>5.18.4</version>
         </dependency>
-        <!-- MyBatis-Plus 启动器 -->
+        <!-- MyBatis-Plus 启动器 (Boot3) -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- MySQL 驱动 -->
@@ -86,8 +86,21 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
     </dependencies>
 </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

@@ -12,7 +12,7 @@ import org.ys.transaction.domain.respository.YsOrderRespository;
 import org.ys.transaction.domain.respository.YsProductReviewRespository;
 import org.ys.transaction.domain.respository.YsUserRespository;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -114,3 +114,4 @@ public class ProductReviewApplicationService {
         ysProductReviewRespository.updateById(new ProductReviewAggregate(updated));
     }
 }
+
