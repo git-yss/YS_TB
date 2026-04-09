@@ -138,3 +138,5 @@ app:
     poll-interval-ms: 1000
     schema: ys_tb
     goods-table: ys_goods
+  assistant:
+    memory-ttl-hours: 24

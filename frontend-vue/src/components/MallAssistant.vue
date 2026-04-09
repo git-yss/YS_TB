@@ -6,6 +6,13 @@
 
     <el-drawer v-model="visible" title="商城助手" :with-header="true" size="380px">
       <div class="assistant-chat">
+        <div class="session-bar">
+          <el-select v-model="sessionId" placeholder="选择会话" style="width: 210px" @change="onSessionChange">
+            <el-option v-for="s in sessions" :key="s.sessionId" :label="s.title || s.sessionId" :value="s.sessionId" />
+          </el-select>
+          <el-button size="small" @click="newSession">新建</el-button>
+          <el-button size="small" type="danger" plain @click="removeSession">删除</el-button>
+        </div>
         <div class="message-list" ref="listRef">
           <div v-for="(item, idx) in messages" :key="idx" :class="['msg', item.role]">
             <div class="bubble">
@@ -24,6 +31,17 @@
                   <div class="card" v-for="g in ((item.payload.result || {}).list || [])" :key="g.id">
                     <div>{{ g.name }}</div>
                     <div>¥{{ g.price }}</div>
+                  </div>
+                </div>
+              </template>
+              <template v-if="item.payload && (item.payload.toolTraces || []).length">
+                <div class="trace-wrap">
+                  <div class="trace-title">调用轨迹</div>
+                  <div class="trace-item" v-for="(t, i) in item.payload.toolTraces" :key="i">
+                    <span>{{ t.tool }}</span>
+                    <span class="trace-status">[{{ t.status || 'ok' }}]</span>
+                    <span class="trace-duration">{{ t.durationMs != null ? t.durationMs + 'ms' : '' }}</span>
+                    <code>{{ JSON.stringify(t.args || {}) }}</code>
                   </div>
                 </div>
               </template>
@@ -47,10 +65,16 @@
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue'
-import { assistantChat } from '@/api/assistant'
+import { nextTick, onMounted, ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import {
+  assistantChat,
+  listAssistantSessions,
+  createAssistantSession,
+  deleteAssistantSession,
+  getAssistantSessionHistory
+} from '@/api/assistant'
 import { useUserStore } from '@/store/user'
-import { ElMessage } from 'element-plus'
 
 const visible = ref(false)
 const sending = ref(false)
@@ -58,6 +82,7 @@ const input = ref('')
 const listRef = ref(null)
 const userStore = useUserStore()
 const sessionId = ref(localStorage.getItem('assistantSessionId') || '')
+const sessions = ref([])
 
 const messages = ref([
   { role: 'bot', text: '你好，我是商城助手。可以帮你查询最近订单、支付情况、介绍商品。' }
@@ -95,12 +120,77 @@ async function send() {
   }
 }
 
+async function loadSessions() {
+  const userId = userStore.userInfo?.id
+  const res = await listAssistantSessions(userId)
+  sessions.value = Array.isArray(res.data) ? res.data : []
+  if (!sessionId.value && sessions.value.length) {
+    sessionId.value = sessions.value[0].sessionId
+  }
+  if (!sessionId.value) {
+    await newSession()
+  }
+}
+
+async function newSession() {
+  const userId = userStore.userInfo?.id
+  const res = await createAssistantSession({ userId, title: '新会话' })
+  const sid = res.data?.sessionId
+  if (sid) {
+    sessionId.value = String(sid)
+    localStorage.setItem('assistantSessionId', sessionId.value)
+    messages.value = [{ role: 'bot', text: '新会话已创建，你可以开始提问了。' }]
+    await loadSessions()
+    scrollToBottom()
+  }
+}
+
+async function removeSession() {
+  if (!sessionId.value) return
+  try {
+    await ElMessageBox.confirm('确定删除当前会话吗？', '提示', { type: 'warning' })
+    const userId = userStore.userInfo?.id
+    await deleteAssistantSession({ userId, sessionId: sessionId.value })
+    sessionId.value = ''
+    localStorage.removeItem('assistantSessionId')
+    await loadSessions()
+    await onSessionChange()
+  } catch (e) {
+    if (e !== 'cancel' && e !== 'close') {
+      ElMessage.error(e.message || '删除会话失败')
+    }
+  }
+}
+
+async function onSessionChange() {
+  if (!sessionId.value) return
+  localStorage.setItem('assistantSessionId', sessionId.value)
+  try {
+    const userId = userStore.userInfo?.id
+    const res = await getAssistantSessionHistory({ userId, sessionId: sessionId.value })
+    const rows = Array.isArray(res.data) ? res.data : []
+    messages.value = rows.length ? rows : [{ role: 'bot', text: '该会话暂无历史消息。' }]
+    scrollToBottom()
+  } catch (e) {
+    ElMessage.error(e.message || '加载会话历史失败')
+  }
+}
+
 function scrollToBottom() {
   nextTick(() => {
     const el = listRef.value
     if (el) el.scrollTop = el.scrollHeight
   })
 }
+
+onMounted(async () => {
+  try {
+    await loadSessions()
+    await onSessionChange()
+  } catch (e) {
+    ElMessage.error(e.message || '初始化助手失败')
+  }
+})
 </script>
 
 <style scoped>
@@ -118,6 +208,13 @@ function scrollToBottom() {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.session-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .message-list {
@@ -165,5 +262,41 @@ function scrollToBottom() {
   padding-top: 10px;
   display: grid;
   gap: 8px;
+}
+
+.trace-wrap {
+  margin-top: 8px;
+  border-top: 1px dashed #dcdfe6;
+  padding-top: 6px;
+}
+
+.trace-title {
+  font-size: 12px;
+  color: #909399;
+  margin-bottom: 4px;
+}
+
+.trace-item {
+  font-size: 12px;
+  color: #606266;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.trace-status {
+  margin-left: 4px;
+  color: #909399;
+}
+
+.trace-duration {
+  margin-left: 4px;
+  color: #67c23a;
+}
+
+.trace-item code {
+  margin-left: 6px;
+  background: #f2f6fc;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 </style>
