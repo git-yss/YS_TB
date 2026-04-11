@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.ys.transaction.domain.port.NaturalLanguageFilterParserPort;
@@ -27,8 +28,24 @@ public class OllamaNaturalLanguageFilterParser implements NaturalLanguageFilterP
     @Value("${app.ollama.enabled:true}")
     private boolean enabled;
 
-    @Value("${app.ollama.parse-timeout-ms:80000}")
+    @Value("${app.ollama.parse-timeout-ms:12000}")
     private long parseTimeoutMs;
+
+    /** 为空则沿用 spring.ai.ollama.chat.options.model；建议单独拉取小模型如 qwen2.5:3b 专用于解析 */
+    @Value("${app.ollama.parser-model:}")
+    private String parserModel;
+
+    @Value("${app.ollama.parser-num-predict:256}")
+    private int parserNumPredict;
+
+    @Value("${app.ollama.parser-num-ctx:2048}")
+    private int parserNumCtx;
+
+    @Value("${app.ollama.parser-temperature:0.1}")
+    private double parserTemperature;
+
+    @Value("${app.ollama.parser-json-format:true}")
+    private boolean parserJsonFormat;
 
     public OllamaNaturalLanguageFilterParser(ChatClient.Builder chatClientBuilder, ObjectMapper objectMapper) {
         this.chatClient = chatClientBuilder.build();
@@ -43,10 +60,13 @@ public class OllamaNaturalLanguageFilterParser implements NaturalLanguageFilterP
         }
         try {
             String prompt = buildPrompt(nlQuery.trim());
+            OllamaOptions options = buildParserOptions();
+            log.debug("[NL解析] 调用 Ollama, timeoutMs={}, options.model={}", parseTimeoutMs,
+                    options.getModel() != null ? options.getModel() : "(default)");
             String response;
             try {
                 response = CompletableFuture
-                        .supplyAsync(() -> chatClient.prompt().user(prompt).call().content())
+                        .supplyAsync(() -> chatClient.prompt().user(prompt).options(options).call().content())
                         .get(parseTimeoutMs, TimeUnit.MILLISECONDS);
             } catch (TimeoutException | InterruptedException | ExecutionException ex) {
                 log.warn("Ollama parse timeout/fail, fallback to normal filters. query={}", nlQuery, ex);
@@ -62,6 +82,29 @@ public class OllamaNaturalLanguageFilterParser implements NaturalLanguageFilterP
         } catch (Exception ignore) {
             return result;
         }
+    }
+
+    /**
+     * OllamaOptions.Builder b = OllamaOptions.builder()
+     *     .numPredict(256)        // ✅ JSON 很短，256 tokens 足够
+     *     .numCtx(2048)           // ✅ 简单查询不需要大上下文
+     *     .temperature(0.1)       // ✅ 需要确定性输出，不要创造性
+     *     .topP(0.9);             // ✅ 平衡准确性和灵活性
+     * @return
+     */
+    private OllamaOptions buildParserOptions() {
+        OllamaOptions.Builder b = OllamaOptions.builder()
+                .numPredict(parserNumPredict)
+                .numCtx(parserNumCtx)
+                .temperature(parserTemperature)
+                .topP(0.9);
+        if (parserModel != null && !parserModel.trim().isEmpty()) {
+            b.model(parserModel.trim());
+        }
+        if (parserJsonFormat) {
+            b.format("json");
+        }
+        return b.build();
     }
 
     private static String buildPrompt(String query) {

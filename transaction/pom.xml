@@ -84,6 +84,15 @@
             <artifactId>spring-ai-starter-model-ollama</artifactId>
             <version>${spring-ai.version}</version>
         </dependency>
+        <!-- RAG：LangChain4j 索引/检索向量；Spring AI ChatClient 负责最终生成 -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-ollama</artifactId>
+        </dependency>
         <!-- Elasticsearch REST High Level Client -->
         <dependency>
             <groupId>org.elasticsearch.client</groupId>

@@ -3,9 +3,11 @@ package org.ys.transaction.Infrastructure.ai;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ys.transaction.application.OrderApplicationService;
 import org.ys.transaction.application.ProductApplicationService;
+import org.ys.transaction.application.RagKnowledgeApplicationService;
 import org.ys.transaction.domain.aggregate.OrderAggregate;
 
 import jakarta.annotation.Resource;
@@ -26,6 +28,9 @@ public class AssistantToolService {
 
     @Resource
     private ProductApplicationService productApplicationService;
+
+    @Autowired(required = false)
+    private RagKnowledgeApplicationService ragKnowledgeApplicationService;
 
     @Tool(description = "查询用户最近订单列表。参数: userId(用户ID), limit(返回条数，建议1-5)")
     public Map<String, Object> getRecentOrders(Long userId, Integer limit) {
@@ -106,6 +111,36 @@ public class AssistantToolService {
             Map<String, Object> data = productApplicationService.searchProducts(filters);
             finishTrace(trace, "ok", null);
             return data;
+        } catch (Exception ex) {
+            finishTrace(trace, "error", ex.getMessage());
+            throw ex;
+        }
+    }
+
+    @Tool(description = "检索商城知识库（退换货规则、活动说明、常见问题等）。参数: query(检索关键词或用户问题)")
+    public Map<String, Object> searchKnowledgeBase(String query) {
+        log.info("assistant_tool searchKnowledgeBase query={}", query);
+        Map<String, Object> traceArgs = new HashMap<>();
+        traceArgs.put("query", query);
+        Map<String, Object> trace = beginTrace("searchKnowledgeBase", traceArgs);
+        Map<String, Object> result = new HashMap<>();
+        try {
+            if (ragKnowledgeApplicationService == null) {
+                result.put("found", false);
+                result.put("snippets", "");
+                result.put("message", "知识库未启用(app.rag.enabled=false 或未装配)");
+                finishTrace(trace, "ok", null);
+                return result;
+            }
+            if (query == null || query.trim().isEmpty()) {
+                result.put("found", false);
+                result.put("snippets", "");
+                finishTrace(trace, "ok", null);
+                return result;
+            }
+            Map<String, Object> rag = ragKnowledgeApplicationService.retrieveForAgent(query.trim());
+            finishTrace(trace, "ok", null);
+            return rag;
         } catch (Exception ex) {
             finishTrace(trace, "error", ex.getMessage());
             throw ex;

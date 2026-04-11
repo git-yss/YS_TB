@@ -1,5 +1,6 @@
 package org.ys.transaction.application;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.ys.transaction.application.conver.CategoryConver;
 import org.ys.transaction.application.conver.ProductConver;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ProductApplicationService {
 
@@ -35,8 +37,17 @@ public class ProductApplicationService {
     private NaturalLanguageFilterParserPort naturalLanguageFilterParserPort;
 
     public Map<String, Object> searchProducts(Map<String, Object> filters) {
+        long startTime = System.currentTimeMillis();
+        log.info("[商品搜索] 开始处理搜索请求, 原始参数: {}", filters);
+        
         if (filters == null) filters = Collections.emptyMap();
+        
+        // 记录大模型查询耗时
+        long aiStartTime = System.currentTimeMillis();
         Map<String, Object> mergedFilters = mergeAiFilters(filters);
+        long aiEndTime = System.currentTimeMillis();
+        long aiDuration = aiEndTime - aiStartTime;
+        log.info("[商品搜索-大模型解析] 自然语言解析完成, 耗时: {}ms, 合并后参数: {}", aiDuration, mergedFilters);
 
         Integer pageNum = mergedFilters.get("pageNum") != null ? Integer.valueOf(mergedFilters.get("pageNum").toString()) : 1;
         Integer pageSize = mergedFilters.get("pageSize") != null ? Integer.valueOf(mergedFilters.get("pageSize").toString()) : 10;
@@ -44,14 +55,32 @@ public class ProductApplicationService {
         if (pageSize < 1) pageSize = 10;
 
         try {
+            // 记录 ES 查询耗时
+            long esStartTime = System.currentTimeMillis();
             Map<String, Object> result = esGoodsSearchService.search(mergedFilters, pageNum, pageSize);
+            long esEndTime = System.currentTimeMillis();
+            long esDuration = esEndTime - esStartTime;
+            
             result.put("appliedFilters", mergedFilters);
+            
+            long totalDuration = System.currentTimeMillis() - startTime;
+            log.info("[商品搜索-ES查询] ES查询完成, 耗时: {}ms, 总耗时: {}ms, 返回结果数: {}", 
+                    esDuration, totalDuration, result.get("list") != null ? ((List<?>) result.get("list")).size() : 0);
             return result;
-        } catch (Exception ignore) {
+        } catch (Exception e) {
+            long dbStartTime = System.currentTimeMillis();
+            log.warn("[商品搜索-ES降级] ES查询失败, 降级到数据库查询, 错误: {}", e.getMessage());
+            
             // Elasticsearch 不可用时降级到数据库查询，保证业务可用性
-
             Map<String, Object> result = searchProductsByDb(mergedFilters, pageNum, pageSize);
+            long dbEndTime = System.currentTimeMillis();
+            long dbDuration = dbEndTime - dbStartTime;
+            
             result.put("appliedFilters", mergedFilters);
+            
+            long totalDuration = System.currentTimeMillis() - startTime;
+            log.info("[商品搜索-DB查询] 数据库查询完成, 耗时: {}ms, 总耗时: {}ms, 返回结果数: {}", 
+                    dbDuration, totalDuration, result.get("list") != null ? ((List<?>) result.get("list")).size() : 0);
             return result;
         }
     }
@@ -59,8 +88,14 @@ public class ProductApplicationService {
     private Map<String, Object> mergeAiFilters(Map<String, Object> filters) {
         Map<String, Object> merged = new HashMap<>();
         String nlQuery = filters.get("nlQuery") == null ? null : filters.get("nlQuery").toString();
+        
+        if (nlQuery != null && !nlQuery.trim().isEmpty()) {
+            log.debug("[大模型解析] 检测到自然语言查询: {}", nlQuery);
+        }
+        
         Map<String, Object> aiFilters = naturalLanguageFilterParserPort.parseNaturalLanguage(nlQuery);
         if (aiFilters != null) {
+            log.debug("[大模型解析] AI返回过滤条件: {}", aiFilters);
             merged.putAll(aiFilters);
         }
         merged.putAll(filters);

@@ -15,7 +15,7 @@
         </div>
         <div class="message-list" ref="listRef">
           <div v-for="(item, idx) in messages" :key="idx" :class="['msg', item.role]">
-            <div class="bubble">
+            <div class="bubble" :class="{ streaming: item.streaming }">
               <div class="text">{{ item.text }}</div>
               <template v-if="item.payload && item.payload.type === 'order_list'">
                 <div class="cards">
@@ -68,7 +68,7 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
-  assistantChat,
+  assistantChatStream,
   listAssistantSessions,
   createAssistantSession,
   deleteAssistantSession,
@@ -83,6 +83,7 @@ const listRef = ref(null)
 const userStore = useUserStore()
 const sessionId = ref(localStorage.getItem('assistantSessionId') || '')
 const sessions = ref([])
+const streamAbort = ref(null)
 
 const messages = ref([
   { role: 'bot', text: '你好，我是商城助手。可以帮你查询最近订单、支付情况、介绍商品。' }
@@ -94,27 +95,58 @@ async function send() {
   messages.value.push({ role: 'user', text })
   input.value = ''
   sending.value = true
+  const botIdx = messages.value.length
+  messages.value.push({ role: 'bot', text: '', payload: {}, streaming: true })
   scrollToBottom()
+  if (streamAbort.value) {
+    streamAbort.value.abort()
+  }
+  const ac = new AbortController()
+  streamAbort.value = ac
   try {
-    const res = await assistantChat({
-      userId: userStore.userInfo?.id,
-      message: text,
-      sessionId: sessionId.value || undefined
-    })
-    const data = res.data || {}
-    if (data.sessionId) {
-      sessionId.value = String(data.sessionId)
-      localStorage.setItem('assistantSessionId', sessionId.value)
-    }
-    messages.value.push({
-      role: 'bot',
-      text: data.reply || '收到，我再试试理解你的问题。',
-      payload: data
-    })
+    await assistantChatStream(
+      {
+        userId: userStore.userInfo?.id,
+        message: text,
+        sessionId: sessionId.value || undefined
+      },
+      {
+        onDelta: (t) => {
+          const row = messages.value[botIdx]
+          if (row) row.text += t
+          scrollToBottom()
+        },
+        onDone: (data) => {
+          const row = messages.value[botIdx]
+          if (!row) return
+          row.streaming = false
+          if (data.sessionId) {
+            sessionId.value = String(data.sessionId)
+            localStorage.setItem('assistantSessionId', sessionId.value)
+          }
+          row.text = data.reply != null && String(data.reply) !== '' ? String(data.reply) : row.text
+          row.payload = data
+        },
+        signal: ac.signal
+      }
+    )
   } catch (e) {
-    ElMessage.error(e.message || '助手响应失败')
-    messages.value.push({ role: 'bot', text: '抱歉，我刚刚开小差了，请稍后重试。' })
+    if (e.name === 'AbortError') {
+      const row = messages.value[botIdx]
+      if (row) {
+        row.streaming = false
+        if (!row.text) row.text = '（已中断）'
+      }
+    } else {
+      ElMessage.error(e.message || '助手响应失败')
+      const row = messages.value[botIdx]
+      if (row) {
+        row.streaming = false
+        row.text = row.text || '抱歉，我刚刚开小差了，请稍后重试。'
+      }
+    }
   } finally {
+    streamAbort.value = null
     sending.value = false
     scrollToBottom()
   }
@@ -242,6 +274,15 @@ onMounted(async () => {
 .msg.user .bubble {
   background: #409eff;
   color: #fff;
+}
+
+.bubble.streaming .text {
+  min-height: 1.2em;
+}
+
+.bubble.streaming .text:empty::after {
+  content: '…';
+  opacity: 0.5;
 }
 
 .cards {

@@ -66,7 +66,8 @@ spring:
       base-url: http://localhost:11434
       chat:
         options:
-          model: qwen3.5:9b
+#          model: qwen3.5:9b-q4_K_M
+          model: qwen2.5:3b
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -105,9 +106,8 @@ shoppinCar:
 
 logging:
   level:
-    org.ys.transaction: debug
-    org.ys.commens: debug
-    org.ys.commens.dao: debug
+    root: info
+    org.ys.transaction: info
     com.baomidou.mybatisplus: debug
     org.mybatis: debug
   file:
@@ -126,7 +126,14 @@ app:
     goods-index-prefix: ys_goods_index_v
   ollama:
     enabled: true
-    parse-timeout-ms: 80000
+    # 自然语言解析：超时后放弃 AI 条件，仅按用户表单条件搜索（总耗时可控在约 15s 内）
+    parse-timeout-ms: 12000
+    # 可选，专用于解析的小模型（需 ollama pull），例如 qwen2.5:3b；不填则用 spring.ai.ollama.chat.options.model
+    # parser-model: qwen2.5:3b
+    parser-num-predict: 256
+    parser-num-ctx: 2048
+    parser-temperature: 0.1
+    parser-json-format: true
   canal:
     enabled: false
     host: 127.0.0.1
@@ -140,3 +147,32 @@ app:
     goods-table: ys_goods
   assistant:
     memory-ttl-hours: 24
+    # Redis 中每会话最多保留的历史行数（每行 U: 或 A: 各算一行；100 行约 50 轮完整问答）
+    max-history-lines: 100
+    # 拼进大模型 user 提示里的「历史」总字符上限（从最近一轮往前装，装不下则丢弃更早的，控制 prefill 与延迟）
+    max-history-prompt-chars: 12000
+    # 写入历史的助手回复最长字符（避免超长 JSON reply 撑爆上下文）
+    max-reply-chars-in-history: 800
+  rag:
+    enabled: true
+    # 与 spring.ai.ollama.base-url 一致即可；嵌入模型需单独 ollama pull
+    ollama-base-url: http://localhost:11434
+    embedding-model: nomic-embed-text
+    chunk-max-chars: 900
+    chunk-overlap-chars: 120
+    retrieve-max-results: 6
+    retrieve-min-score: 0.55
+    ingest-max-chars: 200000
+    http-timeout-seconds: 60
+    embed-timeout-seconds: 90
+    # memory=进程内向量；多实例生产请扩展 LangChain4jRagConfiguration 接入共享向量库
+    store-type: memory
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
