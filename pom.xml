@@ -19,7 +19,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>ys</name>
     <packaging>pom</packaging>
-    <description>ç?µå??é¡¹ç?®</description>
+    <description>ï¿½?ï¿½ï¿½??é¡¹ï¿½?ï¿½</description>
 
     <properties>
         <java.version>17</java.version>
@@ -48,7 +48,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${web.version}</version>
         </dependency>
-        <!-- Spring Securityï¼?ä»?æ??å®? starter ç??æ?¬ï¼?å?¿å®?ä¹? spring-security.version å±?æ?§ï¼? -->
+        <!-- Spring Securityï¿½?ï¿½?ï¿½??ï¿½? starter ï¿½??ï¿½?ï¿½ï¿½?ï¿½?ï¿½ï¿½?ï¿½? spring-security.version ï¿½?ï¿½?ï¿½ï¿½? -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -59,7 +59,7 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>${redisson.version}</version>
         </dependency>
-        <!-- æ·»å?  ActiveMQ ä¾èµ?ç®¡ç? -->
+        <!-- æ·»ï¿½?ï¿½ ActiveMQ ä¾ï¿½?ç®¡ï¿½? -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
@@ -70,13 +70,13 @@
             <artifactId>activemq-client-jakarta</artifactId>
             <version>5.18.4</version>
         </dependency>
-        <!-- MyBatis-Plus å¯å?¨å??(Boot3) -->
+        <!-- MyBatis-Plus å¯ï¿½?ï¿½ï¿½??(Boot3) -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-        <!-- MySQL é©±å?¨ -->
+        <!-- MySQL é©±ï¿½?ï¿½ -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -112,13 +112,13 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot Maven æ?ä»¶ -->
+            <!-- Spring Boot Maven ï¿½?ä»¶ -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- æ??å®?JDKç??æ?¬ -->
+            <!-- ï¿½??ï¿½?JDKï¿½??ï¿½?ï¿½ -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

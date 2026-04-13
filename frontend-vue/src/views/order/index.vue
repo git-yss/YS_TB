@@ -233,7 +233,12 @@ const handlePay = async (order) => {
     ElMessage.success('支付成功')
     await loadOrders()
   } catch (e) {
-    ElMessage.error(e.message || '支付失败')
+    const msg = e.message || '支付失败'
+    ElMessage.error(msg)
+    if (msg.includes('余额不足')) {
+      ElMessage.warning('余额不足，请先前往个人中心充值')
+      router.push('/user')
+    }
   } finally {
     payingId.value = null
   }

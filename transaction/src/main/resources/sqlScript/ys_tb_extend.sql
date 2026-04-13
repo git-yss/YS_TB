@@ -179,7 +179,28 @@ UPDATE `ys_goods` SET `category_id` = 6 WHERE `id` IN (1, 2, 3, 7);
 UPDATE `ys_goods` SET `category_id` = 8 WHERE `id` IN (4, 5);
 UPDATE `ys_goods` SET `category_id` = 4 WHERE `id` IN (6, 8);
 
--- 13. 创建系统配置表
+-- 13. 创建充值订单表（用于三方支付回调幂等与对账）
+DROP TABLE IF EXISTS `ys_recharge_order`;
+CREATE TABLE `ys_recharge_order` (
+                                   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                   `recharge_no` varchar(64) NOT NULL COMMENT '充值单号',
+                                   `user_id` bigint NOT NULL COMMENT '用户ID',
+                                   `channel` varchar(20) NOT NULL COMMENT '支付渠道: ALIPAY/WECHAT',
+                                   `amount` decimal(18,2) NOT NULL COMMENT '充值金额',
+                                   `status` varchar(20) NOT NULL DEFAULT 'PENDING' COMMENT '状态: PENDING/SUCCESS/FAIL',
+                                   `trade_no` varchar(100) DEFAULT NULL COMMENT '三方交易号',
+                                   `pay_content_type` varchar(30) DEFAULT NULL COMMENT '支付内容类型',
+                                   `pay_content` text COMMENT '支付内容',
+                                   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                   `paid_at` datetime DEFAULT NULL COMMENT '支付完成时间',
+                                   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   UNIQUE INDEX `UNQ_RECHARGE_NO` (`recharge_no`) USING BTREE,
+                                   INDEX `IDX_USER_ID` (`user_id`) USING BTREE,
+                                   INDEX `IDX_STATUS` (`status`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='充值订单表';
+
+-- 14. 创建系统配置表
 DROP TABLE IF EXISTS `ys_sys_config`;
 CREATE TABLE `ys_sys_config`  (
                                   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '配置ID',

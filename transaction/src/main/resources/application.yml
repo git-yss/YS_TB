@@ -117,6 +117,23 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
 
 app:
+  pay:
+    alipay:
+      app-id: your_alipay_app_id
+      merchant-private-key: your_alipay_merchant_private_key
+      alipay-public-key: your_alipay_public_key
+      gateway: https://openapi.alipay.com/gateway.do
+      notify-url: http://localhost:8080/user/recharge/alipay/notify
+      return-url: http://localhost:5173/user
+      sign-type: RSA2
+      charset: UTF-8
+    wechat:
+      app-id: your_wechat_app_id
+      mch-id: your_wechat_merchant_id
+      private-key-path: D:/cert/apiclient_key.pem
+      merchant-serial-number: your_wechat_serial_no
+      api-v3-key: your_wechat_api_v3_key
+      notify-url: http://localhost:8080/user/recharge/wechat/notify
   es:
     host: localhost
     port: 9200

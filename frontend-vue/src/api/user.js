@@ -39,3 +39,27 @@ export function updateUserInfo(data) {
     data
   })
 }
+
+export function createRechargeOrder(data) {
+  return request({
+    url: '/user/recharge/create',
+    method: 'post',
+    data
+  })
+}
+
+export function confirmRecharge(data) {
+  return request({
+    url: '/user/recharge/callback',
+    method: 'post',
+    data
+  })
+}
+
+export function getRechargeStatus(rechargeNo) {
+  return request({
+    url: '/user/recharge/status',
+    method: 'post',
+    data: { rechargeNo }
+  })
+}

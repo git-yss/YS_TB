@@ -109,6 +109,16 @@
             <artifactId>canal.protocol</artifactId>
             <version>1.1.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.40.272.ALL</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java</artifactId>
+            <version>0.2.17</version>
+        </dependency>
         <!-- 添加devtools实现热部署 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
