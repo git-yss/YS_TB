@@ -1,4 +1,4 @@
-package org.ys.transaction.application.pay;
+package org.ys.transaction.Infrastructure.pay;
 
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;

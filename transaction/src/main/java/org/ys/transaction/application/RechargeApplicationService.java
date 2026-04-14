@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ys.transaction.Infrastructure.dao.YsRechargeOrderDao;
 import org.ys.transaction.Infrastructure.pojo.YsRechargeOrder;
-import org.ys.transaction.application.pay.ThirdPartyPayClient;
+import org.ys.transaction.Infrastructure.pay.ThirdPartyPayClient;
 import org.ys.transaction.domain.aggregate.UserAggregate;
 import org.ys.transaction.domain.entity.YsUser;
 import org.ys.transaction.domain.respository.YsUserRespository;

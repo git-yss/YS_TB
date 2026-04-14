@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ys.transaction.Interface.VO.CommentResult;
 import org.ys.transaction.application.RechargeApplicationService;
 import org.ys.transaction.application.UserApplicationService;
-import org.ys.transaction.application.pay.PayProperties;
+import org.ys.transaction.Infrastructure.pay.PayProperties;
 import org.ys.transaction.domain.aggregate.UserAggregate;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.wechat.pay.java.core.Config;
